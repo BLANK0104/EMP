@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Clubs.css";
+const backendUrl =
+  import.meta.env.VITE_BACKEND_URL || "http://localhost:5000/api";
 
 const ClubSection = () => {
   const [clubs, setClubs] = useState([]);
@@ -12,7 +14,7 @@ const ClubSection = () => {
 
   const fetchClubs = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/clubs');
+      const response = await fetch(`${backendUrl}/clubs`);
       const data = await response.json();
       setClubs(data);
       if (data.length > 0) {
@@ -20,7 +22,7 @@ const ClubSection = () => {
       }
       setLoading(false);
     } catch (error) {
-      console.error('Error fetching clubs:', error);
+      console.error("Error fetching clubs:", error);
       setLoading(false);
     }
   };
@@ -28,11 +30,13 @@ const ClubSection = () => {
   const handleClubChange = async (e) => {
     const clubName = e.target.value;
     try {
-      const response = await fetch(`http://localhost:5000/api/clubs/${clubName}`);
+      const response = await fetch(
+        `${backendUrl}/clubs/${clubName}`
+      );
       const data = await response.json();
       setSelectedClub(data);
     } catch (error) {
-      console.error('Error fetching club details:', error);
+      console.error("Error fetching club details:", error);
     }
   };
 
@@ -45,20 +49,18 @@ const ClubSection = () => {
   }
 
   const {
-    name = '',
-    slogan = '',
-    logo = '',
+    name = "",
+    slogan = "",
+    logo = "",
     facultyIncharge = [],
     events = [],
     teams = [],
     objectives = [],
-    socialLinks = {}
+    socialLinks = {},
   } = selectedClub;
 
   return (
     <div className="club-section">
-     
-
       <header className="hero">
         <div className="hero-content">
           <img src={logo} alt={`${name} Logo`} className="club-logo" />
@@ -112,8 +114,6 @@ const ClubSection = () => {
           ))}
         </ul>
       </section>
-
-     
     </div>
   );
 };

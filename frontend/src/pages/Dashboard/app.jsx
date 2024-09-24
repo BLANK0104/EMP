@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import TopBox from "./top_box";
 import LeftGraph from "./left_graph";
 import RightUpcomingEvents from "./right_upcoming_events";
+const backendUrl =
+  import.meta.env.VITE_BACKEND_URL || "http://localhost:5000/api";
 
 const App = () => {
   const [accepted, setAccepted] = useState(0);
@@ -18,9 +20,10 @@ const App = () => {
     rejected: [],
     modified: [],
   });
+  
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/dashboard", {
+    fetch(`${backendUrl}/dashboard`, {
       method: "GET",
       credentials: "include",
     })

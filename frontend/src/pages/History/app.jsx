@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import History from "./History.jsx";
+const backendUrl =
+  import.meta.env.VITE_BACKEND_URL || "http://localhost:5000/api";
 
 const App = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/history", {
+    fetch(`${backendUrl}/history`, {
       method: "GET",
       credentials: "include",
     })

@@ -2,6 +2,8 @@ import React, { useState, useRef, useEffect } from "react";
 import Tabs from "./Tabs.jsx";
 import Request from "./Requests.jsx";
 import Report from "./Reports.jsx";
+const backendUrl =
+  import.meta.env.VITE_BACKEND_URL || "http://localhost:5000/api";
 
 const App = () => {
   const [activeTab, setActiveTab] = useState("requests");
@@ -9,10 +11,11 @@ const App = () => {
   const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
+  
   useEffect(() => {
     // fetch data from API
     const fetchRequests = async () => {
-      const response = await fetch("http://localhost:5000/api/requests", {
+      const response = await fetch(`${backendUrl}/requests`, {
         method: "GET",
         credentials: "include",
       });

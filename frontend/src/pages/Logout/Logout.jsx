@@ -1,12 +1,14 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+const backendUrl =
+  import.meta.env.VITE_BACKEND_URL || "http://localhost:5000/api";
 
 const Logout = () => {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/logout", {
+      const response = await fetch(`${backendUrl}/logout`, {
         method: "POST",
         credentials: "include", // Include cookies with the request
       });

@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+const backendUrl =
+  import.meta.env.VITE_BACKEND_URL || "http://localhost:5000/api";
 
 const FormComponent = ({ onSubmit }) => {
   const [formData, setFormData] = useState({
@@ -37,7 +39,7 @@ const FormComponent = ({ onSubmit }) => {
   useEffect(() => {
     async function fetchDraft() {
       try {
-        const response = await fetch("http://localhost:5000/api/report", {
+        const response = await fetch(`${backendUrl}/report`, {
           method: "GET",
           credentials: "include",
         });
@@ -189,7 +191,7 @@ const FormComponent = ({ onSubmit }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:5000/api/report-data", {
+      const response = await fetch(`${backendUrl}/report-data`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

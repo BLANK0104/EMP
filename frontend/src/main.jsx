@@ -12,11 +12,13 @@ import Calendar from "./pages/Calender/cal.jsx";
 import Clubs from "./pages/Clubs/Clubs.jsx";
 import TabBar from "./pages/Event/FacultyEventDashboard/TabBar.jsx";
 import Tabs from "./pages/Event/drep&req/frep&req/App.jsx";
+const backendUrl =
+  import.meta.env.VITE_BACKEND_URL || "http://localhost:5000/api";
 
 // Function to fetch user role
 const fetchUserRole = async () => {
   try {
-    const response = await fetch("http://localhost:5000/api/role", {
+    const response = await fetch(`${backendUrl}/role`, {
       method: "GET",
       credentials: "include",
     });

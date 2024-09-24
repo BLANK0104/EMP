@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import TermsPopup from "./Termspop";
+const backendUrl =
+  import.meta.env.VITE_BACKEND_URL || "http://localhost:5000/api";
 
 const venueOptions = [
   "Amphitheater",
@@ -111,7 +113,7 @@ const RequestForm = () => {
   // useEffect(() => {
   //   async function fetchDraft() {
   //     try {
-  //       const response = await fetch("http://localhost:5000/api/get-draft", {
+  //         const response = await fetch(`${backendUrl}/get-draft`, {
   //         method: "GET",
   //         credentials: "include",
   //       });
@@ -496,7 +498,7 @@ const RequestForm = () => {
     console.log(formData);
 
     try {
-      const response = await fetch("http://localhost:5000/api/event-draft", {
+      const response = await fetch(`${backendUrl}/event-draft`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -545,7 +547,7 @@ const RequestForm = () => {
     console.log(formData);
 
     try {
-      const response = await fetch("http://localhost:5000/api/event-request", {
+      const response = await fetch(`${backendUrl}/event-request`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -6,6 +6,8 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import "tailwindcss/tailwind.css"; // Ensure Tailwind CSS is imported
 import Popup from "./Popup"; // Import the Popup component
+const backendUrl =
+  import.meta.env.VITE_BACKEND_URL || "http://localhost:5000/api";
 
 export default function DemoApp() {
   const [weekendsVisible, setWeekendsVisible] = useState(true);
@@ -20,7 +22,7 @@ export default function DemoApp() {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/calendar", {
+        const response = await fetch(`${backendUrl}/calendar`, {
           method: "GET",
           credentials: "include",
         });

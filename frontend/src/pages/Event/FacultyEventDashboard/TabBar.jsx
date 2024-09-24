@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import RequestForm from "./RequestForm";
 import Report from "../Report/Form";
+const backendUrl =
+  import.meta.env.VITE_BACKEND_URL || "http://localhost:5000/api";
 
 const Tab = ({ label, isActive, onClick, isDisabled }) => {
   return (
@@ -26,13 +28,10 @@ const TabBar = () => {
   useEffect(() => {
     async function fetchEventStatus() {
       try {
-        const response = await fetch(
-          "http://localhost:5000/api/can-submit-request",
-          {
-            method: "GET",
-            credentials: "include",
-          }
-        );
+        const response = await fetch(`${backendUrl}/can-submit-request`, {
+          method: "GET",
+          credentials: "include",
+        });
         const data = await response.json();
         setCanSubmitRequest(data.canSubmitRequest);
       } catch (error) {
@@ -46,7 +45,7 @@ const TabBar = () => {
   const tabs = [
     { id: "request", label: "Request" },
     { id: "report", label: "Report" },
-    { id: "draft", label: "Draft" },
+    // { id: "draft", label: "Draft" },
   ];
 
   return (
@@ -71,7 +70,7 @@ const TabBar = () => {
         })}
       </div>
       <div className="bg-slate-50 dark:bg-zinc-700 w-full rounded-b-lg shadow-lg overflow-y-scroll max-h-screen">
-        {activeTab === "request" && <RequestForm />}
+        {activeTab === "request" && canSubmitRequest && <RequestForm />}
         {activeTab === "report" && !canSubmitRequest && <Report />}
       </div>
     </div>

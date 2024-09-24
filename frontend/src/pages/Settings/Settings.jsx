@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Camera, Edit3 } from "lucide-react";
 import img from "./img.jpeg";
+const backendUrl =
+  import.meta.env.VITE_BACKEND_URL || "http://localhost:5000/api";
 
 const SettingsPage = () => {
   const [name, setName] = useState("");
@@ -15,7 +17,7 @@ const SettingsPage = () => {
   useEffect(() => {
     const fetchUserSettings = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/settings", {
+        const response = await fetch(`${backendUrl}/settings`, {
           method: "GET",
           credentials: "include",
         });
@@ -48,20 +50,17 @@ const SettingsPage = () => {
     }
 
     try {
-      const response = await fetch(
-        "http://localhost:5000/api/change-password",
-        {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            currentPassword,
-            newPassword,
-          }),
-        }
-      );
+      const response = await fetch(`${backendUrl}/change-password`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          currentPassword,
+          newPassword,
+        }),
+      });
 
       if (!response.ok) {
         throw new Error("Failed to change password.");

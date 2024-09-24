@@ -6,6 +6,8 @@ import user from "../../assets/user.svg";
 import { Link } from "react-router-dom";
 import eye from "../../assets/eye.svg";
 import eyeOff from "../../assets/eye-off.svg";
+const backendUrl =
+  import.meta.env.VITE_BACKEND_URL || "http://localhost:5000/api";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -18,7 +20,7 @@ const Login = () => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/verify", {
+        const response = await fetch(`${backendUrl}/verify`, {
           method: "GET",
           credentials: "include",
         });
@@ -48,7 +50,7 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:5000/api/login", {
+      const response = await fetch(`${backendUrl}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
