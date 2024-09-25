@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
-const backendUrl =
-  import.meta.env.VITE_BACKEND_URL || "http://localhost:5000/api";
+const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000/api";
 
 const ProtectedRoute = ({ children }) => {
   const [auth, setAuth] = useState(null); // Initial state as null to represent loading state

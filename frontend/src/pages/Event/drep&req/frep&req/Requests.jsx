@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const Request = ({ requests = [], selectedRequest, setSelectedRequest }) => {
+const Request = ({ requests, selectedRequest, setSelectedRequest }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modification, setModification] = useState("");
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -19,6 +19,7 @@ const Request = ({ requests = [], selectedRequest, setSelectedRequest }) => {
     setIsModalOpen(true);
   };
 
+  console.log(requests);
   const handleAccept = async () => {
     try {
       const response = await fetch("http://localhost:5000/api/accept", {
@@ -132,7 +133,7 @@ const Request = ({ requests = [], selectedRequest, setSelectedRequest }) => {
           </tr>
         </thead>
         <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
-          {Array.isArray(requests) && requests.map((request, index) => (
+          {requests.map((request, index) => (
             <tr
               key={request.id}
               className="hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
