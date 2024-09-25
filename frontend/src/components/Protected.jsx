@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
+const backendUrl =
+  import.meta.env.VITE_BACKEND_URL || "http://localhost:5000/api";
 
 const ProtectedRoute = ({ children }) => {
   const [auth, setAuth] = useState(null); // Initial state as null to represent loading state
@@ -8,7 +10,7 @@ const ProtectedRoute = ({ children }) => {
   useEffect(() => {
     const fetchAuth = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/verify", {
+        const response = await fetch(`${backendUrl}/verify`, {
           method: "GET",
           credentials: "include",
         });
