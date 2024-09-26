@@ -33,9 +33,9 @@ const TabBar = () => {
           credentials: "include",
         });
         const data = await response.json();
-        console.log(data);
+        // console.log(data);
         setCanSubmitRequest(data.canSubmitRequest);
-        console.log(canSubmitRequest);
+        // console.log(canSubmitRequest);
       } catch (error) {
         console.error("Error checking request permission:", error);
       }
@@ -52,7 +52,7 @@ const TabBar = () => {
     }
   }, [canSubmitRequest]);
 
-  console.log(activeTab);
+  // console.log(activeTab);
 
   const tabs = [
     { id: "request", label: "Request" },
