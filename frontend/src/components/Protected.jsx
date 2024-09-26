@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
-const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000/api";
+const backendUrl =
+  import.meta.env.VITE_BACKEND_URL || "http://localhost:5000/api";
 
-const ProtectedRoute = ({ children }) => {
+const ProtectedRoute = ({ children, allowedRoles }) => {
   const [auth, setAuth] = useState(null); // Initial state as null to represent loading state
   const [loading, setLoading] = useState(true); // To manage loading state
+  const [role, setRole] = useState(null);
 
   useEffect(() => {
     const fetchAuth = async () => {
@@ -21,6 +23,7 @@ const ProtectedRoute = ({ children }) => {
           // Assuming your server returns `authenticate: true` when user is authenticated
           if (data.authenticate) {
             setAuth(true);
+            setRole(data.user.role);
           } else {
             setAuth(false);
           }

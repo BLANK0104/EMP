@@ -15,48 +15,8 @@ import Tabs from "./pages/Event/drep&req/frep&req/App.jsx";
 const backendUrl =
   import.meta.env.VITE_BACKEND_URL || "http://localhost:5000/api";
 
-// Function to fetch user role
-const fetchUserRole = async () => {
-  try {
-    const response = await fetch(`${backendUrl}/role`, {
-      method: "GET",
-      credentials: "include",
-    });
-    if (response.ok) {
-      const data = await response.json();
-      console.log(data.role);
-      return data.role;
-    } else {
-      console.error("Failed to fetch role");
-      return "";
-    }
-  } catch (error) {
-    console.error("Error fetching role:", error);
-    return "";
-  }
-};
-
 // Root component that handles role fetching and routing
 function RootComponent() {
-  const [role, setRole] = useState("");
-  const [loading, setLoading] = useState(true);
-
-  // Fetch role when the component mounts
-  useEffect(() => {
-    const getUserRole = async () => {
-      const userRole = await fetchUserRole();
-      setRole(userRole);
-      setLoading(false);
-    };
-    getUserRole();
-  }, []);
-
-  // Loading state while fetching the role
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  // Define your routes with conditional rendering based on role
   const router = createBrowserRouter([
     {
       path: "/",
@@ -85,13 +45,14 @@ function RootComponent() {
         {
           path: "events",
           element: (
-            <ProtectedRoute>
-              {role === "faculty" || role === "centralAuthority" ? (
+            <>
+              <ProtectedRoute allowedRoles={["faculty", "centralAuthority"]}>
                 <TabBar />
-              ) : (
+              </ProtectedRoute>
+              <ProtectedRoute allowedRoles={["dean", "director"]}>
                 <Tabs />
-              )}
-            </ProtectedRoute>
+              </ProtectedRoute>
+            </>
           ),
         },
         {
