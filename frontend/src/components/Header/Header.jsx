@@ -3,26 +3,34 @@ import Logout from "../../pages/Logout/Logout";
 import { Link } from "react-router-dom";
 import ThemeToggle from "../ThemeToggle";
 import DropDown from "./DropDown"; // Import the DropDown component
+import Logo from "./Logo";
+import Title from "./Title";
+import NotificationIcon from "./NotificationIcon";
+import ProfileIcon from "./ProfileIcon";
 
 const Header = () => {
-  const [profileMenuVisible, setProfileMenuVisible] = useState(false);
-  const [notificationDropdownVisible, setNotificationDropdownVisible] = useState(false);
+  const [profileMenuVisible, setProfileMenuVisible] = useState(false); // Profile dropdown state
+  const [notificationDropdownVisible, setNotificationDropdownVisible] =
+    useState(false); // Notification dropdown state
   const [dropdownVisible, setDropdownVisible] = useState(false); // State for dropdown visibility
-
-  const handleProfileButtonClick = () => {
-    setProfileMenuVisible(!profileMenuVisible);
-    setNotificationDropdownVisible(false);
-  };
-
-  const handleNotificationButtonClick = () => {
-    setNotificationDropdownVisible(!notificationDropdownVisible);
-    setProfileMenuVisible(false);
-  };
 
   const handleSidebarToggle = () => {
     setDropdownVisible(!dropdownVisible);
   };
 
+  // Toggle profile dropdown and close notification dropdown if open
+  const toggleProfileMenu = () => {
+    setProfileMenuVisible((prev) => !prev);
+    setNotificationDropdownVisible(false); // Close notification if open
+  };
+
+  // Toggle notification dropdown and close profile dropdown if open
+  const toggleNotificationDropdown = () => {
+    setNotificationDropdownVisible((prev) => !prev);
+    setProfileMenuVisible(false); // Close profile menu if open
+  };
+
+  // Close both dropdowns if clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -72,97 +80,35 @@ const Header = () => {
       </button>
 
       {/* Logo */}
-      <a href="/" className="flex items-center ml-4 sm:ml-10 md:ml-20 lg:ml-0">
-        <img
-          src="/Picture1.jpg"
-          alt="NMIMS Logo"
-          className="rounded-lg w-10 sm:w-12 md:w-16 lg:w-20"
-        />
-      </a>
+      <Logo />
 
       {/* Title */}
-      <h1 className="text-xs sm:text-sm md:text-lg lg:text-xl font-bold text-center flex-grow truncate px-2">
-        Event Management System
-      </h1>
+      <Title />
 
       {/* Notification & Profile Section */}
       <div className="flex items-center space-x-3 sm:space-x-4">
         <ThemeToggle />
 
         {/* Notification Icon */}
-        <div className="relative">
-          <button
-            id="notificationButton"
-            className="p-2 rounded-full hover:bg-gray-600 dark:hover:bg-gray-700 flex items-center justify-center"
-            onClick={handleNotificationButtonClick}
-          >
-            <img
-              src="/bell-03.svg"
-              alt="bell"
-              className="w-6 h-6 sm:w-6 sm:h-6"
-            />
-          </button>
-          {notificationDropdownVisible && (
-            <div
-              id="notificationDropdown"
-              className="absolute right-0 mt-2 w-40 md:w-48 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-lg shadow-lg overflow-hidden z-30"
-            >
-              <a
-                href="#"
-                className="block px-3 py-2 hover:bg-gray-200 dark:hover:bg-gray-700"
-              >
-                Notification 1
-              </a>
-              <a
-                href="#"
-                className="block px-3 py-2 hover:bg-gray-200 dark:hover:bg-gray-700"
-              >
-                Notification 2
-              </a>
-              <a
-                href="#"
-                className="block px-3 py-2 hover:bg-gray-200 dark:hover:bg-gray-700"
-              >
-                Notification 3
-              </a>
-            </div>
-          )}
+        <div id="notificationButton">
+          <NotificationIcon
+            notificationDropdownVisible={notificationDropdownVisible}
+            toggleNotificationDropdown={toggleNotificationDropdown}
+          />
         </div>
 
         {/* Profile Icon */}
-        <div className="relative">
-          <button
-            id="profileButton"
-            className="flex items-center focus:outline-none"
-            onClick={handleProfileButtonClick}
-          >
-            <img
-              src="https://via.placeholder.com/40"
-              alt="User Avatar"
-              className="rounded-full w-6 h-6 sm:w-6 sm:h-6"
-            />
-          </button>
-          {profileMenuVisible && (
-            <div
-              id="profileMenu"
-              className="absolute right-0 mt-2 w-32 md:w-36 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-lg shadow-lg overflow-hidden z-30"
-            >
-              <Link
-                to="/settings"
-                className="block px-3 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 text-center w-full"
-              >
-                Settings
-              </Link>
-              <div className="block px-3 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 w-full text-left">
-                <Logout />
-              </div>
-            </div>
-          )}
-        </div>
+        <ProfileIcon
+          profileMenuVisible={profileMenuVisible} // Pass state as prop
+          toggleProfileMenu={toggleProfileMenu} // Pass toggle function as prop
+        />
       </div>
 
       {/* DropDown Component */}
-      <DropDown isVisible={dropdownVisible} onClose={() => setDropdownVisible(false)} />
+      <DropDown
+        isVisible={dropdownVisible}
+        onClose={() => setDropdownVisible(false)}
+      />
     </header>
   );
 };
