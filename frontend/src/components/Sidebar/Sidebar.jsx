@@ -36,7 +36,7 @@ const Sidebar = () => {
       {/* Overlay */}
       {!collapsed && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-20" // Increased z-index to 20
+          className="fixed inset-0 bg-black bg-opacity-50 z-21" // Increased z-index to 20
           onClick={handleSidebarToggle}
         ></div>
       )}
