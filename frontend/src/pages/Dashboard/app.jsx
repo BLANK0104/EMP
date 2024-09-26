@@ -20,7 +20,6 @@ const App = () => {
     rejected: [],
     modified: [],
   });
-  
 
   useEffect(() => {
     fetch(`${backendUrl}/dashboard`, {
@@ -47,13 +46,10 @@ const App = () => {
         setModified(modifiedCount);
         setRole(data.username);
         setUpcomingEvents(data.upcomingEvents);
-        // console.log(upcomingEvents);
-        // console.log(data);
         setCurrentStatus(
           `${data.latestData.status} by ${data.latestData.username} `
         );
 
-        // Aggregate event counts by month
         const monthNames = [
           "January",
           "February",
@@ -86,7 +82,6 @@ const App = () => {
           if (event.status === "Modified") monthCounts.modified[monthName]++;
         });
 
-        // Filter months based on semester type
         const filteredMonths =
           semesterType === "Even"
             ? ["July", "August", "September", "October", "November", "December"]
@@ -111,7 +106,7 @@ const App = () => {
         });
       })
       .catch((error) => console.error("Error fetching data:", error));
-  }, [semesterType]); // Add semesterType as a dependency
+  }, [semesterType]);
 
   return (
     <div className="flex flex-col items-center w-full space-y-4">
@@ -122,7 +117,7 @@ const App = () => {
         role={role}
         currentStatus={currentStatus}
       />
-      <div className="flex w-full justify-between space-x-4">
+      <div className="flex flex-col w-full space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
         <LeftGraph
           graphData={graphData}
           timeFrame={timeFrame}

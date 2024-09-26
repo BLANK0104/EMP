@@ -106,11 +106,11 @@ const History = ({ data }) => {
   };
 
   return (
-    <div className="container mx-auto p-4 text-lg dark:text-gray-200">
+    <div className="container mx-auto p-4 text-lg dark:text-gray-200 max-w-full">
       <h1 className="text-3xl font-bold mb-4 dark:text-gray-200">History</h1>
       <div className="flex flex-wrap justify-between items-center mb-4 space-y-4 md:space-y-0">
         <div className="w-full md:w-auto flex flex-wrap justify-center space-x-2">
-          <div className="w-full md:w-auto">
+          <div className="w-full md:w-auto max-w-xs">
             <label htmlFor="statusFilter" className="mr-2 dark:text-gray-200">
               Filter by Status:
             </label>
@@ -126,7 +126,7 @@ const History = ({ data }) => {
               <option value="Modified">Modified</option>
             </select>
           </div>
-          <div className="w-full md:w-auto">
+          <div className="w-full md:w-auto max-w-xs">
             <label htmlFor="startDate" className="mr-2 dark:text-gray-200">
               From:
             </label>
@@ -138,7 +138,7 @@ const History = ({ data }) => {
               className="px-2 py-1 border rounded w-full md:w-auto dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
             />
           </div>
-          <div className="w-full md:w-auto">
+          <div className="w-full md:w-auto max-w-xs">
             <label htmlFor="endDate" className="mr-2 dark:text-gray-200">
               To:
             </label>
@@ -150,7 +150,7 @@ const History = ({ data }) => {
               className="px-2 py-1 border rounded w-full md:w-auto dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
             />
           </div>
-          <div className="w-full md:w-auto">
+          <div className="w-full md:w-auto max-w-xs">
             <label htmlFor="semesterFilter" className="mr-2 dark:text-gray-200">
               Filter by Semester:
             </label>
@@ -171,25 +171,25 @@ const History = ({ data }) => {
         <table className="min-w-full bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700">
           <thead>
             <tr>
-              <th className="px-2 py-1 border-b text-center bg-red-100 rounded-tl-lg dark:bg-red-900">
+              <th className="px-2 py-1 border-b text-center bg-red-100 rounded-tl-lg dark:bg-red-900 text-xs md:text-base">
                 Sr No
               </th>
-              <th className="px-2 py-1 border-b text-center bg-red-100 dark:bg-red-900">
+              <th className="px-2 py-1 border-b text-center bg-red-100 dark:bg-red-900 text-xs md:text-base">
                 Club
               </th>
-              <th className="px-2 py-1 border-b text-center bg-red-100 dark:bg-red-900">
+              <th className="px-2 py-1 border-b text-center bg-red-100 dark:bg-red-900 text-xs md:text-base">
                 Event
               </th>
-              <th className="px-2 py-1 border-b text-center bg-red-100 dark:bg-red-900">
+              <th className="px-2 py-1 border-b text-center bg-red-100 dark:bg-red-900 text-xs md:text-base">
                 Date
               </th>
-              <th className="px-2 py-1 border-b text-center bg-red-100 dark:bg-red-900">
+              <th className="px-2 py-1 border-b text-center bg-red-100 dark:bg-red-900 text-xs md:text-base">
                 Venue
               </th>
-              <th className="px-2 py-1 border-b text-center bg-red-100 dark:bg-red-900">
+              <th className="px-2 py-1 border-b text-center bg-red-100 dark:bg-red-900 text-xs md:text-base">
                 Status
               </th>
-              <th className="px-2 py-1 border-b text-center bg-red-100 rounded-tr-lg dark:bg-red-900">
+              <th className="px-2 py-1 border-b text-center bg-red-100 rounded-tr-lg dark:bg-red-900 text-xs md:text-base">
                 Download
               </th>
             </tr>
