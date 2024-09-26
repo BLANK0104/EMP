@@ -1,0 +1,119 @@
+-- Create Type for Event Status
+CREATE TYPE public.new_event_status AS ENUM (
+    'Pending',
+    'Rejected',
+    'Approved',
+    'Modified',
+    'Draft'
+);
+
+-- Create Clubs Table
+CREATE TABLE public.clubs (
+    id integer NOT NULL DEFAULT nextval('public.clubs_id_seq'::regclass),
+    name character varying(100) NOT NULL,
+    logo text,
+    faculty_incharge jsonb NOT NULL,
+    slogan character varying(255),
+    featured_event jsonb NOT NULL,
+    objectives text[],
+    team_members jsonb,
+    PRIMARY KEY (id)
+);
+
+-- Create Event Details Table
+CREATE TABLE public.event_details (
+    id integer NOT NULL DEFAULT nextval('public.event_details_id_seq'::regclass),
+    event_id integer,
+    event_dates jsonb NOT NULL,
+    school_audience jsonb NOT NULL,
+    audience integer NOT NULL,
+    clubs text[],
+    resources text,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    eventtype character varying[] DEFAULT '{}'::character varying[],
+    objectives character varying[] DEFAULT '{}'::character varying[],
+    title text,
+    description text,
+    guests jsonb,
+    otherclub character varying,
+    otherevent character varying,
+    PRIMARY KEY (id),
+    FOREIGN KEY (event_id) REFERENCES public.events(id) ON DELETE CASCADE
+);
+
+-- Create Event Approvals Table
+CREATE TABLE public.eventapprovals (
+    id integer NOT NULL DEFAULT nextval('public.eventapprovals_id_seq'::regclass),
+    event_id integer NOT NULL,
+    approver_id integer NOT NULL,
+    status public.new_event_status DEFAULT 'Pending'::public.new_event_status,
+    reason text,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    FOREIGN KEY (approver_id) REFERENCES public.users(id) ON DELETE CASCADE
+);
+
+-- Create Events Table
+CREATE TABLE public.events (
+    id integer NOT NULL DEFAULT nextval('public.events_id_seq'::regclass),
+    created_by integer NOT NULL,
+    status public.new_event_status DEFAULT 'Pending'::public.new_event_status,
+    current_approver integer,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id)
+);
+
+-- Create Notification Table
+CREATE TABLE public.notification (
+    id integer NOT NULL DEFAULT nextval('public.notification_id_seq'::regclass),
+    user_id integer NOT NULL,
+    event_id integer NOT NULL,
+    notification_type character varying(50),
+    message text NOT NULL,
+    sent_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id)
+);
+
+-- Create Report Table
+CREATE TABLE public.report (
+    id integer NOT NULL DEFAULT nextval('public.report_id_seq'::regclass),
+    event_id integer NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    title character varying(255),
+    event_type character varying(100),
+    guest_speakers jsonb,
+    start_date date,
+    start_time time without time zone,
+    end_date date,
+    end_time time without time zone,
+    objectives text[],
+    venue character varying(255),
+    resources text,
+    audience integer,
+    description text,
+    photos text[],
+    faculty_coordinators jsonb,
+    student_coordinators jsonb,
+    schools text[],
+    branches text[],
+    classes text[],
+    years text[],
+    clubs text,
+    PRIMARY KEY (id)
+);
+
+-- Create Users Table
+CREATE TABLE public.users (
+    id integer NOT NULL DEFAULT nextval('public.users_id_seq'::regclass),
+    username character varying(50) NOT NULL,
+    email character varying(100) NOT NULL,
+    password character varying(128) NOT NULL,
+    role character varying(20) NOT NULL,
+    PRIMARY KEY (id),
+    UNIQUE (email),
+    UNIQUE (username)
+);
