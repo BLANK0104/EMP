@@ -52,8 +52,14 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
     return <Navigate to="/login" replace />;
   }
 
-  // Render child components if authenticated
-  return children;
+  if (allowedRoles && !allowedRoles.includes(role)) {
+    return null; // Customize as needed
+  }
+
+  // Render children, passing down the role
+  return typeof children === "function"
+    ? children({ userRole: role })
+    : children;
 };
 
 export default ProtectedRoute;

@@ -45,14 +45,19 @@ function RootComponent() {
         {
           path: "events",
           element: (
-            <>
-              <ProtectedRoute allowedRoles={["faculty", "centralAuthority"]}>
-                <TabBar />
-              </ProtectedRoute>
-              <ProtectedRoute allowedRoles={["dean", "director"]}>
-                <Tabs />
-              </ProtectedRoute>
-            </>
+            <ProtectedRoute
+              allowedRoles={["faculty", "centralAuthority", "dean", "director"]}
+            >
+              {({ userRole }) => (
+                <>
+                  {(userRole === "faculty" ||
+                    userRole === "centralAuthority") && (
+                      <TabBar />
+                  )}
+                  {(userRole === "dean" || userRole === "director") && <Tabs />}
+                </>
+              )}
+            </ProtectedRoute>
           ),
         },
         {
