@@ -27,7 +27,10 @@ app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", req.headers.origin);
   res.header("Access-Control-Allow-Credentials", "true");
   res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
   next();
 });
 app.use(bodyParser.json());
@@ -246,7 +249,7 @@ app.get("/api/can-submit-request", authenticateToken, async (req, res) => {
     );
 
     if (events.rows.length === 0) {
-      return res.json({ canSubmitRequest: false, eventId: null });
+      return res.json({ canSubmitRequest: true, eventId: null });
     }
 
     const latestEventId = events.rows[0].id;
