@@ -2,11 +2,12 @@ import React, { useState, useEffect } from "react";
 import Logout from "../../pages/Logout/Logout";
 import { Link } from "react-router-dom";
 import ThemeToggle from "../ThemeToggle";
+import DropDown from "./DropDown"; // Import the DropDown component
 
 const Header = () => {
   const [profileMenuVisible, setProfileMenuVisible] = useState(false);
-  const [notificationDropdownVisible, setNotificationDropdownVisible] =
-    useState(false);
+  const [notificationDropdownVisible, setNotificationDropdownVisible] = useState(false);
+  const [dropdownVisible, setDropdownVisible] = useState(false); // State for dropdown visibility
 
   const handleProfileButtonClick = () => {
     setProfileMenuVisible(!profileMenuVisible);
@@ -18,7 +19,10 @@ const Header = () => {
     setProfileMenuVisible(false);
   };
 
-  // Close dropdowns when clicking outside
+  const handleSidebarToggle = () => {
+    setDropdownVisible(!dropdownVisible);
+  };
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -49,12 +53,7 @@ const Header = () => {
       <button
         id="sidebarToggle"
         className="lg:hidden p-2 focus:outline-none"
-        onClick={() => {
-          const sidebar = document.getElementById("sidebar");
-          if (sidebar) {
-            sidebar.classList.toggle("hidden");
-          }
-        }}
+        onClick={handleSidebarToggle}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -100,7 +99,7 @@ const Header = () => {
             <img
               src="/bell-03.svg"
               alt="bell"
-              className="w-6 h-6 sm:w-6 sm:h-6" // Uniform size for all devices
+              className="w-6 h-6 sm:w-6 sm:h-6"
             />
           </button>
           {notificationDropdownVisible && (
@@ -140,7 +139,7 @@ const Header = () => {
             <img
               src="https://via.placeholder.com/40"
               alt="User Avatar"
-              className="rounded-full w-6 h-6 sm:w-6 sm:h-6" // Uniform size for profile icon
+              className="rounded-full w-6 h-6 sm:w-6 sm:h-6"
             />
           </button>
           {profileMenuVisible && (
@@ -161,6 +160,9 @@ const Header = () => {
           )}
         </div>
       </div>
+
+      {/* DropDown Component */}
+      <DropDown isVisible={dropdownVisible} onClose={() => setDropdownVisible(false)} />
     </header>
   );
 };

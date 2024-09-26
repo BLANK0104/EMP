@@ -1,0 +1,5 @@
+/* Add this to your existing App.css */
+
+.sidebar-open .flex-grow {
+    display: none;
+  }
