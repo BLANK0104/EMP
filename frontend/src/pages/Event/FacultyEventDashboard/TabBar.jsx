@@ -22,8 +22,8 @@ const Tab = ({ label, isActive, onClick, isDisabled }) => {
 };
 
 const TabBar = () => {
-  const [activeTab, setActiveTab] = useState("request");
-  const [canSubmitRequest, setCanSubmitRequest] = useState(false);
+  const [activeTab, setActiveTab] = useState("");
+  const [canSubmitRequest, setCanSubmitRequest] = useState(null);
 
   useEffect(() => {
     async function fetchEventStatus() {
@@ -33,7 +33,9 @@ const TabBar = () => {
           credentials: "include",
         });
         const data = await response.json();
+        console.log(data);
         setCanSubmitRequest(data.canSubmitRequest);
+        console.log(canSubmitRequest);
       } catch (error) {
         console.error("Error checking request permission:", error);
       }
@@ -41,6 +43,16 @@ const TabBar = () => {
 
     fetchEventStatus();
   }, []);
+
+  useEffect(() => {
+    if (canSubmitRequest === true) {
+      setActiveTab("request");
+    } else if (canSubmitRequest === false) {
+      setActiveTab("report");
+    }
+  }, [canSubmitRequest]);
+
+  console.log(activeTab);
 
   const tabs = [
     { id: "request", label: "Request" },
