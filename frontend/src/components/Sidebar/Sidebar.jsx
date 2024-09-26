@@ -7,7 +7,7 @@ import ClubsIcon from "/clubs.svg";
 import HistoryIcon from "/history.svg";
 
 const Sidebar = () => {
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true); // Set initial state to true
   const [isMobile, setIsMobile] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
