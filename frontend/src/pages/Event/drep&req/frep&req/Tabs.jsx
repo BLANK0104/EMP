@@ -14,7 +14,7 @@ const Tabs = ({ activeTab, handleTabClick }) => {
 
   return (
     <div className={`flex flex-col items-center ${isDarkMode ? "dark" : ""}`}>
-      <div className="flex flex-col items-center bg-red-50 dark:bg-gray-800 p-1 w-full rounded-md">
+      <div className="flex flex-col items-center bg-red-50 dark:bg-gray-800 p-1 w-full max-w-xs sm:max-w-screen-sm rounded-md">
         <div className="flex justify-center items-center">
           <button
             onClick={() => handleTabClick("requests")}
