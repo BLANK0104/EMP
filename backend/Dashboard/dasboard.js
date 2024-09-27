@@ -55,6 +55,7 @@ const dashboard = async (id, role) => {
     event_details AS ed ON e.id = ed.event_id
   WHERE 
     TO_DATE(ed.event_dates->0->>'date', 'YYYY-MM-DD') >= CURRENT_DATE
+    AND e.status = 'Approved'
   ORDER BY 
     e.id DESC;
 `;
