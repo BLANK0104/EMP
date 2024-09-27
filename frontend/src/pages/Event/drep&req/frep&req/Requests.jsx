@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+const backendUrl =
+  import.meta.env.VITE_BACKEND_URL || "http://localhost:5000/api";
 
 const Request = ({ requests, selectedRequest, setSelectedRequest }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -22,7 +24,7 @@ const Request = ({ requests, selectedRequest, setSelectedRequest }) => {
   console.log(requests);
   const handleAccept = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/accept", {
+      const response = await fetch(`${backendUrl}/accept`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -48,7 +50,7 @@ const Request = ({ requests, selectedRequest, setSelectedRequest }) => {
 
   const handleReject = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/reject", {
+      const response = await fetch(`${backendUrl}/reject`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -79,7 +81,7 @@ const Request = ({ requests, selectedRequest, setSelectedRequest }) => {
       console.log(newModification);
     }
     try {
-      const response = await fetch("http://localhost:5000/api/modify", {
+      const response = await fetch(`${backendUrl}/modify`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -113,47 +115,55 @@ const Request = ({ requests, selectedRequest, setSelectedRequest }) => {
   return (
     <div className={`p-4 dark:text-white text-black`}>
       <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-      <thead>
-            <tr>
-              <th className="px-2 py-1 border-b text-center bg-red-100 rounded-tl-lg dark:bg-red-900 text-xs md:text-base">
-                Sr No
-              </th>
-              <th className="px-2 py-1 border-b text-center bg-red-100 dark:bg-red-900 text-xs md:text-base">
-                Title
-              </th>
-              <th className="px-2 py-1 border-b text-center bg-red-100 dark:bg-red-900 text-xs md:text-base">
-                Club
-              </th>
-              <th className="px-2 py-1 border-b text-center bg-red-100 dark:bg-red-900 text-xs md:text-base">
-                Faculty Coordinator
-              </th>
-              <th className="px-2 py-1 border-b text-center bg-red-100 dark:bg-red-900 text-xs md:text-base">
-                Venue
-              </th>
-            </tr>
-          </thead>
+        <thead>
+          <tr>
+            <th className="px-2 py-1 border-b text-center bg-red-100 rounded-tl-lg dark:bg-red-900 text-xs md:text-base">
+              Sr No
+            </th>
+            <th className="px-2 py-1 border-b text-center bg-red-100 dark:bg-red-900 text-xs md:text-base">
+              Title
+            </th>
+            <th className="px-2 py-1 border-b text-center bg-red-100 dark:bg-red-900 text-xs md:text-base">
+              Club
+            </th>
+            <th className="px-2 py-1 border-b text-center bg-red-100 dark:bg-red-900 text-xs md:text-base">
+              Faculty Coordinator
+            </th>
+            <th className="px-2 py-1 border-b text-center bg-red-100 dark:bg-red-900 text-xs md:text-base">
+              Venue
+            </th>
+          </tr>
+        </thead>
         <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
-          {requests.map((request, index) => (
-            <tr
-              key={request.id}
-              className="hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
-              onClick={() => handleRequestClick(request)}
-            >
-              <td className="px-6 py-4 whitespace-nowrap">{index + 1}</td>
-              <td className="px-6 py-4 whitespace-nowrap">{request.title}</td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                {request.username}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                {/* Faculty Coordinator - Add later */}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                {request.event_dates.length > 0
-                  ? request.event_dates[0].venues[0]
-                  : "N/A"}
+          {requests && requests.length > 0 ? (
+            requests.map((request, index) => (
+              <tr
+                key={request.id}
+                className="hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
+                onClick={() => handleRequestClick(request)}
+              >
+                <td className="px-6 py-4 whitespace-nowrap">{index + 1}</td>
+                <td className="px-6 py-4 whitespace-nowrap">{request.title}</td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {request.username}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {/* Faculty Coordinator - Add later */}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {request.event_dates.length > 0
+                    ? request.event_dates[0].venues[0]
+                    : "N/A"}
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="5" className="px-6 py-4 text-center">
+                No requests available
               </td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
 

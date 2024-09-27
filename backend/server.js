@@ -207,6 +207,7 @@ app.get(
   authenticateToken,
   authorizedRole(["dean", "director"]),
   async (req, res) => {
+    console.log("hello");
     const { id } = req.user;
     try {
       const response = await requests(id);
@@ -384,7 +385,7 @@ app.get(
   async (req, res) => {
     const { id, role } = req.user;
     // console.log(id);
-    console.log("Role", role);
+    // console.log("Role", role);
     const data = await dashboard(id, role);
     console.log(data);
     res.json(data);

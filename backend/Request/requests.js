@@ -30,7 +30,7 @@ const requests = async (id) => {
 
   const result = await db.query(query, [id]);
 
-  //   console.log(result.rows);
+  console.log(result.rows);
   return result.rows;
 };
 
