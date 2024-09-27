@@ -9,111 +9,100 @@ CREATE TYPE new_event_status AS ENUM (
 
 -- Create Clubs Table
 CREATE TABLE clubs (
-    id integer NOT NULL DEFAULT nextval('public.clubs_id_seq'::regclass),
-    name character varying(100) NOT NULL,
-    logo text,
-    faculty_incharge jsonb NOT NULL,
-    slogan character varying(255),
-    featured_event jsonb NOT NULL,
-    objectives text[],
-    team_members jsonb,
-    PRIMARY KEY (id)
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    logo TEXT,
+    faculty_incharge JSONB NOT NULL,
+    slogan VARCHAR(255),
+    featured_event JSONB NOT NULL,
+    objectives TEXT[],
+    team_members JSONB
 );
 
 -- Create Event Details Table
 CREATE TABLE event_details (
-    id integer NOT NULL DEFAULT nextval('public.event_details_id_seq'::regclass),
-    event_id integer,
-    event_dates jsonb NOT NULL,
-    school_audience jsonb NOT NULL,
-    audience integer NOT NULL,
-    clubs text[],
-    resources text,
-    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
-    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
-    eventtype character varying[] DEFAULT '{}'::character varying[],
-    objectives character varying[] DEFAULT '{}'::character varying[],
-    title text,
-    description text,
-    guests jsonb,
-    otherclub character varying,
-    otherevent character varying,
-    PRIMARY KEY (id),
-    FOREIGN KEY (event_id) REFERENCES public.events(id) ON DELETE CASCADE
+    id SERIAL PRIMARY KEY,
+    event_id INTEGER REFERENCES events(id) ON DELETE CASCADE,
+    event_dates JSONB NOT NULL,
+    school_audience JSONB NOT NULL,
+    audience INTEGER NOT NULL,
+    clubs TEXT[],
+    resources TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    eventtype VARCHAR[] DEFAULT '{}'::VARCHAR[],
+    objectives VARCHAR[] DEFAULT '{}'::VARCHAR[],
+    title TEXT,
+    description TEXT,
+    guests JSONB,
+    otherclub VARCHAR,
+    otherevent VARCHAR
 );
 
 -- Create Event Approvals Table
 CREATE TABLE eventapprovals (
-    id integer NOT NULL DEFAULT nextval('public.eventapprovals_id_seq'::regclass),
-    event_id integer NOT NULL,
-    approver_id integer NOT NULL,
-    status public.new_event_status DEFAULT 'Pending'::public.new_event_status,
-    reason text,
-    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
-    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (id),
-    FOREIGN KEY (approver_id) REFERENCES public.users(id) ON DELETE CASCADE
+    id SERIAL PRIMARY KEY,
+    event_id INTEGER NOT NULL REFERENCES events(id) ON DELETE CASCADE,
+    approver_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    status new_event_status DEFAULT 'Pending',
+    reason TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Create Events Table
 CREATE TABLE events (
-    id integer NOT NULL DEFAULT nextval('public.events_id_seq'::regclass),
-    created_by integer NOT NULL,
-    status public.new_event_status DEFAULT 'Pending'::public.new_event_status,
-    current_approver integer,
-    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
-    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (id)
+    id SERIAL PRIMARY KEY,
+    created_by INTEGER NOT NULL REFERENCES users(id),
+    status new_event_status DEFAULT 'Pending',
+    current_approver INTEGER REFERENCES users(id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Create Notification Table
 CREATE TABLE notification (
-    id integer NOT NULL DEFAULT nextval('public.notification_id_seq'::regclass),
-    user_id integer NOT NULL,
-    event_id integer NOT NULL,
-    notification_type character varying(50),
-    message text NOT NULL,
-    sent_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (id)
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES users(id),
+    event_id INTEGER NOT NULL REFERENCES events(id),
+    notification_type VARCHAR(50),
+    message TEXT NOT NULL,
+    sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Create Report Table
 CREATE TABLE report (
-    id integer NOT NULL DEFAULT nextval('public.report_id_seq'::regclass),
-    event_id integer NOT NULL,
-    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
-    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
-    title character varying(255),
-    event_type character varying(100),
-    guest_speakers jsonb,
-    start_date date,
-    start_time time without time zone,
-    end_date date,
-    end_time time without time zone,
-    objectives text[],
-    venue character varying(255),
-    resources text,
-    audience integer,
-    description text,
-    photos text[],
-    faculty_coordinators jsonb,
-    student_coordinators jsonb,
-    schools text[],
-    branches text[],
-    classes text[],
-    years text[],
-    clubs text,
-    PRIMARY KEY (id)
+    id SERIAL PRIMARY KEY,
+    event_id INTEGER NOT NULL REFERENCES events(id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    title VARCHAR(255),
+    event_type VARCHAR(100),
+    guest_speakers JSONB,
+    start_date DATE,
+    start_time TIME,
+    end_date DATE,
+    end_time TIME,
+    objectives TEXT[],
+    venue VARCHAR(255),
+    resources TEXT,
+    audience INTEGER,
+    description TEXT,
+    photos TEXT[],
+    faculty_coordinators JSONB,
+    student_coordinators JSONB,
+    schools TEXT[],
+    branches TEXT[],
+    classes TEXT[],
+    years TEXT[],
+    clubs TEXT
 );
 
 -- Create Users Table
 CREATE TABLE users (
-    id integer NOT NULL DEFAULT nextval('public.users_id_seq'::regclass),
-    username character varying(50) NOT NULL,
-    email character varying(100) NOT NULL,
-    password character varying(128) NOT NULL,
-    role character varying(20) NOT NULL,
-    PRIMARY KEY (id),
-    UNIQUE (email),
-    UNIQUE (username)
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(128) NOT NULL,
+    role VARCHAR(20) NOT NULL
 );
