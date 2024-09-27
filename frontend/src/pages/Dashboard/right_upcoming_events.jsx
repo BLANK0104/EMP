@@ -2,6 +2,16 @@ import React from "react";
 
 const RightUpcomingEvents = ({ events }) => {
   console.log(events);
+  const sanitizeString = (str) => {
+    return str.replace(/[^\w\s]/gi, '');
+  };
+
+  const formatString = (str) => {
+    return str.split(',').map((item, index) => (
+      <div key={index}>{sanitizeString(item.trim())}</div>
+    ));
+  };
+
   return (
     <div className="w-full md:w-8/12 h-full p-4 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
       <h3 className="text-lg font-bold mb-4 text-gray-900 dark:text-gray-100">
@@ -39,19 +49,19 @@ const RightUpcomingEvents = ({ events }) => {
                 } hover:bg-gray-100 dark:hover:bg-gray-700`}
               >
                 <td className="p-2 text-wrap text-center text-gray-900 dark:text-gray-100">
-                  {event.event_title}
+                  {formatString(event.event_title)}
                 </td>
                 <td className="p-2 text-wrap text-center text-gray-900 dark:text-gray-100">
-                  {event.organizer}
+                  {formatString(event.organizer)}
                 </td>
                 <td className="p-2 text-wrap text-center text-gray-900 dark:text-gray-100">
-                  {event.start_time}
+                  {formatString(event.start_time)}
                 </td>
                 <td className="p-2 text-wrap text-center text-gray-900 dark:text-gray-100">
-                  {event.event_date_range}
+                  {formatString(event.event_date_range)}
                 </td>
                 <td className="p-2 text-wrap text-center text-gray-900 dark:text-gray-100">
-                  {event.venue}
+                  {formatString(event.venue)}
                 </td>
               </tr>
             ))}
