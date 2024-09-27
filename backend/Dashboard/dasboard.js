@@ -1,6 +1,7 @@
 const db = require("../db");
 
 const dashboard = async (id, role) => {
+  console.log(id);
   try {
     // Fetch username (if needed)
     const usernameResult = await db.query(

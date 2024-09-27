@@ -5,10 +5,12 @@ const acceptRequest = async (role, requestId, userId) => {
   // Get a client from the pool to execute queries in a transaction
   const client = await db.getClient();
 
-  // status for next approver_id
-  const user = {
-    dean: 15,
-  };
+  const nextApproverQuery = await db.query(
+    "select approver from request_assign where created_by = $1",
+    [userId]
+  );
+
+  const nextApprover = nextApproverQuery.rows[0].approver;
 
   try {
     // Begin transaction
@@ -41,7 +43,7 @@ const acceptRequest = async (role, requestId, userId) => {
 
     // Parameters for the `events` table update
     const eventParams = [
-      role === "dean" ? user.dean : null, // Sets the current approver based on the role
+      nextApprover,
       role === "director" ? "Approved" : "Pending", // Sets status based on the role
       requestId, // The ID of the event being updated
     ];
@@ -66,20 +68,20 @@ const acceptRequest = async (role, requestId, userId) => {
       INSERT INTO eventapprovals (event_id, approver_id, status, created_at, updated_at)
       VALUES ($1, $2, 'Pending', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
     `;
-      const eventApprovalParamsDirector = [requestId, user.dean];
+      const eventApprovalParamsDirector = [requestId, nextApprover];
       await client.query(eventApprovalDirector, eventApprovalParamsDirector);
       // Insert notification for the approver
       const notificationQuery = `
       INSERT INTO Notification (user_id, event_id, notification_type, message, sent_at)
       VALUES ($1, $2, 'Approval_Required', 'You have a new event titled "${title}" awaiting your approval.', CURRENT_TIMESTAMP);
     `;
-      const notificationParams = [user.dean, requestId];
+      const notificationParams = [nextApprover, requestId];
       await client.query(notificationQuery, notificationParams);
       // Send notification email to the approver
       const userQuery = `
       SELECT email FROM Users WHERE id = $1;
     `;
-      const userResult = await client.query(userQuery, [user.dean]);
+      const userResult = await client.query(userQuery, [nextApprover]);
       const approverEmail = userResult.rows[0].email;
       //Email sent to Director
       await sendNotification(

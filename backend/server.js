@@ -129,13 +129,15 @@ app.post(
       otherEvent,
     } = req.body;
 
-    // Define approvers based on role
-    const approvers = {
-      faculty: 9,
-      centralauthority: 1,
-    };
+    const currentApproverQuery = await db.query(
+      "select approver from request_assign where created_by = $1",
+      [id]
+    );
+    let currentApprover = null;
+    if (currentApproverQuery.rows.length > 0) {
+      currentApprover = currentApproverQuery.rows[0].approver;
+    }
 
-    const currentApprover = approvers[role] || 0;
     // console.log("CurrentApprover:", currentApprover);
     console.log(
       eventTitle,
@@ -381,7 +383,8 @@ app.get(
   authorizedRole(["dean", "faculty", "centralAuthority", "director"]),
   async (req, res) => {
     const { id, role } = req.user;
-    console.log(id);
+    // console.log(id);
+    console.log("Role", role);
     const data = await dashboard(id, role);
     console.log(data);
     res.json(data);

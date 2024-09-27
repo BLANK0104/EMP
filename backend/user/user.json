@@ -22,5 +22,29 @@
     "email": "test@example.com",
     "password": "$2a$10$Mb6bhFCOBYNxPzQ.Bi7YKOwBvhEOInqPPKq8rWSzcMHBlot73HJWu",
     "role": "faculty"
+  },
+  {
+    "username": "PharmaDean",
+    "email": "pharmadean@example.com",
+    "password": "$2a$10$Mb6bhFCOBYNxPzQ.Bi7YKOwBvhEOInqPPKq8rWSzcMHBlot73HJWu",
+    "role": "dean"
+  },
+  {
+    "username": "AgriDean",
+    "email": "agridean@example.com",
+    "password": "$2a$10$Mb6bhFCOBYNxPzQ.Bi7YKOwBvhEOInqPPKq8rWSzcMHBlot73HJWu",
+    "role": "dean"
+  },
+  {
+    "username": "AgriClub",
+    "email": "agriClub@example.com",
+    "password": "$2a$10$Mb6bhFCOBYNxPzQ.Bi7YKOwBvhEOInqPPKq8rWSzcMHBlot73HJWu",
+    "role": "faculty"
+  },
+  {
+    "username": "TestDirectorClub",
+    "email": "testdirectorclub@example.com",
+    "password": "$2a$10$Mb6bhFCOBYNxPzQ.Bi7YKOwBvhEOInqPPKq8rWSzcMHBlot73HJWu",
+    "role": "faculty"
   }
 ]
