@@ -51,6 +51,7 @@ fs.readFile("./user.json", "utf8", (err, data) => {
       console.log(`Inserted user: ${user.username}`);
     } catch (error) {
       console.error("Error inserting user:", error);
+      pool.end()
     }
   });
 });

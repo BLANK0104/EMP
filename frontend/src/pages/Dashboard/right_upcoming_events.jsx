@@ -1,6 +1,7 @@
 import React from "react";
 
 const RightUpcomingEvents = ({ events }) => {
+  console.log(events);
   return (
     <div className="w-full md:w-8/12 h-full p-4 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
       <h3 className="text-lg font-bold mb-4 text-gray-900 dark:text-gray-100">

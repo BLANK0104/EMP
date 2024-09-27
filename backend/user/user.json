@@ -16,5 +16,11 @@
     "email": "faculty@example.com",
     "password": "$2a$10$Mb6bhFCOBYNxPzQ.Bi7YKOwBvhEOInqPPKq8rWSzcMHBlot73HJWu",
     "role": "faculty"
+  },
+  {
+    "username": "TestFaculty",
+    "email": "test@example.com",
+    "password": "$2a$10$Mb6bhFCOBYNxPzQ.Bi7YKOwBvhEOInqPPKq8rWSzcMHBlot73HJWu",
+    "role": "faculty"
   }
 ]
