@@ -49,16 +49,16 @@ const RightUpcomingEvents = ({ events }) => {
                 } hover:bg-gray-100 dark:hover:bg-gray-700`}
               >
                 <td className="p-2 text-wrap text-center text-gray-900 dark:text-gray-100">
-                  {formatString(event.event_title)}
+                  {event.event_title}
                 </td>
                 <td className="p-2 text-wrap text-center text-gray-900 dark:text-gray-100">
-                  {formatString(event.organizer)}
+                  {event.organizer}
                 </td>
                 <td className="p-2 text-wrap text-center text-gray-900 dark:text-gray-100">
-                  {formatString(event.start_time)}
+                  {event.start_time}
                 </td>
                 <td className="p-2 text-wrap text-center text-gray-900 dark:text-gray-100">
-                  {formatString(event.event_date_range)}
+                  {event.event_date_range}
                 </td>
                 <td className="p-2 text-wrap text-center text-gray-900 dark:text-gray-100">
                   {formatString(event.venue)}
