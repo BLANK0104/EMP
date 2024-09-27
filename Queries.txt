@@ -8,7 +8,7 @@ CREATE TYPE public.new_event_status AS ENUM (
 );
 
 -- Create Clubs Table
-CREATE TABLE public.clubs (
+CREATE TABLE clubs (
     id integer NOT NULL DEFAULT nextval('public.clubs_id_seq'::regclass),
     name character varying(100) NOT NULL,
     logo text,
@@ -21,7 +21,7 @@ CREATE TABLE public.clubs (
 );
 
 -- Create Event Details Table
-CREATE TABLE public.event_details (
+CREATE TABLE event_details (
     id integer NOT NULL DEFAULT nextval('public.event_details_id_seq'::regclass),
     event_id integer,
     event_dates jsonb NOT NULL,
@@ -43,7 +43,7 @@ CREATE TABLE public.event_details (
 );
 
 -- Create Event Approvals Table
-CREATE TABLE public.eventapprovals (
+CREATE TABLE eventapprovals (
     id integer NOT NULL DEFAULT nextval('public.eventapprovals_id_seq'::regclass),
     event_id integer NOT NULL,
     approver_id integer NOT NULL,
@@ -56,7 +56,7 @@ CREATE TABLE public.eventapprovals (
 );
 
 -- Create Events Table
-CREATE TABLE public.events (
+CREATE TABLE events (
     id integer NOT NULL DEFAULT nextval('public.events_id_seq'::regclass),
     created_by integer NOT NULL,
     status public.new_event_status DEFAULT 'Pending'::public.new_event_status,
@@ -67,7 +67,7 @@ CREATE TABLE public.events (
 );
 
 -- Create Notification Table
-CREATE TABLE public.notification (
+CREATE TABLE notification (
     id integer NOT NULL DEFAULT nextval('public.notification_id_seq'::regclass),
     user_id integer NOT NULL,
     event_id integer NOT NULL,
@@ -78,7 +78,7 @@ CREATE TABLE public.notification (
 );
 
 -- Create Report Table
-CREATE TABLE public.report (
+CREATE TABLE report (
     id integer NOT NULL DEFAULT nextval('public.report_id_seq'::regclass),
     event_id integer NOT NULL,
     created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
@@ -107,7 +107,7 @@ CREATE TABLE public.report (
 );
 
 -- Create Users Table
-CREATE TABLE public.users (
+CREATE TABLE users (
     id integer NOT NULL DEFAULT nextval('public.users_id_seq'::regclass),
     username character varying(50) NOT NULL,
     email character varying(100) NOT NULL,
