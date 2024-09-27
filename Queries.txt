@@ -1,5 +1,5 @@
 -- Create Type for Event Status
-CREATE TYPE public.new_event_status AS ENUM (
+CREATE TYPE new_event_status AS ENUM (
     'Pending',
     'Rejected',
     'Approved',
