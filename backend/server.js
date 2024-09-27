@@ -247,6 +247,7 @@ app.get("/api/can-submit-request", authenticateToken, async (req, res) => {
        LIMIT 1;`,
       [id]
     );
+    console.log(events.rows.length);
 
     if (events.rows.length === 0) {
       return res.json({ canSubmitRequest: true, eventId: null });
