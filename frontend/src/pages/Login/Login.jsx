@@ -6,6 +6,8 @@ import user from "../../assets/user.svg";
 import { Link } from "react-router-dom";
 import eye from "../../assets/eye.svg";
 import eyeOff from "../../assets/eye-off.svg";
+import Popup from "./Popup"; // Import the Popup component
+
 const backendUrl =
   import.meta.env.VITE_BACKEND_URL || "http://localhost:5000/api";
 
@@ -15,6 +17,7 @@ const Login = () => {
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(null);
+  const [isPopupVisible, setIsPopupVisible] = useState(false); // State for popup visibility
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -143,13 +146,14 @@ const Login = () => {
           </button>
         </form>
         {error && <p className="mt-4 text-red-500">{error}</p>}
-        <Link
-          to="#"
+        <button
+          onClick={() => setIsPopupVisible(true)}
           className="mt-4 text-gray-600 text-sm w-full text-right transition duration-300 hover:text-red-500"
         >
           Forgot password?
-        </Link>
+        </button>
       </div>
+      <Popup isVisible={isPopupVisible} onClose={() => setIsPopupVisible(false)} />
     </div>
   );
 };

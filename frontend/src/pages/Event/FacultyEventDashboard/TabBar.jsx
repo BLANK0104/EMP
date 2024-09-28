@@ -90,7 +90,7 @@ const TabBar = () => {
       <div className="bg-slate-50 dark:bg-zinc-700 w-full rounded-b-lg shadow-lg overflow-y-scroll max-h-screen">
         {activeTab === "" ? (
           <div className="bg-red-50 dark:bg-zinc-700 w-full px-6 py-4 flex justify-center items-center">
-            <h1 className="text-red-700 text-lg">You can't access anything until the request status is updated</h1>
+            <h1 className="text-red-700 text-lg">You can't access the forms until your request status is updated</h1>
           </div>
         ) : (
           <>
