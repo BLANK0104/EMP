@@ -17,13 +17,11 @@ const FormComponent = ({ onSubmit }) => {
     audience: "",
     description: "",
     photos: [],
-    facultyCoordinators: [{ name: "" }, { name: "" }],
+    facultyCoordinators: [{ name: "" }],
     studentCoordinators: [
       { name: "" },
       { name: "" },
-      { name: "" },
-      { name: "" },
-      { name: "" },
+      { name: "" }
     ],
     schools: [],
     branches: [],
@@ -132,7 +130,7 @@ const FormComponent = ({ onSubmit }) => {
   };
 
   const removeCoordinator = (type, index) => {
-    if (formData[type].length > (type === "facultyCoordinators" ? 2 : 5)) {
+    if (formData[type].length > (type === "facultyCoordinators" ? 1 : 3)) {
       const updatedCoordinators = formData[type].filter((_, i) => i !== index);
       setFormData({ ...formData, [type]: updatedCoordinators });
     }
@@ -215,9 +213,9 @@ const FormComponent = ({ onSubmit }) => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+    <div className="min-h-screen text-black dark:text-white flex">
       <form
-        className="bg-white p-8 rounded-lg shadow-md w-full max-w-lg"
+        className="p-8 w-full max-w-full lg:max-w-screen-lg mx-0 lg:mx-auto"
         onSubmit={handleSubmit}
       >
         <div className="flex justify-between items-center mb-4">
@@ -236,7 +234,7 @@ const FormComponent = ({ onSubmit }) => {
           name="title"
           value={formData.title}
           onChange={handleChange}
-          className="mb-4 p-2 border border-gray-300 rounded w-full"
+          className="mb-4 p-2 border border-gray-300 rounded w-full bg-white dark:bg-gray-800"
           disabled={!isEditMode}
           required
         />
@@ -248,7 +246,7 @@ const FormComponent = ({ onSubmit }) => {
             name="type"
             value={formData.type}
             onChange={handleChange}
-            className="mb-4 p-2 border border-gray-300 rounded w-full"
+            className="mb-4 p-2 border border-gray-300 rounded w-full bg-white dark:bg-gray-800"
             disabled={!isEditMode}
             required
           />
@@ -262,7 +260,7 @@ const FormComponent = ({ onSubmit }) => {
               value={guestSpeaker.name}
               onChange={(e) => handleGuestSpeakerChange(index, e)}
               placeholder="Guest/Speaker Name"
-              className="mb-2 p-2 border border-gray-300 rounded w-full"
+              className="mb-2 p-2 border border-gray-300 rounded w-full bg-white dark:bg-gray-800"
               disabled={!isEditMode}
               required
             />
@@ -273,7 +271,7 @@ const FormComponent = ({ onSubmit }) => {
               value={guestSpeaker.designation}
               onChange={(e) => handleGuestSpeakerChange(index, e)}
               placeholder="Guest/Speaker Designation"
-              className="mb-2 p-2 border border-gray-300 rounded w-full"
+              className="mb-2 p-2 border border-gray-300 rounded w-full bg-white dark:bg-gray-800"
               disabled={!isEditMode}
               required
             />
@@ -304,7 +302,7 @@ const FormComponent = ({ onSubmit }) => {
           value={formData.startDate}
           onChange={handleChange}
           placeholder="Start Date"
-          className="mb-4 p-2 border border-gray-300 rounded w-full"
+          className="mb-4 p-2 border border-gray-300 rounded w-full bg-white dark:bg-gray-800"
           disabled={!isEditMode}
           required
         />
@@ -315,7 +313,7 @@ const FormComponent = ({ onSubmit }) => {
           value={formData.startTime}
           onChange={handleChange}
           placeholder="Start Time"
-          className="mb-4 p-2 border border-gray-300 rounded w-full"
+          className="mb-4 p-2 border border-gray-300 rounded w-full bg-white dark:bg-gray-800"
           disabled={!isEditMode}
           required
         />
@@ -326,7 +324,7 @@ const FormComponent = ({ onSubmit }) => {
           value={formData.endDate}
           onChange={handleChange}
           placeholder="End Date"
-          className="mb-4 p-2 border border-gray-300 rounded w-full"
+          className="mb-4 p-2 border border-gray-300 rounded w-full bg-white dark:bg-gray-800"
           disabled={!isEditMode}
           required
         />
@@ -337,7 +335,7 @@ const FormComponent = ({ onSubmit }) => {
           value={formData.endTime}
           onChange={handleChange}
           placeholder="End Time"
-          className="mb-4 p-2 border border-gray-300 rounded w-full"
+          className="mb-4 p-2 border border-gray-300 rounded w-full bg-white dark:bg-gray-800"
           disabled={!isEditMode}
           required
         />
@@ -348,7 +346,7 @@ const FormComponent = ({ onSubmit }) => {
           value={formData.venue}
           onChange={handleChange}
           placeholder="Venue"
-          className="mb-4 p-2 border border-gray-300 rounded w-full"
+          className="mb-4 p-2 border border-gray-300 rounded w-full bg-white dark:bg-gray-800"
           disabled={!isEditMode}
           required
         />
@@ -359,7 +357,7 @@ const FormComponent = ({ onSubmit }) => {
           value={formData.resources}
           onChange={handleChange}
           placeholder="Resources"
-          className="mb-4 p-2 border border-gray-300 rounded w-full"
+          className="mb-4 p-2 border border-gray-300 rounded w-full bg-white dark:bg-gray-800"
           disabled={!isEditMode}
           required
         />
@@ -519,7 +517,7 @@ const FormComponent = ({ onSubmit }) => {
           value={formData.audience}
           onChange={handleChange}
           placeholder="Audience"
-          className="mb-4 p-2 border border-gray-300 rounded w-full"
+          className="mb-4 p-2 border border-gray-300 rounded w-full bg-white dark:bg-gray-800"
           disabled={!isEditMode}
           required
         />
@@ -530,7 +528,7 @@ const FormComponent = ({ onSubmit }) => {
           value={formData.clubs}
           onChange={handleChange}
           placeholder="Collaboration"
-          className="mb-4 p-2 border border-gray-300 rounded w-full"
+          className="mb-4 p-2 border border-gray-300 rounded w-full bg-white dark:bg-gray-800"
           disabled={!isEditMode}
           required
         />
@@ -543,7 +541,7 @@ const FormComponent = ({ onSubmit }) => {
                 name={`objective-${index}`}
                 value={objective}
                 onChange={(e) => handleObjectiveChange(index, e.target.value)}
-                className="mb-4 p-2 border border-gray-300 rounded w-full"
+                className="mb-4 p-2 border border-gray-300 rounded w-full bg-white dark:bg-gray-800"
                 disabled={!isEditMode}
                 required
               />
@@ -575,7 +573,7 @@ const FormComponent = ({ onSubmit }) => {
           value={formData.description}
           onChange={handleChange}
           placeholder="Description"
-          className="mb-4 p-2 border border-gray-300 rounded w-full h-300"
+          className="mb-4 p-2 border border-gray-300 rounded w-full h-300 bg-white dark:bg-gray-800"
           required
         ></textarea>
         <div>
@@ -589,9 +587,9 @@ const FormComponent = ({ onSubmit }) => {
                 onChange={(e) =>
                   handleCoordinatorChange("facultyCoordinators", index, e)
                 }
-                className="mb-4 p-2 border border-gray-300 rounded w-full"
+                className="mb-4 p-2 border border-gray-300 rounded w-full bg-white dark:bg-gray-800"
               />
-              {formData.facultyCoordinators.length > 2 && (
+              {formData.facultyCoordinators.length > 1 && (
                 <button
                   type="button"
                   onClick={() =>
@@ -623,9 +621,9 @@ const FormComponent = ({ onSubmit }) => {
                 onChange={(e) =>
                   handleCoordinatorChange("studentCoordinators", index, e)
                 }
-                className="mb-4 p-2 border border-gray-300 rounded w-full"
+                className="mb-4 p-2 border border-gray-300 rounded w-full bg-white dark:bg-gray-800"
               />
-              {formData.studentCoordinators.length > 5 && (
+              {formData.studentCoordinators.length > 3 && (
                 <button
                   type="button"
                   onClick={() =>
@@ -647,13 +645,13 @@ const FormComponent = ({ onSubmit }) => {
           </button>
         </div>
 
-        <label className="block mb-2 text-gray-700">Media Input</label>
+        <label className="block mb-2">Media Input</label>
         <input
           type="file"
           name="photos"
           multiple
           onChange={handleChange}
-          className="mb-4 p-2 border border-gray-300 rounded w-full"
+          className="mb-4 p-2 border border-gray-300 rounded w-full bg-white dark:bg-gray-800"
         />
         <button
           type="submit"

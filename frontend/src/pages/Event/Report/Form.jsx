@@ -8,7 +8,7 @@ const Form = () => {
   };
 
   return (
-    <div>
+    <div className="w-full max-w-screen-lg mx-auto p-4">
       <FormComponent onSubmit={handleFormSubmit} />
     </div>
   );
