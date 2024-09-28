@@ -46,7 +46,12 @@ const App = () => {
         setRejected(rejectedCount);
         setModified(modifiedCount);
         setRole(data.username);
-        setUpcomingEvents(data.upcomingevent);
+        if(data.upcomingevent === undefined) {
+          setUpcomingEvents([]);
+        }else{
+          setUpcomingEvents(data.upcomingevent);
+        }
+        
         console.log(data);
         if (data.role === "faculty" || data.role === "centralAuthority") {
           if (data.reportStatus === false) {
@@ -65,7 +70,7 @@ const App = () => {
             setCurrentStatus(`${data.currentStatusValue} pending requests`);
           }
         }
-
+console.log(data.currentStatusValue)
         const monthNames = [
           "January",
           "February",
