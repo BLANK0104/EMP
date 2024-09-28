@@ -234,54 +234,78 @@ app.get("/api/role", authenticateToken, (req, res) => {
   res.json({ role });
 });
 
-app.get("/api/can-submit-request", authenticateToken, async (req, res) => {
-  const { id } = req.user; // Ensure the id is correct and populated
-  if (!id) {
-    return res.status(400).json({ error: "User not authenticated" });
-  }
+app.get(
+  "/api/can-submit-request",
+  authenticateToken,
+  authorizedRole(["faculty", "centralAuthority"]),
+  async (req, res) => {
+    const { id } = req.user; // Ensure the id is correct and populated
+    if (!id) {
+      return res.status(400).json({ error: "User not authenticated" });
+    }
 
-  try {
-    // Fetch the latest event created by the user
-    const events = await db.query(
-      `SELECT e.id
+    try {
+      // Fetch the latest event created by the user
+      const events = await db.query(
+        `SELECT e.id, e.status
        FROM events e
        WHERE e.created_by = $1
        ORDER BY e.created_at DESC
        LIMIT 1;`,
-      [id]
-    );
-    // console.log(events.rows.length);
+        [id]
+      );
+      // console.log(events.rows.length);
 
-    if (events.rows.length === 0) {
-      return res.json({ canSubmitRequest: true, eventId: null });
+      if (events.rows.length === 0) {
+        return res.json({
+          canSubmitRequest: true,
+          canSubmitReport: false,
+          eventId: null,
+        });
+      }
+
+      const latestEventStatus = events.rows[0].status;
+      console.log(`Latest event Status: ${latestEventStatus}`);
+      const latestEventId = events.rows[0].id;
+      console.log(`Latest Event id ${latestEventId}`);
+
+      const report = await db.query(`select 1 from report where event_id =$1`, [
+        latestEventId,
+      ]);
+
+      if (report.rowCount > 0) {
+        return res.json({
+          canSubmitRequest: true,
+          canSubmitReport: false,
+          eventId: null,
+        });
+      }
+
+      if (latestEventStatus === "Pending") {
+        return res.json({
+          canSubmitRequest: false,
+          canSubmitReport: false,
+          eventId: events.rows[0].id,
+        });
+      } else if (latestEventStatus === "Approved") {
+        return res.json({
+          canSubmitRequest: false,
+          canSubmitReport: true,
+          eventId: null,
+        });
+      } else {
+        return res.json({
+          canSubmitRequest: true,
+          canSubmitReport: false,
+          eventId: null,
+        });
+      }
+    } catch (error) {
+      console.error("Error checking request permission:", error);
+      return res.status(500).json({ error: "Internal server error" });
     }
-
-    const latestEventId = events.rows[0].id;
-    console.log(`Latest event ID: ${latestEventId}`);
-
-    // Check if the event_id exists in the report table
-    const reportCheck = await db.query(
-      `SELECT r.event_id 
-       FROM report r 
-       WHERE r.event_id = $1;`,
-      [latestEventId]
-    );
-
-    console.log(reportCheck.rows.length); // Log the number of rows
-    const check = reportCheck.rows;
-    console.log(check);
-
-    // Assign canSubmitRequest based on whether there are rows or not
-    const canSubmitRequest = check.length > 0; // True if no report exists
-
-    console.log(`Can submit request: ${canSubmitRequest}`); // Log the correct value of canSubmitRequest
-
-    return res.json({ canSubmitRequest, eventId: latestEventId });
-  } catch (error) {
-    console.error("Error checking request permission:", error);
-    return res.status(500).json({ error: "Internal server error" });
   }
-});
+);
 
 app.post("/api/report-data", async (req, res) => {
   console.log("body:", req.body);

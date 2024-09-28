@@ -5,12 +5,16 @@ const acceptRequest = async (role, requestId, userId) => {
   // Get a client from the pool to execute queries in a transaction
   const client = await db.getClient();
 
-  const nextApproverQuery = await db.query(
-    "select approver from request_assign where created_by = $1",
-    [userId]
-  );
+  let nextApprover = null;
 
-  const nextApprover = nextApproverQuery.rows[0].approver;
+  if (role === "dean") {
+    const nextApproverQuery = await db.query(
+      "select approver from request_assign where created_by = $1",
+      [userId]
+    );
+
+    nextApprover = nextApproverQuery.rows[0].approver;
+  }
 
   try {
     // Begin transaction
