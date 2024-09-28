@@ -138,22 +138,22 @@ const Request = ({ requests, selectedRequest, setSelectedRequest }) => {
           {requests && requests.length > 0 ? (
             requests.map((request, index) => (
               <tr
-              key={request.id}
-              className="hover:bg-gray-100 text-center dark:hover:bg-gray-700 cursor-pointer"
-              onClick={() => handleRequestClick(request)}
-            >
-              <td className="px-6 py-4 pl-4 whitespace-nowrap text-center">{index + 1}</td>
-              <td className="px-6 py-4 pl-4 whitespace-nowrap text-center">{request.title}</td>
-              <td className="px-6 py-4 pl-4 whitespace-nowrap text-center">{request.username}</td>
-              <td className="px-6 py-4 pl-4 whitespace-nowrap text-center">
-                {/* Faculty Coordinator - Add later */}
-              </td>
-              <td className="px-6 py-4 pl-4 whitespace-nowrap text-center">
-                {request.event_dates.length > 0
-                  ? request.event_dates[0].venues[0]
-                  : "N/A"}
-              </td>
-            </tr>
+                key={request.id}
+                className="hover:bg-gray-100 text-center dark:hover:bg-gray-700 cursor-pointer"
+                onClick={() => handleRequestClick(request)}
+              >
+                <td className="px-6 py-4 pl-4 whitespace-nowrap text-center">{index + 1}</td>
+                <td className="px-6 py-4 pl-4 whitespace-nowrap text-center">{request.title}</td>
+                <td className="px-6 py-4 pl-4 whitespace-nowrap text-center">{request.username}</td>
+                <td className="px-6 py-4 pl-4 whitespace-nowrap text-center">
+                  {/* Faculty Coordinator - Add later */}
+                </td>
+                <td className="px-6 py-4 pl-4 whitespace-nowrap text-center">
+                  {request.event_dates.length > 0
+                    ? request.event_dates[0].venues[0]
+                    : "N/A"}
+                </td>
+              </tr>
             ))
           ) : (
             <tr>
@@ -177,63 +177,74 @@ const Request = ({ requests, selectedRequest, setSelectedRequest }) => {
             <h2 className="text-xl font-bold mb-4 dark:text-white">
               Request Details
             </h2>
-            <p className="dark:text-gray-300">
-              <strong>Title:</strong> {selectedRequest.title}
-            </p>
-            <p className="dark:text-gray-300">
-              <strong>Type:</strong> {selectedRequest.eventtype}
-            </p>
-            <p className="dark:text-gray-300">
-              <strong>Description:</strong> {selectedRequest.description}
-            </p>
-            <p className="dark:text-gray-300">
-              <strong>Objectives:</strong> {selectedRequest.objectives}
-            </p>
-            <p className="dark:text-gray-300">
-              <strong>Target Audience:</strong> {selectedRequest.TAudience}
-            </p>
-            <p className="dark:text-gray-300">
-              <strong>Branch:</strong> {selectedRequest.school_audience.branch}
-            </p>
-            <p className="dark:text-gray-300">
-              <strong>Classes:</strong> {selectedRequest.school_audience.class}
-            </p>
-            <p className="dark:text-gray-300">
-              <strong>Year:</strong> {selectedRequest.school_audience.year}
-            </p>
-            <p className="dark:text-gray-300">
-              <strong>Max Audience:</strong> {selectedRequest.audience}
-            </p>
-            <p className="dark:text-gray-300">
-              <strong>Club:</strong> {selectedRequest.username}
-            </p>
-            <p className="dark:text-gray-300">
-              <strong>Faculty Coordinator:</strong> {/* Add later */}
-            </p>
-            <p className="dark:text-gray-300">
-              <strong>Venue:</strong>{" "}
-              {selectedRequest.event_dates.map((event, idx) => (
-                <span key={idx}>{event.venues.join(", ")}</span>
-              ))}
-            </p>
-            <p className="dark:text-gray-300">
-              <strong>Event Start Date:</strong>{" "}
-              {selectedRequest.event_dates[0]?.date}
-            </p>
-            <p className="dark:text-gray-300">
-              <strong>Event Start Time:</strong>{" "}
-              {selectedRequest.event_dates[0]?.start_time}
-            </p>
-            <p className="dark:text-gray-300">
-              <strong>Event End Time:</strong>{" "}
-              {selectedRequest.event_dates[0]?.end_time}
-            </p>
-            <p className="dark:text-gray-300">
-              <strong>Resources Required:</strong> {selectedRequest.resources}
-            </p>
-            <p className="dark:text-gray-300">
-              <strong>Collaborators:</strong> {selectedRequest.clubs}
-            </p>
+            
+<p className="dark:text-gray-300">
+  <strong>Title:</strong> {selectedRequest.title}
+</p>
+<p className="dark:text-gray-300">
+  <strong>Type:</strong> {selectedRequest.eventtype}
+</p>
+<p className="dark:text-gray-300">
+  <strong>Description:</strong> {selectedRequest.description}
+</p>
+<p className="dark:text-gray-300">
+  <strong>Objectives:</strong>{" "}
+  {Array.isArray(selectedRequest.objectives) ? (
+    selectedRequest.objectives.map((objective, idx) => (
+      <span key={idx}>{idx + 1}. {objective}<br /></span>
+    ))
+  ) : (
+    selectedRequest.objectives
+  )}
+</p>
+<p className="dark:text-gray-300">
+  <strong>Target Audience:</strong> {selectedRequest.TAudience}
+</p>
+<p className="dark:text-gray-300">
+  <strong>Branch:</strong> {selectedRequest.school_audience.branch}
+</p>
+<p className="dark:text-gray-300">
+  <strong>Classes:</strong> {selectedRequest.school_audience.class}
+</p>
+<p className="dark:text-gray-300">
+  <strong>Year:</strong> {selectedRequest.school_audience.year}
+</p>
+<p className="dark:text-gray-300">
+  <strong>Max Audience:</strong> {selectedRequest.audience}
+</p>
+<p className="dark:text-gray-300">
+  <strong>Club:</strong> {selectedRequest.username}
+</p>
+<p className="dark:text-gray-300">
+  <strong>Faculty Coordinator:</strong> {/* Add later */}
+</p>
+<p className="dark:text-gray-300">
+  <strong>Venue:</strong>{" "}
+  {selectedRequest.event_dates.map((event, idx) => (
+    <span key={idx}>{idx + 1}. {event.venue}<br /></span>
+  ))}
+</p>
+<p className="dark:text-gray-300">
+  <strong>Event Start Date:</strong>{" "}
+  {selectedRequest.event_dates[0]?.date}
+</p>
+<p className="dark:text-gray-300">
+  <strong>Event Start Time:</strong>{" "}
+  {selectedRequest.event_dates[0]?.start_time}
+</p>
+<p className="dark:text-gray-300">
+  <strong>Event End Time:</strong>{" "}
+  {selectedRequest.event_dates[0]?.end_time}
+</p>
+<p className="dark:text-gray-300">
+  <strong>Resources Required:</strong> {selectedRequest.resources}
+</p>
+<p className="dark:text-gray-300">
+  <strong>Collaborators:</strong>{" "}
+  {selectedRequest.clubs.map((club, idx) => (
+    <span key={idx}>{idx + 1}. {club}<br /></span>
+  ))}
+</p>
             <div className="mt-4">
               <button
                 className="bg-green-500 text-white px-4 py-2 rounded mr-2"
