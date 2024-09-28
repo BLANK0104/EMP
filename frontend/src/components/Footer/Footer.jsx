@@ -37,7 +37,7 @@ const Footer = () => {
               <ul className="flex flex-wrap justify-center md:justify-start">
                 <li className="m-1 text-sm sm:text-base">Achyut Vyas</li>
                 <li className="m-1 text-sm sm:text-base">Dev Saraf</li>
-                <li className="m-1 text-sm sm:text-base">Divanshu Patil</li>
+                <li className="m-1 text-sm sm:text-base">Divyanshu Patil</li>
               </ul>
               <ul className="flex flex-wrap justify-center md:justify-start">
                 <li className="m-1 text-sm sm:text-base">Harsh Jain</li>
