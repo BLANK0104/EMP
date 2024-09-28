@@ -28,6 +28,7 @@ const App = () => {
     })
       .then((response) => response.json())
       .then((data) => {
+        console.log(data);
         let acceptedCount = 0;
         let rejectedCount = 0;
         let modifiedCount = 0;
@@ -45,16 +46,24 @@ const App = () => {
         setRejected(rejectedCount);
         setModified(modifiedCount);
         setRole(data.username);
-        setUpcomingEvents(data.upcomingEvents);
+        setUpcomingEvents(data.upcomingevent);
         console.log(data);
-        if (data.reportStatus === false) {
-          setCurrentStatus(`Please submit the report of the event`);
-        } else if (data.reportStatus === null) {
-          setCurrentStatus("No request added");
+        if (data.role === "faculty" || data.role === "centralAuthority") {
+          if (data.reportStatus === false) {
+            setCurrentStatus(`Please submit the report of the event`);
+          } else if (data.reportStatus === null) {
+            setCurrentStatus("No request added");
+          } else {
+            setCurrentStatus(
+              `${data.latestData.status} by ${data.latestData.username}`
+            );
+          }
         } else {
-          setCurrentStatus(
-            `${data.latestData.status} by ${data.latestData.username} `
-          );
+          if (data.currentStatusValue === 0) {
+            setCurrentStatus(`No pending requests`);
+          } else {
+            setCurrentStatus(`${data.currentStatusValue} pending requests`);
+          }
         }
 
         const monthNames = [
