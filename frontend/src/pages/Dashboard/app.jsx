@@ -46,9 +46,16 @@ const App = () => {
         setModified(modifiedCount);
         setRole(data.username);
         setUpcomingEvents(data.upcomingEvents);
-        setCurrentStatus(
-          `${data.latestData.status} by ${data.latestData.username} `
-        );
+        console.log(data);
+        if (data.reportStatus === false) {
+          setCurrentStatus(`Please submit the report of the event`);
+        } else if (data.reportStatus === null) {
+          setCurrentStatus("No request added");
+        } else {
+          setCurrentStatus(
+            `${data.latestData.status} by ${data.latestData.username} `
+          );
+        }
 
         const monthNames = [
           "January",
