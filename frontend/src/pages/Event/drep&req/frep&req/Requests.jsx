@@ -191,7 +191,7 @@ const Request = ({ requests, selectedRequest, setSelectedRequest }) => {
   <strong>Objectives:</strong>{" "}
   {Array.isArray(selectedRequest.objectives) ? (
     selectedRequest.objectives.map((objective, idx) => (
-      <span key={idx}>{idx + 1}. {objective}<br /></span>
+      <span key={idx}><br />{idx + 1}. {objective}</span>
     ))
   ) : (
     selectedRequest.objectives
