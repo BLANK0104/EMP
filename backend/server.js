@@ -411,7 +411,7 @@ app.get(
     // console.log(id);
     // console.log("Role", role);
     const data = await dashboard(id, role);
-    console.log(data);
+    // console.log(data);
     res.json(data);
   }
 );
