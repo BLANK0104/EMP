@@ -46,12 +46,12 @@ const App = () => {
         setRejected(rejectedCount);
         setModified(modifiedCount);
         setRole(data.username);
-        if(data.upcomingevent === undefined) {
+        if (data.upcomingevent === undefined) {
           setUpcomingEvents([]);
-        }else{
+        } else {
           setUpcomingEvents(data.upcomingevent);
         }
-        
+
         console.log(data);
         if (data.role === "faculty" || data.role === "centralAuthority") {
           if (data.reportStatus === false) {
@@ -64,13 +64,16 @@ const App = () => {
             );
           }
         } else {
-          if (data.currentStatusValue === 0) {
+          if (
+            data.currentStatusValue === 0 ||
+            data.currentStatusValue === undefined
+          ) {
             setCurrentStatus(`No pending requests`);
           } else {
             setCurrentStatus(`${data.currentStatusValue} pending requests`);
           }
         }
-console.log(data.currentStatusValue)
+        console.log(data.currentStatusValue);
         const monthNames = [
           "January",
           "February",
