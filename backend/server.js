@@ -11,6 +11,7 @@ const db = require("./db");
 const addEvent = require("./Events/addEvent");
 const { getRequestStatus } = require("./Request/latestRequest");
 const requests = require("./Request/requests");
+const report = require("./Report/report")
 const acceptRequest = require("./Request/acceptRequest");
 const rejectRequest = require("./Request/rejectRequest");
 const modifyRequest = require("./Request/modifyRequest");
@@ -215,6 +216,25 @@ app.get(
       // console.log(response);
       res.json(response);
     } catch {}
+  }
+);
+
+app.get(
+  "/api/report",
+  authenticateToken,
+  authorizedRole(["dean", "director"]),
+  async (req, res) => {
+    console.log("Request received at /api/report");
+    const { id } = req.user;
+    console.log(`User ID: ${id}`);
+    try {
+      const response = await report(id);
+      console.log("Report generated successfully");
+      res.json(response);
+    } catch (error) {
+      console.error("Error generating report:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
   }
 );
 

@@ -196,6 +196,29 @@ export const generatePdf = async ({ formData }) => {
       console.error("Error reading photo file:", error);
     }
   }
+  // Convert the PDF to a Blob
+  const pdfBlob = doc.output("blob");
 
-  doc.save("form.pdf");
+  // Create a FormData object to send the PDF to the server
+  const formDataToSend = new FormData();
+  formDataToSend.append("file", pdfBlob, `${formData.title}.pdf`);
+
+  // Send the PDF to the server
+  try {
+    const response = await fetch("/api/upload", {
+      method: "POST",
+      body: formDataToSend,
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to upload PDF");
+    }
+
+    console.log("PDF uploaded successfully");
+  } catch (error) {
+    console.error("Error uploading PDF:", error);
+  }
+  const fileName = formData.title ? `${formData.title}.pdf` : "form.pdf";
+  doc.save(fileName);
+  
 };
