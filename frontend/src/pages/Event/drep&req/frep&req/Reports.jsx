@@ -46,20 +46,20 @@ const Report = ({ reports, selectedReport, setSelectedReport }) => {
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
+          <tbody className="bg-white dark:bg-gray-900 divide-y text-center divide-gray-200 dark:divide-gray-700">
             {reports.map((report, index) => (
               <tr
                 key={report.id}
                 onClick={() => handleReportClick(report)}
-                className="hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
+                className="hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer text-center"
               >
-                <td className="px-6 py-4 whitespace-nowrap">{index + 1}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{report.title}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{report.club}</td>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="px-6 py-4 whitespace-nowrap text-center">{index + 1}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-center">{report.title}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-center">{report.club}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-center">
                   {report.facultyCoordinator}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">{report.venue}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-center">{report.venue}</td>
               </tr>
             ))}
           </tbody>

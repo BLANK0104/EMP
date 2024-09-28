@@ -113,7 +113,7 @@ const Request = ({ requests, selectedRequest, setSelectedRequest }) => {
   };
 
   return (
-    <div className={`p-4 dark:text-white text-black`}>
+    <div className={`p-4 pl-6 dark:text-white text-black`}>
       <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
         <thead>
           <tr>
@@ -134,28 +134,26 @@ const Request = ({ requests, selectedRequest, setSelectedRequest }) => {
             </th>
           </tr>
         </thead>
-        <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
+        <tbody className="bg-white dark:bg-gray-900 text-center divide-y divide-gray-200 dark:divide-gray-700">
           {requests && requests.length > 0 ? (
             requests.map((request, index) => (
               <tr
-                key={request.id}
-                className="hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
-                onClick={() => handleRequestClick(request)}
-              >
-                <td className="px-6 py-4 whitespace-nowrap">{index + 1}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{request.title}</td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {request.username}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {/* Faculty Coordinator - Add later */}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {request.event_dates.length > 0
-                    ? request.event_dates[0].venues[0]
-                    : "N/A"}
-                </td>
-              </tr>
+              key={request.id}
+              className="hover:bg-gray-100 text-center dark:hover:bg-gray-700 cursor-pointer"
+              onClick={() => handleRequestClick(request)}
+            >
+              <td className="px-6 py-4 pl-4 whitespace-nowrap text-center">{index + 1}</td>
+              <td className="px-6 py-4 pl-4 whitespace-nowrap text-center">{request.title}</td>
+              <td className="px-6 py-4 pl-4 whitespace-nowrap text-center">{request.username}</td>
+              <td className="px-6 py-4 pl-4 whitespace-nowrap text-center">
+                {/* Faculty Coordinator - Add later */}
+              </td>
+              <td className="px-6 py-4 pl-4 whitespace-nowrap text-center">
+                {request.event_dates.length > 0
+                  ? request.event_dates[0].venues[0]
+                  : "N/A"}
+              </td>
+            </tr>
             ))
           ) : (
             <tr>
