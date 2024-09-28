@@ -68,12 +68,11 @@ const Report = ({ reports, selectedReport, setSelectedReport }) => {
       {showPopup && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white dark:bg-gray-800 p-4 rounded shadow-lg">
-            <p className="dark:text-white">Detailed Report goes here</p>
             <button
               onClick={handleAcceptReport}
-              className="mt-2 px-4 py-2 bg-blue-500 text-white rounded"
+              className="mt-2 px-4 py-2 bg-grees-500 text-white rounded"
             >
-              Accept
+              Download Report
             </button>
           </div>
         </div>
