@@ -15,10 +15,11 @@ const acceptRequest = require("./Request/acceptRequest");
 const rejectRequest = require("./Request/rejectRequest");
 const modifyRequest = require("./Request/modifyRequest");
 const calendar = require("./Calendar/calendar");
-const dashboard = require("./Dashboard/dasboard");
+const Facultydashboard = require("./Dashboard/Facultydasboard");
 const history = require("./History/history");
 const addDraft = require("./Events/addDraft");
 const { getDraft } = require("./Events/getDraft");
+const DeanDirectorDashboard = require("./Dashboard/DeanDirectorDashboard");
 
 const app = express();
 const PORT = 5000;
@@ -410,9 +411,10 @@ app.get(
     const { id, role } = req.user;
     // console.log(id);
     // console.log("Role", role);
-    const data = await dashboard(id, role);
-    // console.log(data);
-    res.json(data);
+    {(role === "faculty" || role === "centralAuthority") ?
+      Facultydashboard(id, req, res, role) : DeanDirectorDashboard(id, req, res, role)
+    }
+    
   }
 );
 
