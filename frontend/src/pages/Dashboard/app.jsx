@@ -59,7 +59,7 @@ const App = () => {
           } else if (data.reportStatus === null) {
             setCurrentStatus("No request added");
           } else {
-            setCurrentStatus(
+            setCurrentStatus( 
               `${data.latestData.status} by ${data.latestData.username}`
             );
           }
