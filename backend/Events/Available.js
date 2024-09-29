@@ -37,4 +37,4 @@ const Available = async (id, venue, eventDateTime) => {
   return 0;
 };
 
-module.exports = requests;
+module.exports = Available;
