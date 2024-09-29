@@ -15,6 +15,7 @@ const report = require("./Report/report")
 const acceptRequest = require("./Request/acceptRequest");
 const rejectRequest = require("./Request/rejectRequest");
 const modifyRequest = require("./Request/modifyRequest");
+const Available = require("./Events/Available");
 const calendar = require("./Calendar/calendar");
 const Facultydashboard = require("./Dashboard/Facultydasboard");
 const history = require("./History/history");
@@ -323,6 +324,28 @@ app.get(
       }
     } catch (error) {
       console.error("Error checking request permission:", error);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+  }
+);
+
+
+app.post(
+  "/api/Available",
+  authenticateToken,
+  authorizedRole(["faculty", "centralAuthority"]),
+  async (req, res) => {
+    const { id, venue, eventDateTime } = req.body;
+
+    try {
+      const availability = await Available(id, venue, eventDateTime);
+      if (availability === 1) {
+        return res.status(200).json({ Available: false, message: "Venue is already booked for the specified date and time." });
+      } else {
+        return res.status(200).json({ Available: true, message: "Venue is Available." });
+      }
+    } catch (error) {
+      console.error("Error checking availability:", error);
       return res.status(500).json({ error: "Internal server error" });
     }
   }
