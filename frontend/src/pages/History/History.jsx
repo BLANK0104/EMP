@@ -190,7 +190,7 @@ const History = ({ data }) => {
                 Status
               </th>
               <th className="px-2 py-1 border-b text-center bg-red-100 rounded-tr-lg dark:bg-red-900 text-xs md:text-base">
-                Download
+                Download Report
               </th>
             </tr>
           </thead>
@@ -219,10 +219,28 @@ const History = ({ data }) => {
                   {item.status}
                 </td>
                 <td className="px-2 py-1 border-b text-center align-middle dark:border-gray-600">
-                  <button onClick={() => handleDownload(item)}>
-                    <FaDownload className="text-blue-500 hover:text-blue-700" />
-                  </button>
-                </td>
+  <a
+    href={`/Reports/${item.event}.pdf`}
+    download
+    className="text-blue-500 hover:underline"
+    onClick={(e) => {
+      e.preventDefault();
+      fetch(`/Reports/${item.event}.pdf`, { method: 'HEAD' })
+        .then((response) => {
+          if (response.ok) {
+            window.location.href = `/Reports/${item.event}.pdf`;
+          } else {
+            alert("Report has yet to be generated");
+          }
+        })
+        .catch(() => {
+          alert("Report has yet to be generated");
+        });
+    }}
+  >
+    Download
+  </a>
+</td>
               </tr>
             ))}
           </tbody>
