@@ -410,13 +410,13 @@ const FormComponent = ({ onSubmit }) => {
                 <input
                   type="checkbox"
                   name="branches"
-                  value="SE"
-                  checked={formData.branches.includes("SE")}
+                  value="CE"
+                  checked={formData.branches.includes("CE")}
                   onChange={(e) => handleCheckboxChange(e, "branches")}
                   className="mr-2"
                   disabled={!isEditMode}
                 />
-                SE
+                CE
               </label>
               <label className="ml-4">
                 <input

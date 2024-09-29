@@ -11,7 +11,7 @@ const db = require("./db");
 const addEvent = require("./Events/addEvent");
 const { getRequestStatus } = require("./Request/latestRequest");
 const requests = require("./Request/requests");
-const report = require("./Report/report")
+const reporttab = require("./Report/reporttab")
 const acceptRequest = require("./Request/acceptRequest");
 const rejectRequest = require("./Request/rejectRequest");
 const modifyRequest = require("./Request/modifyRequest");
@@ -221,15 +221,15 @@ app.get(
 );
 
 app.get(
-  "/api/report",
+  "/api/reporttab",
   authenticateToken,
   authorizedRole(["dean", "director"]),
   async (req, res) => {
-    console.log("Request received at /api/report");
+    console.log("Request received at /api/reporttab");
     const { id } = req.user;
     console.log(`User ID: ${id}`);
     try {
-      const response = await report(id);
+      const response = await reporttab(id);
       console.log("Report generated successfully");
       res.json(response);
     } catch (error) {
