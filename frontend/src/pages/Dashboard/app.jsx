@@ -19,6 +19,9 @@ const App = () => {
     accepted: [],
     rejected: [],
     modified: [],
+    yearlyAccepted: [],
+    yearlyRejected: [],
+    yearlyModified: [],
   });
 
   useEffect(() => {
@@ -122,11 +125,24 @@ const App = () => {
           (month) => monthCounts.modified[month] || 0
         );
 
+        const yearlyAcceptedData = monthNames.map(
+          (month) => monthCounts.accepted[month] || 0
+        );
+        const yearlyRejectedData = monthNames.map(
+          (month) => monthCounts.rejected[month] || 0
+        );
+        const yearlyModifiedData = monthNames.map(
+          (month) => monthCounts.modified[month] || 0
+        );
+
         setGraphData({
           labels,
           accepted: acceptedData,
           rejected: rejectedData,
           modified: modifiedData,
+          yearlyAccepted: yearlyAcceptedData,
+          yearlyRejected: yearlyRejectedData,
+          yearlyModified: yearlyModifiedData,
         });
       })
       .catch((error) => console.error("Error fetching data:", error));

@@ -34,7 +34,39 @@ const LeftGraph = ({
     setSemesterType(event.target.value);
   };
 
-  const data = {
+  const monthlyLabels = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+
+  const yearlyData = {
+    labels: monthlyLabels,
+    datasets: [
+      {
+        label: "Accepted",
+        data: graphData.yearlyAccepted,
+        backgroundColor: "rgba(34,197,94,0.2)", // Green
+        borderColor: "rgba(34,197,94,1)",
+        borderWidth: 1,
+      },
+      {
+        label: "Rejected",
+        data: graphData.yearlyRejected,
+        backgroundColor: "rgba(239,68,68,0.2)", // Red
+        borderColor: "rgba(239,68,68,1)",
+        borderWidth: 1,
+      },
+      {
+        label: "Modified",
+        data: graphData.yearlyModified,
+        backgroundColor: "rgba(251,146,60,0.2)", // Orange
+        borderColor: "rgba(251,146,60,1)",
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const semesterData = {
     labels: graphData.labels,
     datasets: [
       {
@@ -61,6 +93,8 @@ const LeftGraph = ({
     ],
   };
 
+  const data = timeFrame === "Year" ? yearlyData : semesterData;
+
   const options = {
     maintainAspectRatio: false,
     scales: {
@@ -74,6 +108,11 @@ const LeftGraph = ({
       },
     },
   };
+
+  // Debugging logs
+  console.log("Time Frame:", timeFrame);
+  console.log("Graph Data:", graphData);
+  console.log("Data for Chart:", data);
 
   return (
     <div className="w-full h-96 md:h-full p-4 overflow-x-auto flex justify-end">

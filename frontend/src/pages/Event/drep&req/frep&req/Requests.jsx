@@ -166,108 +166,108 @@ const Request = ({ requests, selectedRequest, setSelectedRequest }) => {
       </table>
 
       {isModalOpen && (
-        <div
-          className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 dark:bg-opacity-80"
-          onClick={handleCloseModal}
+  <div
+    className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 dark:bg-opacity-80"
+    onClick={handleCloseModal}
+  >
+    <div
+      className="bg-white dark:bg-gray-800 p-6 rounded shadow-lg max-w-3xl max-h-96 overflow-auto"
+      onClick={(e) => e.stopPropagation()}
+    >
+      <h2 className="text-xl font-bold mb-4 dark:text-white">
+        Request Details
+      </h2>
+      
+      <p className="dark:text-gray-300">
+        <strong>Title:</strong> {selectedRequest.title}
+      </p>
+      <p className="dark:text-gray-300">
+        <strong>Type:</strong> {selectedRequest.eventtype}
+      </p>
+      <p className="dark:text-gray-300">
+        <strong>Description:</strong> {selectedRequest.description}
+      </p>
+      <p className="dark:text-gray-300">
+        <strong>Objectives:</strong>{" "}
+        {Array.isArray(selectedRequest.objectives) ? (
+          selectedRequest.objectives.map((objective, idx) => (
+            <span key={idx}><br />{idx + 1}. {objective}</span>
+          ))
+        ) : (
+          selectedRequest.objectives
+        )}
+      </p>
+      <p className="dark:text-gray-300">
+        <strong>Target Audience:</strong> {selectedRequest.TAudience}
+      </p>
+      <p className="dark:text-gray-300 ml-24">
+       <strong>Branch:</strong> {selectedRequest.school_audience.branch}
+      </p>
+      <p className="dark:text-gray-300 ml-24">
+        <strong>Classes:</strong> {selectedRequest.school_audience.class}
+      </p>
+      <p className="dark:text-gray-300 ml-24">
+        <strong>Year:</strong> {selectedRequest.school_audience.year}
+      </p>
+      <p className="dark:text-gray-300">
+        <strong>Max Audience:</strong> {selectedRequest.audience}
+      </p>
+      <p className="dark:text-gray-300">
+        <strong>Club:</strong> {selectedRequest.username}
+      </p>
+      <p className="dark:text-gray-300">
+        <strong>Faculty Coordinator:</strong> {/* Add later */}
+      </p>
+      <p className="dark:text-gray-300">
+        <strong>Venue:</strong>{" "}
+        {selectedRequest.event_dates.map((event, idx) => (
+          <span key={idx}>{idx + 1}. {event.venue}<br /></span>
+        ))}
+      </p>
+      <p className="dark:text-gray-300">
+        <strong>Event Start Date:</strong>{" "}
+        {selectedRequest.event_dates[0]?.date}
+      </p>
+      <p className="dark:text-gray-300">
+        <strong>Event Start Time:</strong>{" "}
+        {selectedRequest.event_dates[0]?.start_time}
+      </p>
+      <p className="dark:text-gray-300">
+        <strong>Event End Time:</strong>{" "}
+        {selectedRequest.event_dates[0]?.end_time}
+      </p>
+      <p className="dark:text-gray-300">
+        <strong>Resources Required:</strong> {selectedRequest.resources}
+      </p>
+      <p className="dark:text-gray-300">
+        <strong>Collaborators:</strong>{" "}
+        {selectedRequest.clubs.map((club, idx) => (
+          <span key={idx}>{idx + 1}. {club}<br /></span>
+        ))}
+      </p>
+      <div className="mt-4">
+        <button
+          className="bg-green-500 text-white px-4 py-2 rounded mr-2"
+          onClick={handleAccept}
         >
-          <div
-            className="bg-white dark:bg-gray-800 p-6 rounded shadow-lg"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h2 className="text-xl font-bold mb-4 dark:text-white">
-              Request Details
-            </h2>
-            
-<p className="dark:text-gray-300">
-  <strong>Title:</strong> {selectedRequest.title}
-</p>
-<p className="dark:text-gray-300">
-  <strong>Type:</strong> {selectedRequest.eventtype}
-</p>
-<p className="dark:text-gray-300">
-  <strong>Description:</strong> {selectedRequest.description}
-</p>
-<p className="dark:text-gray-300">
-  <strong>Objectives:</strong>{" "}
-  {Array.isArray(selectedRequest.objectives) ? (
-    selectedRequest.objectives.map((objective, idx) => (
-      <span key={idx}><br />{idx + 1}. {objective}</span>
-    ))
-  ) : (
-    selectedRequest.objectives
-  )}
-</p>
-<p className="dark:text-gray-300">
-  <strong>Target Audience:</strong> {selectedRequest.TAudience}
-</p>
-<p className="dark:text-gray-300">
-  <strong>Branch:</strong> {selectedRequest.school_audience.branch}
-</p>
-<p className="dark:text-gray-300">
-  <strong>Classes:</strong> {selectedRequest.school_audience.class}
-</p>
-<p className="dark:text-gray-300">
-  <strong>Year:</strong> {selectedRequest.school_audience.year}
-</p>
-<p className="dark:text-gray-300">
-  <strong>Max Audience:</strong> {selectedRequest.audience}
-</p>
-<p className="dark:text-gray-300">
-  <strong>Club:</strong> {selectedRequest.username}
-</p>
-<p className="dark:text-gray-300">
-  <strong>Faculty Coordinator:</strong> {/* Add later */}
-</p>
-<p className="dark:text-gray-300">
-  <strong>Venue:</strong>{" "}
-  {selectedRequest.event_dates.map((event, idx) => (
-    <span key={idx}>{idx + 1}. {event.venue}<br /></span>
-  ))}
-</p>
-<p className="dark:text-gray-300">
-  <strong>Event Start Date:</strong>{" "}
-  {selectedRequest.event_dates[0]?.date}
-</p>
-<p className="dark:text-gray-300">
-  <strong>Event Start Time:</strong>{" "}
-  {selectedRequest.event_dates[0]?.start_time}
-</p>
-<p className="dark:text-gray-300">
-  <strong>Event End Time:</strong>{" "}
-  {selectedRequest.event_dates[0]?.end_time}
-</p>
-<p className="dark:text-gray-300">
-  <strong>Resources Required:</strong> {selectedRequest.resources}
-</p>
-<p className="dark:text-gray-300">
-  <strong>Collaborators:</strong>{" "}
-  {selectedRequest.clubs.map((club, idx) => (
-    <span key={idx}>{idx + 1}. {club}<br /></span>
-  ))}
-</p>
-            <div className="mt-4">
-              <button
-                className="bg-green-500 text-white px-4 py-2 rounded mr-2"
-                onClick={handleAccept}
-              >
-                Accept
-              </button>
-              <button
-                className="bg-red-500 text-white px-4 py-2 rounded mr-2"
-                onClick={handleReject}
-              >
-                Reject
-              </button>
-              <button
-                className="bg-blue-500 text-white px-4 py-2 rounded"
-                onClick={handleModify}
-              >
-                Modify
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+          Accept
+        </button>
+        <button
+          className="bg-red-500 text-white px-4 py-2 rounded mr-2"
+          onClick={handleReject}
+        >
+          Reject
+        </button>
+        <button
+          className="bg-blue-500 text-white px-4 py-2 rounded"
+          onClick={handleModify}
+        >
+          Modify
+        </button>
+      </div>
+    </div>
+  </div>
+)}
     </div>
   );
 };

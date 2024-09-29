@@ -11,7 +11,7 @@ const Report = ({ selectedReport, setSelectedReport }) => {
   useEffect(() => {
     const fetchReports = async () => {
       try {
-        const response = await fetch(`${backendUrl}/report`, {
+        const response = await fetch(`${backendUrl}/reporttab`, {
           method: "GET",
           credentials: "include",
           headers: {
