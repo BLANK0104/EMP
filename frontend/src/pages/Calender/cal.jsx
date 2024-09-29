@@ -144,7 +144,13 @@ export default function DemoApp() {
               Today
             </button>
           </div>
-
+            {/* Overlay for closing popup when clicking outside */}
+            {selectedEvent && (
+            <div
+              className="fixed inset-0 bg-black opacity-50 z-50"
+              onClick={() => setSelectedEvent(null)}
+            ></div>
+            )}
           {/* Calendar Section */}
           <FullCalendar
             ref={calendarRef} // Attach the ref to FullCalendar

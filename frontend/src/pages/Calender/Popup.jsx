@@ -24,7 +24,7 @@ export default function Popup({ eventDetails, onClose }) {
           <strong>Time:</strong> {eventDetails.time}
         </p>
         <p>
-          <strong>Event Type:</strong> {eventDetails.eventType}
+          <strong>Event Type:</strong> {eventDetails.eventtype}
         </p>
         <button
           className="mt-4 px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded"
