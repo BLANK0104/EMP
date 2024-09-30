@@ -3,7 +3,7 @@ const mysql = require('../db');
 const queryTables = async (id) => {
     try {
         // Fetch username
-        const usernameQuery = `SELECT username FROM users WHERE id = ?`;
+        const usernameQuery = `SELECT username FROM users WHERE id = $1`;
         mysql.query(usernameQuery, [id], (err, results) => {
             if (err) {
                 console.error(`Error executing query for users table:`, err);
@@ -13,7 +13,7 @@ const queryTables = async (id) => {
             console.log(`Username for user with id ${id}:`, username);
 
             // Fetch entire table with the same username
-            const entireTableQuery = `SELECT * FROM users WHERE username = ?`;
+            const entireTableQuery = `SELECT * FROM users WHERE username = $1`;
             mysql.query(entireTableQuery, [username], (err, results) => {
                 if (err) {
                     console.error(`Error executing query for entire users table:`, err);
@@ -42,4 +42,3 @@ const queryTables = async (id) => {
 };
 
 // Execute the function with a specific user id
-queryTables(1);

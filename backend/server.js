@@ -735,6 +735,22 @@ app.get(
   }
 );
 
+
+app.get(
+  "/api/clubs",
+  authenticateToken,
+  authorizedRole(["faculty", "centralAuthority","dean","director"]),
+  async (req, res) => {
+    const { id } = req.user;
+    try {
+      const response = await clubs(id);
+      console.log(response);
+
+      res.json(response);
+    } catch {}
+  }
+);
+
 // Login
 app.post("/api/login", async (req, res) => {
   const { email, password } = req.body;
