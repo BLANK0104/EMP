@@ -195,54 +195,70 @@ const History = ({ data }) => {
             </tr>
           </thead>
           <tbody>
-            {selectedEntries.map((item, index) => (
-              <tr
-                key={index}
-                className="hover:bg-gray-100 dark:hover:bg-gray-700"
-              >
-                <td className="px-2 py-1 border-b text-center align-middle dark:border-gray-600">
+            {selectedEntries.map((item, index) => {
+              const eventDate = new Date(item.date);
+              const currentDate = new Date();
+                return (
+                <tr
+                  key={index}
+                  className="hover:bg-gray-100 dark:hover:bg-gray-700"
+                >
+                  <td className="px-2 py-1 border-b text-center align-middle dark:border-gray-600">
                   {startIndex + index + 1}
-                </td>
-                <td className="px-2 py-1 border-b text-center align-middle dark:border-gray-600">
+                  </td>
+                  <td className="px-2 py-1 border-b text-center align-middle dark:border-gray-600">
                   {item.club}
-                </td>
-                <td className="px-2 py-1 border-b text-center align-middle dark:border-gray-600">
+                  </td>
+                  <td className="px-2 py-1 border-b text-center align-middle dark:border-gray-600">
                   {item.event}
-                </td>
-                <td className="px-2 py-1 border-b text-center align-middle dark:border-gray-600">
-                  {item.date}
-                </td>
-                <td className="px-2 py-1 border-b text-center align-middle dark:border-gray-600">
-                  {item.venue}
-                </td>
-                <td className="px-2 py-1 border-b text-center align-middle dark:border-gray-600">
+                  </td>
+                  <td className="px-2 py-1 border-b text-center align-middle dark:border-gray-600">
+                  {Array.isArray(item.date) ? item.date[0] : item.date}
+                  </td>
+                  <td className="px-2 py-1 border-b text-center align-middle dark:border-gray-600">
+                  {Array.isArray(item.venue) ? (
+                    item.venue.map((venue, i) => (
+                    <span key={i}>
+                      {venue}
+                      {i < item.venue.length - 1 && ", "}
+                      {i % 2 === 1 && <br />}
+                    </span>
+                    ))
+                  ) : (
+                    item.venue
+                  )}
+                  </td>
+                  <td className="px-2 py-1 border-b text-center align-middle dark:border-gray-600">
                   {item.status}
-                </td>
-                <td className="px-2 py-1 border-b text-center align-middle dark:border-gray-600">
-  <a
-    href={`/Reports/${item.event}.pdf`}
-    download
-    className="text-blue-500 hover:underline"
-    onClick={(e) => {
-      e.preventDefault();
-      fetch(`/Reports/${item.event}.pdf`, { method: 'HEAD' })
-        .then((response) => {
-          if (response.ok) {
-            window.location.href = `/Reports/${item.event}.pdf`;
-          } else {
-            alert("Report has yet to be generated");
-          }
-        })
-        .catch(() => {
-          alert("Report has yet to be generated");
-        });
-    }}
-  >
-    Download
-  </a>
-</td>
-              </tr>
-            ))}
+                  </td>
+                  <td className="px-2 py-1 border-b text-center align-middle dark:border-gray-600">
+                  {item.status === "Approved" && currentDate > new Date(Array.isArray(item.date) ? item.date[0] : item.date) && (
+                    <a
+                    href={`/Reports/${item.event}.pdf`}
+                    download
+                    className="text-blue-500 hover:underline"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      fetch(`/Reports/${item.event}.pdf`, { method: 'HEAD' })
+                      .then((response) => {
+                        if (response.ok) {
+                        window.location.href = `/Reports/${item.event}.pdf`;
+                        } else {
+                        alert("Report has yet to be generated");
+                        }
+                      })
+                      .catch(() => {
+                        alert("Report has yet to be generated");
+                      });
+                    }}
+                    >
+                    Download
+                    </a>
+                  )}
+                  </td>
+                </tr>
+                );
+            })}
           </tbody>
         </table>
       </div>

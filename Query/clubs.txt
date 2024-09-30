@@ -1,0 +1,907 @@
+-- Active: 1724209214932@@127.0.0.1@3306@test
+use ems;
+--App Development Club
+
+CREATE TABLE app_development_club (
+    id SERIAL PRIMARY KEY,  -- Unique identifier for each row
+    name VARCHAR(100),      -- Name of the faculty or committee member
+    role VARCHAR(100),      -- Role of the person (Faculty In-charge or Committee Member)
+    objectives TEXT,        -- Objective associated with the person
+    outcomes TEXT,          -- Outcome associated with the person
+    functions TEXT          -- Function associated with the person
+);
+-- Inserting data for Faculty In-charge with unique objective, outcome, and function
+INSERT INTO app_development_club (name, role, objectives, outcomes, functions)
+VALUES 
+('Mr. Dhiraj Bhise', 'Faculty In-charge', 'We give a start to the students who are interested in App Development.', 'Increased Awareness and Interest in App Development.', 'Study Jams');
+
+-- Inserting data for Core Committee Members (some columns will be left empty since only names and roles are provided)
+INSERT INTO app_development_club (name, role, objectives, outcomes, functions)
+VALUES 
+('Meet Maheshwari', 'Core Committee Member', 'We have a community which also focuses on helping students with their ongoing project.', 'Increased Networking Opportunities within and outside the college.', 'Workshops'),
+('Owais Bubere', 'Core Committee Member', 'To promote and create an environment of App Development in our community.', 'Enhanced Skill Acquisition', 'Fun events'),
+('Yashasvee Wankhede', 'Core Committee Member', NULL, NULL, 'Coding Contest'),
+('Rushikesh Patil', 'Core Committee Member', NULL, NULL, 'Seminars by industry experts'),
+('Malay Padshah', 'Core Committee Member', NULL, NULL, NULL),
+('Rehan Singhal', 'Core Committee Member', NULL, NULL, NULL),
+('Sakina Kayyawala', 'Core Committee Member', NULL, NULL, NULL),
+('Aastha Tiwari', 'Core Committee Member', NULL, NULL, NULL),
+('Navya Singh', 'Core Committee Member', NULL, NULL, NULL),
+('Jenish Mehta', 'Core Committee Member', NULL, NULL, NULL),
+('Ronak Vishanvani', 'Core Committee Member', NULL, NULL, NULL);
+
+
+--Atrangi Club
+CREATE TABLE atrangi_club (
+    id SERIAL PRIMARY KEY,  -- Unique identifier for each row
+    name VARCHAR(100),      -- Name of the faculty or committee member
+    role VARCHAR(100),      -- Role of the person (Faculty In-charge or Committee Member)
+    objectives TEXT,        -- Objective associated with the person
+    outcomes TEXT,          -- Outcome associated with the person
+    functions TEXT          -- Function associated with the person
+);
+
+-- Inserting data for Faculty In-charge
+INSERT INTO atrangi_club (name, role, objectives, outcomes, functions)
+VALUES 
+('Prof. Sonia Relan', 'Faculty In-charge', 
+ 'Foster Creativity and Expression: Encourage students to explore and develop their artistic talents in a supportive environment.', 
+ 'Enhanced Artistic Skills: Students improve their artistic techniques and broaden their creative expression, leading to more sophisticated and varied art pieces.', 
+ 'Workshops and Classes: Host regular workshops and classes in various art forms, such as painting, drawing, sculpture, and digital art, to help students develop new skills and techniques.'),
+('Mahek Gopani', 'Core Committee Member', 
+ 'Encourage collaboration among students from different disciplines to create diverse and innovative art projects.', 
+ 'Increased Visibility: Student artworks gain exposure to a wider audience, including peers, faculty, and the local community, enhancing their reputation and recognition.', 
+ 'Art Jams: Facilitate informal art jam sessions where members can create art together in a relaxed environment.'
+),
+('Dhruv Singh', 'Core Committee Member', 
+ 'Showcase Student Art: Organize exhibitions and events to display student artwork to the college community and beyond.', 
+ 'Stronger Community Bonds: A sense of community and camaraderie is fostered among members, resulting in lasting friendships and collaborative projects.', 
+ 'Exhibitions: Organize regular exhibitions in college galleries or public spaces to display student artwork to the college community and beyond.'
+),
+('Priyanshi Sinha', 'Core Committee Member', 
+ NULL, 
+ NULL, 
+ 'Collaborative Workshops: Host workshops that encourage students to work together, combining different skills and perspectives to create unique pieces.'
+),
+(NULL, NULL, 
+ NULL, 
+ NULL, 
+ 'Art Shows and Festivals: Participate in or host art shows and festivals to give students the opportunity to present their work to diverse audiences.'
+);
+
+
+
+--Coding Club
+CREATE TABLE coding_club (
+    id SERIAL PRIMARY KEY,        -- Unique identifier for each row
+    name VARCHAR(100),            -- Name of the faculty or core committee member
+    role VARCHAR(100),            -- Role (Faculty In-charge, Team Lead, co-Lead, etc.)
+    objectives TEXT,              -- Objective associated with the person
+    outcomes TEXT,                -- Outcome associated with the person
+    functions TEXT                -- Function associated with the person
+);
+-- Inserting data for Faculty In-charges
+INSERT INTO coding_club (name, role, objectives, outcomes, functions)
+VALUES 
+('Dr. Suraj Patil', 'Faculty In-charge', 
+ 'Skill Development: Enhance members programming skills through hands-on coding practice and learning new languages and technologies.', 
+ 'Enhanced Coding Skills: Members improve their proficiency in various programming languages and technologies through practice and learning.', 
+ 'Conducting Technical hands-on sessions.'),
+('Prof. Praveen Landge', 'Faculty In-charge', 
+ 'Learning Resources: Provide access to educational resources, such as tutorials, coding challenges, and guest speakers from the industry.', 
+ 'Collaborative Experience: Members gain experience working in teams, learning to communicate effectively and manage collaborative tasks.', 
+ 'Conducting Programming Contests.'),
+('Jay Patel', 'Team Lead', 
+ 'Networking: Create opportunities for members to connect with peers, mentors, and professionals in the tech industry.', 
+ 'Networking Opportunities: Members connect with peers, mentors, and professionals, which can lead to internships, job opportunities, or collaborations.', 
+ NULL),
+('Srikar Molahalli', 'Team Lead', 
+ 'Problem Solving: Work on practical problems and coding challenges to enhance critical thinking and problem-solving skills.', 
+ 'Problem-Solving Abilities: Members develop stronger problem-solving and critical-thinking skills by tackling coding challenges and real-world problems.', 
+ NULL),
+('Yashasvee Wankhade', 'co-Lead', 
+ NULL, 
+ NULL, 
+ NULL),
+('Deshna Sancheti', 'co-Lead', 
+ NULL, 
+ NULL, 
+ NULL),
+('Tanishq Nandwana', 'Event Operation lead', 
+ NULL, 
+ NULL, 
+ NULL),
+('Divyanshu Kumbe', 'Marketing lead', 
+ NULL, 
+ NULL, 
+ NULL),
+('Krish Prajapati', 'Public Relations lead', 
+ NULL, 
+ NULL, 
+ NULL),
+('Vyom Adhyaru', 'Creative Lead', 
+ NULL, 
+ NULL, 
+ NULL),
+('Dhyani Shah', 'Documentation Lead', 
+ NULL, 
+ NULL, 
+ NULL),
+('Vedant Bhatt', 'Quantitative Analytics', 
+ NULL, 
+ NULL, 
+ NULL),
+('Utkarsh', 'Competitive Coding', 
+ NULL, 
+ NULL, 
+ NULL),
+('Laxita Jain', 'Web Development', 
+ NULL, 
+ NULL, 
+ NULL),
+('Niti Sharma', 'AI/ML', 
+ NULL, 
+ NULL, 
+ NULL);
+
+
+
+--Competitive Preparation
+CREATE TABLE competitive_preparation (
+    id SERIAL PRIMARY KEY,        -- Unique identifier for each row
+    name VARCHAR(100),            -- Name of the faculty or core committee member
+    role VARCHAR(100),            -- Role (Faculty In-charge, Core Committee Member, etc.)
+    objectives TEXT,              -- Objective associated with the person
+    outcomes TEXT,                -- Outcome associated with the person
+    functions TEXT                -- Function associated with the person
+);
+-- Inserting data for Faculty In-charge
+INSERT INTO competitive_preparation (name, role, objectives, outcomes, functions)
+VALUES 
+('Dr. Amit Pandit', 'Faculty In-charge', 
+ 'Identification of students appearing for GPAT examination', 
+ 'Interactive sessions were conducted by faculties to discuss about the exam.', 
+ 'Identification of students interested in appearing for GPAT Examination.'),
+('Uday Patil', 'Core Committee Member',
+ 'Guiding them regarding examination preparation and exam form filling',
+ 'Seminar was organised by the club in association with external agency named “GPAT Discussion Center”',
+ 'Arranging the seminars to discuss about plan of preparation '),
+(NULL,
+ NULL,
+ 'Arranging external agencies seminars to motivate interested students for GPAT',
+ 'Assistance was provided by faculty for resolving the doubts related to exam preparation and application form filling.',
+ 'Inviting external agencies to organize seminars to motivate students'),
+(NULL,
+ NULL, 
+ NULL, 
+ NULL, 
+ 'Conduct monthly meetings to take updates on examination preparation.');
+
+
+--CRS_ILC
+CREATE TABLE crs_ilc (
+    id SERIAL PRIMARY KEY,        -- Unique identifier for each row
+    name VARCHAR(100),            -- Name of the faculty or core committee member
+    role VARCHAR(100),            -- Role (Faculty In-charge, Core Committee Member, etc.)
+    objectives TEXT,              -- Objective associated with the person
+    outcomes TEXT,                -- Outcome associated with the person
+    functions TEXT                -- Function associated with the person
+);
+INSERT INTO crs_ilc (name, role, objectives, outcomes, functions)
+VALUES
+('Dr. Sankha Bhattacharya',
+ 'Faculty In-charge',
+ 'Providing platforms such as conferences, workshops, and publications for scientists, researchers, and industry professionals to share their findings and innovations.',
+ 'Strengthened collaborations and networks among scientists, researchers, and industry professionals, leading to new partnerships, joint ventures, and multidisciplinary projects.',
+ 'Facilitating Knowledge Exchange'),
+('Sarthak Khamitkar',
+ 'Core Committee Member',
+ 'Expanding the reach of the society by establishing chapters and networks in different regions to address local challenges and opportunities in controlled release.',
+ 'Promotion of sustainable practices by developing eco-friendly controlled-release products that contribute to environmental conservation and resource management.',
+ 'Motivating Budding Researches'),
+('Khushi Gupta',
+ 'Core Committee Member',
+ 'Building partnerships and collaborations among academia, industry, and government organizations to advance the field of controlled release.',
+ 'Successful integration of knowledge and techniques from various scientific disciplines, leading to holistic and comprehensive advancements in controlled release systems.',
+ 'Organizing Conferences and Events '),
+('Harsh Tiwari',
+ 'Core Committee Member',
+ NULL,
+ NULL,
+ 'Awareness about Novel Research'),
+('Rupesh More',
+ 'Core Committee Member',
+ NULL,
+ NULL,
+ NULL),
+('Sourav chaudhari',
+ 'Core Committee Member',
+ NULL,
+ NULL,
+ NULL),
+('Janhvi Borkar',
+ 'Core Committee Member',
+ NULL,
+ NULL,
+ NULL),
+('Aditi Samdani',
+ 'Core Committee Member',
+ NULL,
+ NULL,
+ NULL),
+('Atharva Kurkute',
+ 'Core Committee Member',
+ NULL,
+ NULL,
+ NULL),
+('Sarbani Roy',
+ 'Core Committee Member',
+ NULL,
+ NULL,
+ NULL),
+('Abhiram Patil',
+ 'Core Committee Member',
+ NULL,
+ NULL,
+ NULL),
+('Shivika Gupta',
+ 'Core Committee Member',
+ NULL,
+ NULL,
+ NULL),
+('Bhushan Mahajan',
+ 'Core Committee Member',
+ NULL,
+ NULL,
+ NULL),
+('Tanvi Maheshwari',
+ 'Core Committee Member',
+ NULL,
+ NULL,
+ NULL),
+('Rutuja More',
+ 'Core Committee Member',
+ NULL,
+ NULL,
+ NULL),
+('Rahul Anand',
+ 'Core Committee Member',
+ NULL,
+ NULL,
+ NULL);
+
+
+
+-- Computer Society of India (CSI)
+CREATE TABLE computer_society_of_india (
+    id SERIAL PRIMARY KEY,        -- Unique identifier for each row
+    name VARCHAR(100),            -- Name of the faculty or core committee member
+    role VARCHAR(100),            -- Role (Faculty In-charge, Core Committee Member, etc.)
+    objectives TEXT,              -- Objective associated with the person
+    outcomes TEXT,                -- Outcome associated with the person
+    functions TEXT                -- Function associated with the person
+);
+INSERT INTO computer_society_of_india (name, role, objectives, outcomes, functions)
+VALUES
+('Dr. Mayank Sohani',
+ 'Faculty In-charge',
+ 'Promote IT Education and Knowledge: To enhance the quality and scope of IT education and ensure professionals stay updated with emerging technologies.',
+ 'Enhanced IT Education: Improved IT education standards and updated knowledge among professionals, evidenced by increased participation and positive feedback from educational events.',
+ 'Organizing Events: Hosting seminars, workshops, and training programs to disseminate knowledge and foster professional development.'),
+('Prof. Piyush Kumar Soni',
+ 'Faculty In-charge',
+ 'Professional Development: To provide opportunities for career growth and skill enhancement for IT professionals through various programs and resources.',
+ 'Increased Professional Skills: Better career advancement and skill enhancement, as reflected in the successful completion of certification programs and career growth among members.',
+ 'Networking and Collaboration: Creating forums for networking among IT professionals and fostering collaborations between industry, and academia.'),
+('Gargi Jain ',
+ 'Core Committee Member',
+ 'Enhance IT Awareness: To raise awareness about the role and impact of IT on society and various sectors.',
+ 'Greater IT Awareness: Enhanced students and public understanding of IT’s impact, supported by outreach efforts and media coverage.',
+ 'Organizing Competitions and Hackathons: Hosting coding competitions, hackathons, and innovation challenges to stimulate creativity, problem-solving, and practical skills among participants.'),
+('Meet Maheshwari',
+ 'Core Committee Member',
+ NULL,
+ NULL,
+ NULL),
+('Vansh Julka',
+ 'Core Committee Member',
+ NULL,
+ NULL,
+ NULL),
+('Ashish Neelkanth',
+ 'Core Committee Member',
+ NULL,
+ NULL,
+ NULL),
+('Abhishek Pal',
+ 'Core Committee Member',
+ NULL,
+ NULL,
+ NULL),
+('Owais Burbere',
+ 'Core Committee Member',
+ NULL,
+ NULL,
+ NULL),
+('Vishwa Bhalodiya',
+ 'Core Committee Member',
+ NULL,
+ NULL,
+ NULL);
+
+
+
+-- Cultural Activity Forum
+CREATE TABLE cultural_activity_forum (
+    id SERIAL PRIMARY KEY,        -- Unique identifier for each row
+    name VARCHAR(100),            -- Name of the faculty or core committee member
+    role VARCHAR(100),            -- Role (Faculty In-charge, Core Committee Member, etc.)
+    objectives TEXT,              -- Objective associated with the person
+    outcomes TEXT,                -- Outcome associated with the person
+    functions TEXT                -- Function associated with the person
+);
+
+INSERT INTO cultural_activity_forum (name, role, objectives, outcomes, functions)
+VALUES
+('Dr. Mahendra Prajapati',
+ 'Faculty In-charge',
+ 'To encourage the students to join various committees under the forum.',
+ 'Personal growth and development of various skills in students.',
+ 'Identification and planning for the event.'),
+('Dr. Amit Pandit',
+ 'Faculty In-charge',
+ 'To provide opportunities for the students to participate in activities as an extension of the academic activities.',
+ 'Leadership, Teamwork and Time Management qualities buildup in students.',
+ 'Allocating and managing funds for various activities and requirements'),
+('Dr. Anitha Kuttiapyan',
+ 'Faculty In-charge',
+ 'To plan and organize various cultural activities in an academic year as per the Academic Calendar.',
+ 'Relief from academic stress and promotion mental well-being of students.',
+ 'Formation of the organizing committee for the events.'),
+('Durvaa Desai',
+ 'Core Committee Member',
+ 'To increase the cordial relations between students and faculty.',
+ 'Networking and social Connections buildup abilities in students.',
+ 'Getting all the prior permissions to ensure the smooth conduction of events.'),
+('Shrushti Samdadiya',
+ 'Core Committee Member',
+ 'To inculcate good governance and develop skills through teamwork and organizing 
+ various activities.',
+ 'Discovering new passion and interests of students.',
+ 'Marketing and publicity of the event on various platforms.'),
+('Krisha Shah',
+ 'Core Committee Member',
+ NULL,
+ NULL,
+ 'To identify sponsors, connect with them, negotiation and getting the sponsorship.'),
+(NULL,
+ NULL,
+ NULL,
+ NULL,
+ 'Engaging with students and faculty to encourage participation.'),
+(NULL,
+ NULL,
+ NULL,
+ NULL,
+ 'To plan the Pre-events for the Protsahan college fest.'),
+(NULL,
+ NULL,
+ NULL,
+ NULL,
+ 'Ensuring sound systems, stage and lighting, and other technical aspects are functioning.'),
+(NULL,
+ NULL,
+ NULL,
+ NULL,
+ 'Conducting cultural competitions like dance competitions, singing, competitions, music band competions and other cultural performances.'),
+(NULL,
+ NULL,
+ NULL,
+ NULL,
+ 'Arrange all the logistics requirement.'),
+(NULL,
+ NULL,
+ NULL,
+ NULL,
+ 'Documenting the event through photos, videos, and reports for future 
+reference.');
+
+
+
+-- EOSO
+CREATE TABLE eoso (
+    id SERIAL PRIMARY KEY,        -- Unique identifier for each row
+    name VARCHAR(100),            -- Name of the faculty or core committee member
+    role VARCHAR(100),            -- Role (Faculty In-charge, Core Committee Member, etc.)
+    objectives TEXT,              -- Objective associated with the person
+    outcomes TEXT,                -- Outcome associated with the person
+    functions TEXT                -- Function associated with the person
+);
+
+INSERT INTO eoso (name, role, objectives, outcomes, functions)
+VALUES
+('Dr. Payal Dande',
+ 'Faculty In-charge',
+ 'Spreading smiles especially to the other sections of the society',
+ 'Educational Support: We provide resources and support to students of ashram schools to enhance learning experiences and achieve their learning outcome.',
+ 'Seek approvals from managements to arrange pick up and drop facilities'),
+('Mahi Sahu',
+ 'Core Committee Member',
+ 'Uplifting the society by educating underprivileged students',
+ 'Cultural Events: We organize events, celebrate birthdays and other cultural occasions like Ganeshutsav, diwali, holi and Christmas with ashram school students to create a sense of equality and togetherness.',
+ 'Event planning and coordination'),
+('Swaraj Borkar',
+ 'Core Committee Member',
+ 'Strengthening the society by raising donations to meet basic needs',
+ 'Health and Wellness Programs: We implement initiatives like hygiene camps and cleanliness drives, blood donation camps to improve the health and well-being of school children.',
+ 'Content Creation for Social Media advocacy'),
+('Varsha Kumari',
+ 'Core Committee Member',
+ NULL,
+ 'Environmental Projects: We promote sustainability and ecological awareness by running various activities like (Say No to single use plastic, Best out of waste, Recycle, reuse and reduce, bags out of old cloths, plantation)  within school communities.',
+ 'Cultural and Social Integration'),
+('Hanusha Sharma',
+ 'Core Committee Member',
+ NULL,
+ 'Providing basic needs and emergency help: We raise funds for any health or similar emergency and to provide basic needs, facilities and equipment which help in growth of the other sections of society',
+ 'Preparing real-time reports and articles for newspaper clippings of events and activities'),
+('Amrutha Pillai',
+ 'Core Committee Member',
+ NULL,
+ NULL,
+ 'Fundraising and maintenance of donation accounts'),
+('Mita Tamhankar',
+ 'Core Committee Member',
+ NULL,
+ NULL,
+ NULL),
+('Avneesh Taneja',
+ 'Core Committee Member',
+ NULL,
+ NULL,
+ NULL),
+('Harsh Jain',
+ 'Core Committee Member',
+ NULL,
+ NULL,
+ NULL),
+('Yuvraj Alandikar',
+ 'Core Committee Member',
+ NULL,
+ NULL,
+ NULL),
+('Sanhita Sahane',
+ 'Core Committee Member',
+ NULL,
+ NULL,
+ NULL),
+('Yash Shah',
+ 'Core Committee Member',
+ NULL,
+ NULL,
+ NULL);
+
+
+
+-- IEEE
+CREATE TABLE ieee (
+    id SERIAL PRIMARY KEY,        -- Unique identifier for each row
+    name VARCHAR(100),            -- Name of the faculty or core committee member
+    role VARCHAR(100),            -- Role (Faculty In-charge, Core Committee Member, etc.)
+    objectives TEXT,              -- Objective associated with the person
+    outcomes TEXT,                -- Outcome associated with the person
+    functions TEXT                -- Function associated with the person
+);
+
+INSERT INTO ieee (name, role, objectives, outcomes, functions)
+VALUES
+('Prof.Atul Patil',
+ 'Faculty In-charge',
+ 'Promoting Technological Innovation: IEEE aims to drive technological advancement and innovation through its publications, conferences, and standards developments.',
+ 'Technological Advancements: IEEE’s work in research, standards development, and conferences often leans to significant advancement in technology and engineering practices. Innovation and improvement in fields telecommunications, computing, and electrical systems frequently result from IEEE’s activities.',
+ 'Conferences'),
+('Prof. Rehan Ahmed',
+ 'Faculty In-charge',
+ 'Supporting Professional Development:  The organization provides resources for professional growth, including educational programs, certifications, and networking opportunities for engineers and technologists',
+ 'Education Resources: IEEE provides a wealth of educational material, including journals, conference proceedings, and online courses. These resources support the continuous learning and professional development of engineering and technologists',
+ 'Guest Lecture Series'),
+('Yomesh Khandalwal',
+ 'Core Committee Member',
+ 'Fostering Collaboration: IEEE encourages collaboration among professionals. Researchers and academics to advance knowledge and address complex challenges in technology',
+ 'Professional Networking: IEEE’s conferences, local chapters, and special interest groups offer opportunities for professionals to connect, collaborate and share knowledge. This networking fosters career growth and partnership within the engineering community',
+ 'Seminars'),
+('Amay Thakkar',
+ 'Core Committee Member',
+ NULL,
+ NULL,
+ 'Quiz Contest'),
+(NULL,
+ NULL,
+ NULL,
+ NULL,
+ 'Coding Competition'),
+(NULL,
+ NULL,
+ NULL,
+ NULL,
+ 'Social Activities');
+
+
+
+-- ISTE
+CREATE TABLE iste (
+    id SERIAL PRIMARY KEY,        -- Unique identifier for each row
+    name VARCHAR(100),            -- Name of the faculty or core committee member
+    role VARCHAR(100),            -- Role (Faculty In-charge, Core Committee Member, etc.)
+    objectives TEXT,              -- Objective associated with the person
+    outcomes TEXT,                -- Outcome associated with the person
+    functions TEXT                -- Function associated with the person
+);
+
+INSERT INTO iste (name, role, objectives, outcomes, functions)
+VALUES
+('Dr. Suresh Kurumbanshi',
+ 'Faculty In-charge',
+ 'Organize   workshops, and guest lectures to provide students with insights into the latest developments in technology and engineering fields.',
+ 'Students gain up-to-date insights into emerging technologies and trends in engineering and technology, broadening their academic and practical understanding.',
+ 'Publish newsletters or magazines to keep members informed about chapter activities, achievements, and upcoming events'),
+(NULL,
+ NULL,
+ 'Conduct skill development programs and technical training to help students gain practical experience and industry-relevant skills.',
+ 'Networking opportunities with guest speakers and workshop facilitators can lead to mentorship or future career opportunities.',
+ 'Provide opportunities for students to take on leadership roles within the chapter, helping them develop organizational and managerial skills'),
+(NULL,
+ NULL,
+ 'Encourage and support student projects and research activities, fostering a collaborative environment for innovation and problem-solving.',
+ 'Students acquire hands-on experience with tools, technologies, and methodologies that are relevant in the industry, enhancing their practical skills.',
+ 'Handle the administrative functions of the chapter, including organizing meetings, managing finances, and coordinating with the parent ISTE organization.'),
+(NULL,
+ NULL,
+ NULL,
+ NULL,
+ 'Facilitate networking opportunities with professionals, alumni, and peers to help students build a strong professional network.'),
+(NULL,
+ NULL,
+ NULL,
+ NULL,
+ 'Arrange visits to companies and research labs to give students firsthand experience of industrial environments and practices.');
+
+
+
+-- Learn Tech
+CREATE TABLE learn_tech (
+    id SERIAL PRIMARY KEY,        -- Unique identifier for each row
+    name VARCHAR(100),            -- Name of the faculty or core committee member
+    role VARCHAR(100),            -- Role (Faculty In-charge, Core Committee Member, etc.)
+    objectives TEXT,              -- Objective associated with the person
+    outcomes TEXT,                -- Outcome associated with the person
+    functions TEXT                -- Function associated with the person
+);
+
+INSERT INTO learn_tech (name, role, objectives, outcomes, functions)
+VALUES
+('Prof. Dhananjay Joshi',
+ 'Faculty In-charge',
+ 'Organizing various technical training programs',
+ 'Engineering Knowledge',
+ 'Workshops, Seminars and webinars'),
+('Rasanath Kulkarni',
+ 'Core Committee Member',
+ 'Offering a platform to Emphasizes continuous self-learning',
+ 'Problem Analysis',
+ 'Projects and Competitions'),
+('Anjali Agrawal',
+ 'Core Committee Member',
+ 'Promote Social Outreach',
+ 'Design/Development of Solutions',
+ 'Guest Lectures'),
+('Dhananjay Khairnar',
+ 'Core Committee Member',
+ NULL,
+ 'Investigation of Complex Problems',
+ 'Networking Events'),
+('Abhisek Pal',
+ 'Core Committee Member',
+ NULL,
+ 'Modern Tool Usage',
+ 'Collaborative Learning'),
+('Dhyani Shah',
+ 'Core Committee Member',
+ NULL,
+ 'Engineer and Society',
+ 'Community Outreach'),
+('Utkarsh Mandloi',
+ 'Core Committee Member',
+ NULL,
+ 'Individual and Team Work',
+ NULL),
+('Syed Farhanuddin',
+ 'Core Committee Member',
+ NULL,
+ 'Communication',
+ NULL),
+(NULL,
+ NULL,
+ NULL,
+ 'Project Management and Finance',
+ NULL),
+(NULL,
+ NULL,
+ NULL,
+ 'Life-Long Learning',
+ NULL);
+
+
+
+-- NMMUN
+CREATE TABLE nmmun (
+    id SERIAL PRIMARY KEY,        -- Unique identifier for each row
+    name VARCHAR(100),            -- Name of the faculty or core committee member
+    role VARCHAR(100),            -- Role (Faculty In-charge, Core Committee Member, etc.)
+    objectives TEXT,              -- Objective associated with the person
+    outcomes TEXT,                -- Outcome associated with the person
+    functions TEXT                -- Function associated with the person
+);
+
+INSERT INTO nmmun (name, role, objectives, outcomes, functions)
+VALUES
+('Dr. Rakesh Chaudhari',
+ 'Faculty In-charge',
+ 'To develop universally acceptable drafts of the proposals for the existing global issues.',
+ 'Global Awareness: Stay informed about global issues, boosting confidence in discussions',
+ 'Information Gathering: Researching and staying updated on global issues'),
+('Owais Fahim Bubere',
+ 'Core Committee Members',
+ 'To educate the people about the working process of the United Nations.',
+ 'Confidence Building: Improve public speaking and communication skills.',
+ 'Public Speaking: Enhancing communication and presentation skills'),
+('Nishtha Desai',
+ 'Core Committee Members',
+ 'To voice an opinion of the Youth across the world to be considered in the United Nations as a viewpoint.',
+ 'Business Skills: Gain practical experience in planning, marketing, and leadership',
+ 'Event Management: Organizing, planning, and strategizing for successful execution.'),
+('Meet Maheshwari',
+ 'Core Committee Members',
+ 'To develop skills in the Youth to solve issues and manage negotiations.',
+ 'Networking: Interact with knowledgeable peers, expanding your network.',
+ 'Networking: Building relationships and expanding professional networks.'),
+('Nitya Chourasia',
+ 'Core Committee Members',
+ NULL,
+ 'Resume Boost: Enhance your resume with valuable extracurricular experience.',
+ 'Skill Development: Improving leadership, marketing, and business acumen.'),
+('Aastha Tiwari',
+ 'Core Committee Members',
+ NULL,
+ NULL,
+ 'Resume Building: Adding weight to academic and career profiles'),
+('Vrudhi Varma',
+ 'Core Committee Members',
+ NULL,
+ NULL,
+ NULL),
+('Aditya Patil',
+ 'Core Committee Members',
+ NULL,
+ NULL,
+ NULL),
+('Rushikesh Patil',
+ 'Core Committee Members',
+ NULL,
+ NULL,
+ NULL),
+('Avneesh Taneja',
+ 'Core Committee Members',
+ NULL,
+ NULL,
+ NULL),
+('Rasanath Kulkarni',
+ 'Core Committee Members',
+ NULL,
+ NULL,
+ NULL);
+
+
+
+-- S4DS
+CREATE TABLE s4ds (
+    id SERIAL PRIMARY KEY,        -- Unique identifier for each row
+    name VARCHAR(100),            -- Name of the faculty or core committee member
+    role VARCHAR(100),            -- Role (Faculty In-charge, Core Committee Member, etc.)
+    objectives TEXT,              -- Objective associated with the person
+    outcomes TEXT,                -- Outcome associated with the person
+    functions TEXT                -- Function associated with the person
+);
+
+INSERT INTO s4ds (name, role, objectives, outcomes, functions)
+VALUES
+('Prof. Rajesh Verma',
+ 'Faculty In-charge',
+ 'Foster awareness and understanding of Data Science through workshops, training sessions, and guest lectures, empowering students to pursue careers in this field.',
+ 'Enhanced Technical Skills: Conducting workshops and training sessions on IoT and data science to improve students technical knowledge and practical skills',
+ 'Conducting events that help members develop a range of skills, including administrative, technical, and managerial abilities.'),
+(NULL,
+ NULL,
+ 'Provide a platform for students, researchers, companies, and governments to exchange ideas and collaborate on real-life data science applications and solutions.',
+ 'Foster Collaboration: Strengthen the collaboration between industry, academia, and government to accelerate the deployment of IoT infrastructure.',
+ 'Offering certification programs on disruptive technologies to enhance technical knowledge.'),
+(NULL,
+ NULL,
+ 'Develop educational initiatives, form partnerships with government and industry, and organize seminars, conferences, and recognition programs to highlight exemplary work in Data Science.',
+ 'Professional Growth: Offering membership benefits that include access to conferences, seminars, and professional networking events to support student`s career growth',
+ 'Opportunities to host or partner in organizing the International Conference on Data Management, Analytics, and Innovation');
+
+
+
+-- Soft Skill Club
+CREATE TABLE soft_skill_club (
+    id SERIAL PRIMARY KEY,        -- Unique identifier for each row
+    name VARCHAR(100),            -- Name of the faculty or core committee member
+    role VARCHAR(100),            -- Role (Faculty In-charge, Core Committee Member, etc.)
+    objectives TEXT,              -- Objective associated with the person
+    outcomes TEXT,                -- Outcome associated with the person
+    functions TEXT                -- Function associated with the person
+);
+
+INSERT INTO soft_skill_club (name, role, objectives, outcomes, functions)
+VALUES
+('SINOY SUGUNAN',
+ 'Faculty In-charge',
+ 'To develop leadership and teamwork abilities',
+ 'Students will demonstrate enhanced verbal and non-verbal communication skills, enabling them to articulate their ideas clearly and confidently in both academic and professional settings.',
+ 'Organize regular workshops and training sessions focused on various soft skills such as communication, leadership, teamwork, emotional intelligence, time management, and conflict resolution.'),
+('Ms. KHUSHI RATHI',
+ 'Core Committee Members',
+ 'To foster emotional intelligence and interpersonal skills',
+ 'Members will exhibit stronger leadership qualities and an improved ability to work effectively within teams, showcasing their ability to manage projects, delegate tasks, and collaborate efficiently.',
+ 'Invite industry professionals, alumni, and experts to share their experiences and insights on the importance of soft skills in the professional world.'),
+('Mr. DARSHILKUMAR PATEL',
+ 'Core Committee Members',
+ 'To enhance communication skills',
+ 'Participants will develop greater emotional intelligence, including better self-awareness, empathy, and conflict resolution skills, leading to improved relationships and a more supportive community',
+ 'Provide opportunities for members to practice public speaking and presentations in a supportive environment, including feedback and constructive criticism to help them improve.'),
+('Ms. DIPLAXMI RANE',
+ 'Core Committee Members',
+ NULL,
+ NULL,
+ 'Conduct team-building exercises and activities that encourage collaboration, problem-solving, and trust among members.'),
+('Ms.APURVA MASULE',
+ 'Core Committee Members',
+ NULL,
+ NULL,
+ 'Facilitate peer mentoring programs where experienced members can guide and support new members in developing their soft skills. Organize networking events to help members build connections.'),
+('Mr. HARSHAL PATIL',
+ 'Core Committee Members',
+ NULL,
+ NULL,
+ 'Encourage members to work on group projects and initiatives that require effective communication, coordination, and teamwork.');
+
+
+
+-- Team UAS
+CREATE TABLE team_uas_nmims (
+    id SERIAL PRIMARY KEY,        -- Unique identifier for each row
+    name VARCHAR(100),            -- Name of the faculty or core committee member
+    role VARCHAR(100),            -- Role (Faculty In-charge, Core Committee Member, etc.)
+    objectives TEXT,              -- Objective associated with the person
+    outcomes TEXT,                -- Outcome associated with the person
+    functions TEXT                -- Function associated with the person
+);
+
+INSERT INTO team_uas_nmims (name, role, objectives, outcomes, functions)
+VALUES
+(' Prof. Sachin Chavan',
+ 'Faculty In-charge',
+ 'Team UAS NMIMS specializes in drone technology and has been conducting extensive research and development.',
+ 'Members will gain hands-on experience in building, programming, and piloting drones, improving their technical proficiency.',
+ 'Workshops and Training Sessions'),
+('Prof. Mayank Kothari',
+ 'Faculty In-charge',
+ 'Provide members with opportunities to learn about drone technology, including building, programming, and piloting drones.',
+ 'The club will produce innovative projects and applications for drones, showcasing creativity and problem-solving skills.',
+ 'Project Development'),
+('Vaibhav Tayal',
+ 'Core Committee Members',
+ 'Encourage members to innovate and create new applications for drones in various fields such as photography, agriculture, and search and rescue.',
+ 'Through events and workshops, the club will raise awareness about the benefits of drones and engage the local community.',
+ 'Competitions and Challenges'),
+('Om Biscuitwala',
+ 'Core Committee Members',
+ 'Participate in drone competitions and challenges to foster a spirit of friendly competition and continuous improvement.',
+ 'Participation in competitions and challenges will lead to recognition and accolades, fostering a sense of achievement.',
+ NULL),
+('Parth Sharma',
+ 'Core Committee Members',
+ 'Provide a platform for members to network, share ideas, and collaborate on projects.',
+ 'Members will build a network of like-minded individuals, facilitating collaboration and idea-sharing.',
+ NULL),
+('Vismay Kansara',
+ 'Core Committee Members',
+ NULL,
+ NULL,
+ NULL),
+('Shrinivas Ahirrao',
+ 'Core Committee Members',
+ NULL,
+ NULL,
+ NULL),
+('Yomesh Khandelwal',
+ 'Core Committee Members',
+ NULL,
+ NULL,
+ NULL);
+
+
+
+-- The Writers Hub
+CREATE TABLE the_writers_hub (
+    id SERIAL PRIMARY KEY,        -- Unique identifier for each row
+    name VARCHAR(100),            -- Name of the faculty or core committee member
+    role VARCHAR(100),            -- Role (Faculty In-charge, Core Committee Member, etc.)
+    objectives TEXT,              -- Objective associated with the person
+    outcomes TEXT,                -- Outcome associated with the person
+    functions TEXT                -- Function associated with the person
+);
+
+INSERT INTO the_writers_hub (name, role, objectives, outcomes, functions)
+VALUES
+('Dr. Preeti C. Sangave',
+ 'Faculty In-charge',
+ 'To provide a platform for all those who express themselves through the art of literature.',
+ 'Official Newsletter – CLIFFNOTES issue 2021, 2022, 2023',
+ 'Original Content Creations'),
+('Dr. Sanjay Shrivastava',
+ 'Faculty In-charge',
+ 'Create, Design Newsletter - Written Form',
+ 'Ink and Insights – Poet’s Evening 2024',
+ 'Handle Social Media Handles (Insta, FB, LinkedIn)'),
+('Ms.Mahi Sahu',
+ 'Core Committee Members',
+ 'Create, Perform – On Stage events',
+ 'CV Writing Workshop 2023',
+ 'Graphic Designs'),
+('Ms.Hanusha Sharma',
+ 'Core Committee Members',
+ NULL,
+ 'TWH event at Ganesh Utsav & at AlmaCohesion 2024 Alumni meet',
+ 'Event Planning, approvals & Execution'),
+('Ms.Aastha Gawali',
+ 'Core Committee Members',
+ NULL,
+ NULL,
+ 'Public Outreach'),
+('Ms.Durvaa Desai',
+ 'Core Committee Members',
+ NULL,
+ NULL,
+ 'Organize events & Competitions'),
+('Mr.Rasnath Kulkarni',
+ 'Core Committee Members',
+ NULL,
+ NULL,
+ 'Student Member committee selections'),
+('Mr.Avneesh Kumar Taneja',
+ 'Core Committee Members',
+ NULL,
+ NULL,
+ NULL),
+('Ms.Mita Tamhankar',
+ 'Core Committee Members',
+ NULL,
+ NULL,
+ NULL),
+('Mr.Ritvik Kharde',
+ 'Core Committee Members',
+ NULL,
+ NULL,
+ NULL),
+('Mr.Adishwar Jain',
+ 'Core Committee Members',
+ NULL,
+ NULL,
+ NULL),
+('Ms.Riya Vengurlekar',
+ 'Core Committee Members',
+ NULL,
+ NULL,
+ NULL);

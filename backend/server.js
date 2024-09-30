@@ -24,6 +24,7 @@ const historyDirector = require("./History/historyDirector");
 const addDraft = require("./Events/addDraft");
 const { getDraft } = require("./Events/getDraft");
 const DeanDirectorDashboard = require("./Dashboard/DeanDirectorDashboard");
+const clubs = require("./Clubs/clubs")
 
 const app = express();
 const PORT = 5000;
@@ -532,6 +533,23 @@ app.get(
   }
 );
 
+app.get("/api/current-club", authenticateToken, async (req, res) => {
+  try {
+    console.log("User ID from token:", req.user.id); // Log the user ID
+    const { id } = req.user;
+    const result = await db.query("SELECT username FROM users WHERE id = $1", [id]);
+    console.log("Database query result:", result); // Log the database query result
+    if (result.rows.length > 0) {
+      res.json({ username: result.rows[0].username });
+    } else {
+      res.status(404).json({ error: "User not found" });
+    }
+  } catch (error) {
+    console.error("Error fetching current user:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 app.get(
   "/api/history",
   authenticateToken,
@@ -708,6 +726,22 @@ app.get(
       console.error("Database query error:", error);
       res.status(500).json({ error: "Internal server error" });
     }
+  }
+);
+
+
+app.get(
+  "/api/clubs",
+  authenticateToken,
+  authorizedRole(["faculty", "centralAuthority","dean","director"]),
+  async (req, res) => {
+    const { id } = req.user;
+    try {
+      const response = await clubs(id);
+      console.log(response);
+
+      res.json(response);
+    } catch {}
   }
 );
 
