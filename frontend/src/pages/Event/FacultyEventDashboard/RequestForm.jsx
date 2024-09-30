@@ -9,22 +9,22 @@ const backendUrl =
   import.meta.env.VITE_BACKEND_URL || "http://localhost:5000/api";
 
 const venueOptions = [
+  "A-Wing",
   "Amphitheater",
   "Auditorium",
-  "Playground",
-  "Seminar hall",
+  "B-Wing",
+  "Central Fourier(CF)",
+  "Classroom",
+  "Conference Room",
+  "Dance Room",
   "Drawing hall",
   "Lab",
-  "A-Wing",
-  "B-Wing",
+  "LR",
   "Music Room",
-  "Dance Room",
-  "Central Fourier(CF)",
+  "Playground",
+  "Seminar hall",
   "Sobus",
   "Student Lounge",
-  "Conference Room",
-  "LR",
-  "Classroom",
   "Others",
 ];
 
@@ -58,40 +58,45 @@ const eventTypes = [
 ];
 
 const clubEvents = [
-  "INSTITUTIONS INNOVATIONS COUNCIL(IIC)",
-  "IPR CELL",
-  "E-CELL",
-  "INSTITUE-INDUSTRY INTERACTION AND INTERSHIP CELL(I4C)",
-  "NATIONAL INNOVATION AND START-UP POLICY CELL(NISP)",
-  "Saturday 10AM",
-  "EACH ONE SAVE ONE",
-  "RAW VISION CLUB",
+  "AMBIORA-Technical Fest",
   "ATRANGI CLUB",
-  "Computer Society Of India(CSI)",
-  "NMMUN(Narsee Monjee Model United Nation)",
+  "AVINYA-IOT LAB",
   "Coding Club",
-  "App development Club",
+  "Computer Society Of India(CSI)",
+  "E-CELL",
+  "EACH ONE SAVE ONE",
+  "FLAVIUM",
+  "IEEE",
+  "INSTITATIONS INNOVATIONS COUNCIL(IIC)",
+  "INSTITUE-INDUSTRY INTERACTION AND INTERSHIP CELL(I4C)",
+  "IPR CELL",
+  "Learn Tech with NMIMS Shirpur",
+  "NMMUN(Narsee Monjee Model United Nation)",
+  "NATIONAL INNOVATION AND START-UP POLICY CELL(NISP)",
+  "PROTSAHAN",
+  "RAW VISION CLUB",
+  "Saturday 10AM",
+  "Society 4DS",
   "TEAM UAS NMIMS (Drone Club)",
   "ISTE",
-  "IEEE",
-  "Society 4DS",
-  "AVINYA-IOT LAB",
-  "Learn Tech with NMIMS Shirpur",
-  "FLAVIUM",
-  "AMBIORA-Technical Fest",
-  "PROTSAHAN",
   "Others",
 ];
 
 const RequestForm = () => {
-  const [selectedSchools, setSelectedSchools] = useState([]);
-  const [selectedCourses, setSelectedCourses] = useState([]);
-  const [selectedBranches, setSelectedBranches] = useState([]);
-  const [selectedYears, setSelectedYears] = useState([]);
+  const [formState, setFormState] = useState({
+    isInternal: false,
+    isExternal: false,
+    selectedSchools: [],
+    selectedCourses: [],
+    selectedBranches: [],
+    selectedYears: [],
+    externalInput: "",
+  });
   const [audience, setAudience] = useState("");
   const [eventTitle, setEventTitle] = useState("");
   const [description, setDescription] = useState("");
   const [resources, setResources] = useState([]);
+  const [registration, setRegistration] = useState("");
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [showTerms, setShowTerms] = useState(false);
   const [eventDates, setEventDates] = useState([
@@ -132,11 +137,11 @@ const RequestForm = () => {
       "Second Floor": [10, 11, 12],
     },
     "C-Wing": {
-      "First Floor": [11, 12, 13, 14, 15, 16],
+      "First Floor": [13, 14, 15, 16],
       "Second Floor": [17, 18, 19],
     },
     "D-Wing": {
-      "Ground Floor": [20, 21, 22, 23, 24, 25],
+      "Ground Floor": [20, 21, 22, 23, 24],
     },
   };
 
@@ -187,10 +192,80 @@ const RequestForm = () => {
     setEventDates(updatedDates);
   };
 
+  const handleClassroomSelectAll = (dateIndex) => {
+    const updatedDates = [...eventDates];
+
+    // Get all classroom numbers from validClassroomRanges
+    const allClassrooms = validClassroomRanges.flatMap((range) =>
+      Array.from({ length: range.end - range.start + 1 }, (_, i) =>
+        (range.start + i).toString()
+      )
+    );
+
+    const { classroomVenues } = updatedDates[dateIndex];
+
+    // Check if all classrooms are already selected
+    const allSelected = allClassrooms.every((classroom) =>
+      classroomVenues.includes(classroom)
+    );
+
+    if (allSelected) {
+      // Deselect all classrooms
+      updatedDates[dateIndex].classroomVenues = [];
+    } else {
+      // Select all classrooms
+      updatedDates[dateIndex].classroomVenues = allClassrooms;
+    }
+
+    setEventDates(updatedDates);
+  };
+
+  // Function to select/deselect all wings, floors, and rooms
+  const handleSelectAll = (dateIndex) => {
+    const updatedDates = [...eventDates];
+    const allWings = ["B-Wing", "C-Wing", "D-Wing"];
+
+    // Get all possible floors for selected wings
+    const allFloors = Array.from(
+      new Set(allWings.flatMap((wing) => floorOptions[wing] || []))
+    );
+
+    // Get all possible rooms for selected wings and floors
+    const allRooms = Array.from(
+      new Set(
+        allFloors.flatMap((floor) =>
+          allWings.flatMap((wing) => roomOptions[wing]?.[floor] || [])
+        )
+      )
+    );
+
+    const { selectedWings, selectedFloors, selectedRooms } =
+      updatedDates[dateIndex];
+
+    // If everything is already selected, deselect all
+    if (
+      selectedWings.length === allWings.length &&
+      selectedFloors.length === allFloors.length &&
+      selectedRooms.length === allRooms.length
+    ) {
+      updatedDates[dateIndex].selectedWings = [];
+      updatedDates[dateIndex].selectedFloors = [];
+      updatedDates[dateIndex].selectedRooms = [];
+    } else {
+      // Select all wings, floors, and rooms
+      updatedDates[dateIndex].selectedWings = allWings;
+      updatedDates[dateIndex].selectedFloors = allFloors;
+      updatedDates[dateIndex].selectedRooms = allRooms;
+    }
+
+    setEventDates(updatedDates);
+  };
+
   const handleWingChange = (dateIndex, wing) => {
     const updatedDates = [...eventDates];
     const { selectedWings } = updatedDates[dateIndex];
 
+    // Toggle wing selection
     if (selectedWings.includes(wing)) {
       updatedDates[dateIndex].selectedWings = selectedWings.filter(
         (w) => w !== wing
@@ -199,14 +274,18 @@ const RequestForm = () => {
       updatedDates[dateIndex].selectedWings = [...selectedWings, wing];
     }
 
-    updatedDates[dateIndex].selectedFloors = []; // Reset floors when wings change
+    // Reset floors and rooms when wings change
+    updatedDates[dateIndex].selectedFloors = [];
+    updatedDates[dateIndex].selectedRooms = [];
+
     setEventDates(updatedDates);
   };
 
   const handleFloorChange = (dateIndex, floor) => {
     const updatedDates = [...eventDates];
-    const { selectedFloors } = updatedDates[dateIndex];
+    const { selectedFloors, selectedWings } = updatedDates[dateIndex];
 
+    // Toggle floor selection
     if (selectedFloors.includes(floor)) {
       updatedDates[dateIndex].selectedFloors = selectedFloors.filter(
         (f) => f !== floor
@@ -215,10 +294,8 @@ const RequestForm = () => {
       updatedDates[dateIndex].selectedFloors = [...selectedFloors, floor];
     }
 
-    const availableFloors = new Set();
-    updatedDates[dateIndex].selectedWings.forEach((selectedWing) => {
-      floorOptions[selectedWing].forEach((floor) => availableFloors.add(floor));
-    });
+    // Reset rooms when floors change
+    updatedDates[dateIndex].selectedRooms = [];
 
     setEventDates(updatedDates);
   };
@@ -227,15 +304,42 @@ const RequestForm = () => {
     const updatedDates = [...eventDates];
     const { selectedRooms } = updatedDates[dateIndex];
 
+    // Toggle room selection and keep the list sorted in descending order
     if (selectedRooms.includes(room)) {
-      updatedDates[dateIndex].selectedRooms = selectedRooms.filter(
-        (r) => r !== room
-      );
+      updatedDates[dateIndex].selectedRooms = selectedRooms
+        .filter((r) => r !== room)
+        .sort((a, b) => b - a);
     } else {
-      updatedDates[dateIndex].selectedRooms = [...selectedRooms, room];
+      updatedDates[dateIndex].selectedRooms = [...selectedRooms, room].sort(
+        (a, b) => b - a
+      );
     }
 
     setEventDates(updatedDates);
+  };
+
+  // Check if everything is selected
+  const isAllSelected = (dateIndex) => {
+    const allWings = ["B-Wing", "C-Wing", "D-Wing"];
+    const allFloors = Array.from(
+      new Set(allWings.flatMap((wing) => floorOptions[wing] || []))
+    );
+    const allRooms = Array.from(
+      new Set(
+        allFloors.flatMap((floor) =>
+          allWings.flatMap((wing) => roomOptions[wing]?.[floor] || [])
+        )
+      )
+    );
+
+    const { selectedWings, selectedFloors, selectedRooms } =
+      eventDates[dateIndex];
+
+    return (
+      selectedWings.length === allWings.length &&
+      selectedFloors.length === allFloors.length &&
+      selectedRooms.length === allRooms.length
+    );
   };
 
   const handleAddEventDate = () => {
@@ -300,34 +404,100 @@ const RequestForm = () => {
 
   const handleSchoolChange = (e) => {
     const { value, checked } = e.target;
-    setSelectedSchools((prev) =>
-      checked ? [...prev, value] : prev.filter((school) => school !== value)
-    );
-    setSelectedCourses([]);
-    setSelectedBranches([]);
-    setSelectedYears([]);
+    setFormState((prevState) => ({
+      ...prevState,
+      selectedSchools: checked
+        ? [...prevState.selectedSchools, value]
+        : prevState.selectedSchools.filter((school) => school !== value),
+      selectedCourses: [], // Reset courses and branches when schools change
+      selectedBranches: [],
+      selectedYears: [],
+    }));
   };
 
   const handleCourseChange = (e) => {
     const { value, checked } = e.target;
-    setSelectedCourses((prev) =>
-      checked ? [...prev, value] : prev.filter((course) => course !== value)
-    );
-    setSelectedBranches([]);
+    setFormState((prevState) => ({
+      ...prevState,
+      selectedCourses: checked
+        ? [...prevState.selectedCourses, value]
+        : prevState.selectedCourses.filter((course) => course !== value),
+      selectedBranches: [], // Reset branches when courses change
+    }));
   };
 
   const handleBranchChange = (e) => {
     const { value, checked } = e.target;
-    setSelectedBranches((prev) =>
-      checked ? [...prev, value] : prev.filter((branch) => branch !== value)
-    );
+    setFormState((prevState) => ({
+      ...prevState,
+      selectedBranches: checked
+        ? [...prevState.selectedBranches, value]
+        : prevState.selectedBranches.filter((branch) => branch !== value),
+    }));
   };
 
   const handleYearChange = (e) => {
     const { value, checked } = e.target;
-    setSelectedYears((prev) =>
-      checked ? [...prev, value] : prev.filter((year) => year !== value)
-    );
+    setFormState((prevState) => ({
+      ...prevState,
+      selectedYears: checked
+        ? [...prevState.selectedYears, value]
+        : prevState.selectedYears.filter((year) => year !== value),
+    }));
+  };
+
+  const handleInternalChange = (checked) => {
+    setFormState((prevState) => ({
+      ...prevState,
+      isInternal: checked,
+      selectedSchools: [], // Clear selections if Internal is selected
+      selectedCourses: [],
+      selectedBranches: [],
+      selectedYears: [],
+    }));
+  };
+
+  const handleExternalChange = (checked) => {
+    setFormState((prevState) => ({
+      ...prevState,
+      isExternal: checked,
+      selectedSchools: [], // Clear selections if External is selected
+      selectedCourses: [],
+      selectedBranches: [],
+      selectedYears: [],
+    }));
+  };
+
+  const handleBothChange = (checked) => {
+    setFormState((prevState) => ({
+      ...prevState,
+      isInternal: checked,
+      isExternal: checked, // Set External to true as well
+      selectedSchools: [], // Clear selections if Both is selected
+      selectedCourses: [],
+      selectedBranches: [],
+      selectedYears: [],
+    }));
+  };
+
+  const handleSelectAllSchools = (checked) => {
+    if (checked) {
+      setFormState((prevState) => ({
+        ...prevState,
+        selectedSchools: ["MPSTME", "SPTM", "SAST"], // Select all schools
+        selectedCourses: Object.values(courses).flat(), // Select all courses
+        selectedBranches: Object.values(branches).flat(), // Select all branches
+        selectedYears: years, // Select all years
+      }));
+    } else {
+      setFormState((prevState) => ({
+        ...prevState,
+        selectedSchools: [],
+        selectedCourses: [],
+        selectedBranches: [],
+        selectedYears: [],
+      }));
+    }
   };
 
   const handleEventTypeChange = (e) => {
@@ -515,6 +685,7 @@ const RequestForm = () => {
       eventType: consolidatedEventType, // Final event type array
       objectives: objectives,
       guests: JSON.stringify(guests),
+      registration,
       eventDates: JSON.stringify(
         finalEventDates.map((event) => ({
           date: event.date, // Use formatted date
@@ -524,10 +695,11 @@ const RequestForm = () => {
         }))
       ),
       school_audience: JSON.stringify({
-        school: selectedSchools,
-        branch: selectedCourses,
-        class: selectedBranches,
-        year: selectedYears,
+        school: formState.selectedSchools,
+        branch: formState.selectedCourses,
+        class: formState.selectedBranches,
+        year: formState.selectedYears,
+        externalInput: formState.externalInput,
       }),
     };
 
@@ -547,10 +719,10 @@ const RequestForm = () => {
         setFormSubmitted(true);
 
         // Reset form fields
-        setSelectedSchools([]);
-        setSelectedCourses([]);
-        setSelectedBranches([]);
-        setSelectedYears([]);
+        setFormState.selectedSchools([]);
+        setFormState.selectedCourses([]);
+        setFormState.selectedBranches([]);
+        setFormState.selectedYears([]);
         setClubs([]);
         setAudience(0);
         setEventTitle("");
@@ -607,6 +779,7 @@ const RequestForm = () => {
               value={eventTitle}
               onChange={(e) => setEventTitle(e.target.value)}
               className="w-full px-3 py-2 sm:px-4 sm:py-2 border rounded-lg bg-white border-gray-300 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
+              placeholder="Enter Event Title"
               required
             />
           </motion.div>
@@ -651,6 +824,7 @@ const RequestForm = () => {
                   onChange={handleOtherEventChange}
                   className="w-full px-3 py-2 sm:px-4 sm:py-2 border rounded-lg bg-white border-gray-300 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
                   placeholder="Enter event type"
+                  required
                 />
               </motion.div>
             )}
@@ -671,6 +845,7 @@ const RequestForm = () => {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               className="w-full px-3 py-2 sm:px-4 sm:py-2 border rounded-lg bg-white border-gray-300 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
+              placeholder="Enter Description"
               required
             />
           </motion.div>
@@ -795,6 +970,33 @@ const RequestForm = () => {
                           <label className="block font-semibold mb-2 text-gray-700 dark:text-gray-300">
                             Select Classroom Numbers:
                           </label>
+
+                          {/* Select All Checkbox */}
+                          <div className="flex items-center mb-4">
+                            <input
+                              type="checkbox"
+                              id="select-all-classrooms"
+                              checked={validClassroomRanges.every((range) =>
+                                Array.from(
+                                  { length: range.end - range.start + 1 },
+                                  (_, i) => range.start + i
+                                ).every((classroomNumber) =>
+                                  event.classroomVenues.includes(
+                                    classroomNumber.toString()
+                                  )
+                                )
+                              )}
+                              onChange={() => handleClassroomSelectAll(index)}
+                              className="mr-2 dark:bg-gray-800 dark:border-gray-600"
+                            />
+                            <label
+                              htmlFor="select-all-classrooms"
+                              className="text-gray-700 dark:text-gray-300"
+                            >
+                              All
+                            </label>
+                          </div>
+
                           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                             {validClassroomRanges.map((range) =>
                               Array.from(
@@ -889,6 +1091,23 @@ const RequestForm = () => {
                                   </label>
                                 </div>
                               ))}
+
+                              {/* Select All Wings, Floors, and Rooms */}
+                              <div className="flex items-center mt-2">
+                                <input
+                                  type="checkbox"
+                                  id="selectAll"
+                                  checked={isAllSelected(index)} // Function to check if everything is selected
+                                  onChange={() => handleSelectAll(index)} // Function to select/deselect all
+                                  className="mr-2 dark:bg-gray-800 dark:border-gray-600"
+                                />
+                                <label
+                                  htmlFor="selectAll"
+                                  className="text-gray-700 dark:text-gray-300"
+                                >
+                                  All
+                                </label>
+                              </div>
                             </div>
 
                             {/* Select Floor */}
@@ -897,7 +1116,6 @@ const RequestForm = () => {
                                 <label className="block font-semibold mb-2 text-gray-700 dark:text-gray-300">
                                   Select Floor:
                                 </label>
-                                {/* Create a Set to store unique floors */}
                                 {Array.from(
                                   new Set(
                                     event.selectedWings.flatMap(
@@ -1030,6 +1248,7 @@ const RequestForm = () => {
                       handleObjectiveChange(index, e.target.value)
                     }
                     className="flex-grow mb-2 px-4 py-2 border rounded-lg bg-white border-gray-300 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
+                    placeholder="Enter Objective"
                     required
                   />
                   {objectives.length > 3 && (
@@ -1064,129 +1283,186 @@ const RequestForm = () => {
             Target Audience
           </label>
 
-          {/* Schools */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-          >
-            <label className="block font-semibold mb-2 text-gray-700 dark:text-gray-300">
-              Select Schools
+          {/* Internal, External, Both Checkboxes */}
+          <div className="flex flex-col mb-4">
+            <label className="flex items-center mb-2">
+              <input
+                type="checkbox"
+                checked={formState.isInternal}
+                onChange={(e) => handleInternalChange(e.target.checked)}
+                className="mr-2"
+              />
+              Internal
             </label>
-            <div className="flex flex-col">
-              {["MPSTME", "SPTM", "SAST"].map((school) => (
-                <label key={school} className="flex items-center mb-2">
+            <label className="flex items-center mb-2">
+              <input
+                type="checkbox"
+                checked={formState.isExternal}
+                onChange={(e) => handleExternalChange(e.target.checked)}
+                className="mr-2"
+              />
+              External
+            </label>
+            <label className="flex items-center mb-2">
+              <input
+                type="checkbox"
+                checked={formState.isInternal && formState.isExternal} // Both is true if both are true
+                onChange={(e) => handleBothChange(e.target.checked)}
+                className="mr-2"
+              />
+              Both
+            </label>
+          </div>
+
+          {/* Schools */}
+          {formState.isInternal && (
+            <div className="flex justify-between">
+              {/* Schools */}
+              <motion.div className="w-1/4">
+                <label className="block font-semibold mb-2 text-gray-700 dark:text-gray-300">
+                  Select Schools
+                </label>
+                <div className="flex items-center mb-2">
                   <input
                     type="checkbox"
-                    value={school}
-                    checked={selectedSchools.includes(school)}
-                    onChange={handleSchoolChange}
+                    checked={formState.selectedSchools.length === 3} // Check if all schools are selected
+                    onChange={(e) => handleSelectAllSchools(e.target.checked)}
                     className="mr-2"
                   />
-                  {school}
-                </label>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Courses */}
-          <AnimatePresence>
-            {selectedSchools.length > 0 && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                className="mb-4"
-              >
-                <label className="block font-semibold mb-2 text-gray-700 dark:text-gray-300">
-                  Select Courses
-                </label>
-                {selectedSchools.map((school) =>
-                  courses[school].map((course) => (
-                    <label key={course} className="flex items-center mb-2">
-                      <input
-                        type="checkbox"
-                        value={course}
-                        checked={selectedCourses.includes(course)}
-                        onChange={handleCourseChange}
-                        className="mr-2"
-                      />
-                      {course}
-                    </label>
-                  ))
-                )}
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {/* Branches */}
-          <AnimatePresence>
-            {selectedCourses.length > 0 && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                className="mb-4"
-              >
-                <label className="block font-semibold mb-2 text-gray-700 dark:text-gray-300">
-                  Select Branch
-                </label>
-                <div className="flex flex-col">
-                  {
-                    // Flatten the branches and filter out duplicates
-                    [
-                      ...new Set(
-                        selectedCourses.flatMap((course) => branches[course])
-                      ),
-                    ].map((branch) => (
-                      <label key={branch} className="flex items-center mb-2">
-                        <input
-                          type="checkbox"
-                          value={branch}
-                          checked={selectedBranches.includes(branch)}
-                          onChange={handleBranchChange}
-                          className="mr-2"
-                        />
-                        {branch}
-                      </label>
-                    ))
-                  }
+                  <span>Select All</span>
                 </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {/* Year */}
-          <AnimatePresence>
-            {selectedBranches.length > 0 && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                className="mb-4"
-              >
-                <label className="block font-semibold mb-2 text-gray-700 dark:text-gray-300">
-                  Select Year
-                </label>
                 <div className="flex flex-col">
-                  {years.map((year) => (
-                    <label key={year} className="flex items-center mb-2">
+                  {["MPSTME", "SPTM", "SAST"].map((school) => (
+                    <label key={school} className="flex items-center mb-2">
                       <input
                         type="checkbox"
-                        value={year}
-                        checked={selectedYears.includes(year)}
-                        onChange={handleYearChange}
+                        value={school}
+                        checked={formState.selectedSchools.includes(school)}
+                        onChange={handleSchoolChange}
                         className="mr-2"
                       />
-                      {year}
+                      {school}
                     </label>
                   ))}
                 </div>
               </motion.div>
-            )}
-          </AnimatePresence>
+
+              {/* Courses */}
+              <AnimatePresence>
+                {formState.selectedSchools.length > 0 && (
+                  <motion.div className="w-1/4">
+                    <label className="block font-semibold mb-2 text-gray-700 dark:text-gray-300">
+                      Select Courses
+                    </label>
+                    {formState.selectedSchools.map((school) =>
+                      courses[school].map((course) => (
+                        <label key={course} className="flex items-center mb-2">
+                          <input
+                            type="checkbox"
+                            value={course}
+                            checked={formState.selectedCourses.includes(course)}
+                            onChange={handleCourseChange}
+                            className="mr-2"
+                          />
+                          {course}
+                        </label>
+                      ))
+                    )}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {/* Branches */}
+              <AnimatePresence>
+                {formState.selectedCourses.length > 0 && (
+                  <motion.div className="w-1/4">
+                    <label className="block font-semibold mb-2 text-gray-700 dark:text-gray-300">
+                      Select Branch
+                    </label>
+                    <div className="flex flex-col">
+                      {
+                        // Flatten the branches and filter out duplicates
+                        [
+                          ...new Set(
+                            formState.selectedCourses.flatMap(
+                              (course) => branches[course]
+                            )
+                          ),
+                        ].map((branch) => (
+                          <label
+                            key={branch}
+                            className="flex items-center mb-2"
+                          >
+                            <input
+                              type="checkbox"
+                              value={branch}
+                              checked={formState.selectedBranches.includes(
+                                branch
+                              )}
+                              onChange={handleBranchChange}
+                              className="mr-2"
+                            />
+                            {branch}
+                          </label>
+                        ))
+                      }
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {/* Year */}
+              <AnimatePresence>
+                {formState.selectedBranches.length > 0 && (
+                  <motion.div className="w-1/4">
+                    <label className="block font-semibold mb-2 text-gray-700 dark:text-gray-300">
+                      Select Year
+                    </label>
+                    <div className="flex flex-col">
+                      {years.map((year) => (
+                        <label key={year} className="flex items-center mb-2">
+                          <input
+                            type="checkbox"
+                            value={year}
+                            checked={formState.selectedYears.includes(year)}
+                            onChange={handleYearChange}
+                            className="mr-2"
+                          />
+                          {year}
+                        </label>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          )}
+
+          {/* External Input */}
+          {formState.isExternal && (
+            <div className="mt-4">
+              <label className="block font-semibold mb-2 text-gray-700 dark:text-gray-300">
+                External Input
+              </label>
+              <input
+                type="text"
+                value={formState.externalInput}
+                onChange={(e) =>
+                  setFormState((prevState) => ({
+                    ...prevState,
+                    externalInput: e.target.value,
+                  }))
+                }
+                className="w-full px-4 py-2 border rounded-lg bg-white border-gray-300 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
+                placeholder="Enter external information"
+              />
+            </div>
+          )}
         </div>
 
+        <div className=" font-bold text-md font-serif p-2">
+          If any Guest Speaker :{" "}
+        </div>
         {guests.map((guest, index) => (
           <div key={index} className="mb-4 border p-4 rounded-md">
             {/* Guest Name */}
@@ -1206,7 +1482,7 @@ const RequestForm = () => {
                   handleGuestChange(index, "name", e.target.value)
                 }
                 className="w-full px-4 py-2 border rounded-lg bg-white border-gray-300 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
-                required
+                placeholder="Enter Guest/Speaker Name"
               />
             </motion.div>
 
@@ -1227,7 +1503,7 @@ const RequestForm = () => {
                   handleGuestChange(index, "designation", e.target.value)
                 }
                 className="w-full px-4 py-2 border rounded-lg bg-white border-gray-300 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
-                required
+                placeholder="Enter Guest/Speaker Designation"
               />
             </motion.div>
 
@@ -1261,7 +1537,7 @@ const RequestForm = () => {
           exit={{ opacity: 0, y: -20 }}
         >
           <label className="block font-semibold mb-2 text-gray-700 dark:text-gray-300">
-            Maximum Audience / Participation
+            Expected Audience / Participation
           </label>
           <input
             type="number" // Keeps the input type as number
@@ -1276,6 +1552,7 @@ const RequestForm = () => {
             min="0" // Prevents negative values
             className="w-full px-4 py-2 border rounded-lg bg-white border-gray-300 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 appearance-none" // Add appearance-none
             required
+            placeholder="Enter Maximum Audience / Participation"
             style={{
               MozAppearance: "textfield", // Firefox
               WebkitAppearance: "none", // Chrome/Safari
@@ -1298,7 +1575,27 @@ const RequestForm = () => {
             value={resources}
             onChange={(e) => setResources(e.target.value)}
             className="w-full px-4 py-2 border rounded-lg bg-white border-gray-300 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
+            placeholder="Enter Resources Utilize (Provided by Faculty)"
             required
+          />
+        </motion.div>
+
+        {/*Registration Link*/}
+        <motion.div
+          className="mb-4"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+        >
+          <label className="block font-semibold mb-2 text-gray-700 dark:text-gray-300">
+            If Registration Link available :
+          </label>
+          <input
+            type="url"
+            value={registration}
+            onChange={(e) => setRegistration(e.target.value)}
+            className="w-full px-4 py-2 border rounded-lg bg-white border-gray-300 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
+            placeholder="Enter registration link"
           />
         </motion.div>
 
@@ -1314,7 +1611,7 @@ const RequestForm = () => {
           </label>
 
           <AnimatePresence>
-            {clubs.length > 0 &&
+            {clubs.length > 0 ? (
               clubs.map((club, index) => (
                 <motion.div
                   key={index}
@@ -1347,7 +1644,12 @@ const RequestForm = () => {
                     Remove
                   </motion.button>
                 </motion.div>
-              ))}
+              ))
+            ) : (
+              <p className="text-red-500 p-1 font-medium text-base">
+                No club added
+              </p>
+            )}
           </AnimatePresence>
 
           <AnimatePresence>

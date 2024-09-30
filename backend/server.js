@@ -24,7 +24,7 @@ const historyDirector = require("./History/historyDirector");
 const addDraft = require("./Events/addDraft");
 const { getDraft } = require("./Events/getDraft");
 const DeanDirectorDashboard = require("./Dashboard/DeanDirectorDashboard");
-const clubs = require("./Clubs/clubs")
+const clubs = require("./Clubs/clubs");
 
 const app = express();
 const PORT = 5000;
@@ -118,8 +118,8 @@ app.post(
   authorizedRole(["faculty", "centralauthority"]),
   async (req, res) => {
     const { id, role } = req.user;
-    // console.log(id);
-    // console.log("Role", role);
+    console.log(id);
+    console.log("Role", role);
     const {
       eventTitle,
       description,
@@ -131,6 +131,7 @@ app.post(
       eventType,
       objectives,
       guests,
+      registration,
     } = req.body;
 
     const currentApproverQuery = await db.query(
@@ -155,7 +156,8 @@ app.post(
       currentApprover,
       eventType,
       objectives,
-      guests
+      guests,
+      registration
     );
     try {
       // Insert event details into the database, including parsed JSONB fields
@@ -172,6 +174,7 @@ app.post(
         eventType: eventType,
         objectives: objectives,
         guests: guests,
+        registration: registration,
       });
 
       return res.status(201);
@@ -537,7 +540,9 @@ app.get("/api/current-club", authenticateToken, async (req, res) => {
   try {
     console.log("User ID from token:", req.user.id); // Log the user ID
     const { id } = req.user;
-    const result = await db.query("SELECT username FROM users WHERE id = $1", [id]);
+    const result = await db.query("SELECT username FROM users WHERE id = $1", [
+      id,
+    ]);
     console.log("Database query result:", result); // Log the database query result
     if (result.rows.length > 0) {
       res.json({ username: result.rows[0].username });
@@ -729,11 +734,10 @@ app.get(
   }
 );
 
-
 app.get(
   "/api/clubs",
   authenticateToken,
-  authorizedRole(["faculty", "centralAuthority","dean","director"]),
+  authorizedRole(["faculty", "centralAuthority", "dean", "director"]),
   async (req, res) => {
     const { id } = req.user;
     try {

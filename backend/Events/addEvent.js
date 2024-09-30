@@ -14,8 +14,7 @@ const addEvent = async ({
   eventType,
   objectives,
   guests,
-  otherClub,
-  otherEvent,
+  registration,
 }) => {
   console.log("created_by value:", created_by); // Debugging statement
   console.log("title:", title);
@@ -52,8 +51,8 @@ const addEvent = async ({
 
     // Insert event details into event_details table
     const eventDetailsQuery = `
-      INSERT INTO event_details (event_id, title, description, event_dates, school_audience, audience, clubs, resources, created_at, updated_at, eventtype, objectives, guests)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, $9, $10, $11);
+      INSERT INTO event_details (event_id, title, description, event_dates, school_audience, audience, clubs, resources, created_at, updated_at, eventtype, objectives, guests, registration)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, $9, $10, $11, $12);
     `;
 
     // Update the eventDetailsParams to use the corrected arrays
@@ -69,6 +68,7 @@ const addEvent = async ({
       eventType, // Use finalEventType here
       objectives,
       guests,
+      registration,
     ];
     await client.query(eventDetailsQuery, eventDetailsParams);
 
