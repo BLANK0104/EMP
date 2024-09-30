@@ -4,4 +4,5 @@ env
 package.json
 frontend/package.json
 frontend/public/Reports
+backend/.env
 package-lock.json
