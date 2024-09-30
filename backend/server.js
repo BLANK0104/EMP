@@ -24,6 +24,7 @@ const historyDirector = require("./History/historyDirector");
 const addDraft = require("./Events/addDraft");
 const { getDraft } = require("./Events/getDraft");
 const DeanDirectorDashboard = require("./Dashboard/DeanDirectorDashboard");
+const clubs = require("./Clubs/clubs")
 
 const app = express();
 const PORT = 5000;
