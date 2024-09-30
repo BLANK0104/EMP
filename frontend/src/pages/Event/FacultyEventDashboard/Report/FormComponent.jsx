@@ -410,106 +410,316 @@ const FormComponent = ({ onSubmit }) => {
                 <input
                   type="checkbox"
                   name="branches"
-                  value="CE"
-                  checked={formData.branches.includes("CE")}
+                  value="BTech"
+                  checked={formData.branches.includes("BTech")}
                   onChange={(e) => handleCheckboxChange(e, "branches")}
                   className="mr-2"
                   disabled={!isEditMode}
                 />
-                CE
+                BTech
               </label>
               <label className="ml-4">
                 <input
                   type="checkbox"
                   name="branches"
-                  value="AI/ML"
-                  checked={formData.branches.includes("AI/ML")}
+                  value="MBATech"
+                  checked={formData.branches.includes("MBATech")}
                   onChange={(e) => handleCheckboxChange(e, "branches")}
                   className="mr-2"
                   disabled={!isEditMode}
                 />
-                AI/ML
-              </label>
-              <label className="ml-4">
-                <input
-                  type="checkbox"
-                  name="branches"
-                  value="CS"
-                  checked={formData.branches.includes("CS")}
-                  onChange={(e) => handleCheckboxChange(e, "branches")}
-                  className="mr-2"
-                  disabled={!isEditMode}
-                />
-                CS
-              </label>
-              <label className="ml-4">
-                <input
-                  type="checkbox"
-                  name="branches"
-                  value="IT"
-                  checked={formData.branches.includes("IT")}
-                  onChange={(e) => handleCheckboxChange(e, "branches")}
-                  className="mr-2"
-                  disabled={!isEditMode}
-                />
-                IT
+                MBATech
               </label>
             </div>
           </div>
         )}
-        <div>
-          <label>Year:</label>
-          <div className="mb-4">
-            <label>
-              <input
-                type="checkbox"
-                name="years"
-                value="1st"
-                checked={formData.years.includes("1st")}
-                onChange={(e) => handleCheckboxChange(e, "years")}
-                className="mr-2"
-                disabled={!isEditMode}
-              />
-              1st
-            </label>
-            <label className="ml-4">
-              <input
-                type="checkbox"
-                name="years"
-                value="2nd"
-                checked={formData.years.includes("2nd")}
-                onChange={(e) => handleCheckboxChange(e, "years")}
-                className="mr-2"
-                disabled={!isEditMode}
-              />
-              2nd
-            </label>
-            <label className="ml-4">
-              <input
-                type="checkbox"
-                name="years"
-                value="3rd"
-                checked={formData.years.includes("3rd")}
-                onChange={(e) => handleCheckboxChange(e, "years")}
-                className="mr-2"
-                disabled={!isEditMode}
-              />
-              3rd
-            </label>
-            <label className="ml-4">
-              <input
-                type="checkbox"
-                name="years"
-                value="4th"
-                checked={formData.years.includes("4th")}
-                onChange={(e) => handleCheckboxChange(e, "years")}
-                className="mr-2"
-                disabled={!isEditMode}
-              />
-              4th
-            </label>
-          </div>
-        </div>
+{formData.schools.includes("SPTM") && (
+  <div>
+    <label>Branches:</label>
+    <div className="mb-4">
+      <label>
+        <input
+          type="checkbox"
+          name="branches"
+          value="BPharma"
+          checked={formData.branches.includes("BPharma")}
+          onChange={(e) => handleCheckboxChange(e, "branches")}
+          className="mr-2"
+          disabled={!isEditMode}
+        />
+        BPharma
+      </label>
+      <label className="ml-4">
+        <input
+          type="checkbox"
+          name="branches"
+          value="MPharma"
+          checked={formData.branches.includes("MPharma")}
+          onChange={(e) => handleCheckboxChange(e, "branches")}
+          className="mr-2"
+          disabled={!isEditMode}
+        />
+        MPharma
+      </label>
+      <label className="ml-4">
+        <input
+          type="checkbox"
+          name="branches"
+          value="BPharmaMBA"
+          checked={formData.branches.includes("BPharmaMBA")}
+          onChange={(e) => handleCheckboxChange(e, "branches")}
+          className="mr-2"
+          disabled={!isEditMode}
+        />
+        BPharmaMBA
+      </label>
+      <label className="ml-4">
+        <input
+          type="checkbox"
+          name="branches"
+          value="MPharmaMBA"
+          checked={formData.branches.includes("MPharmaMBA")}
+          onChange={(e) => handleCheckboxChange(e, "branches")}
+          className="mr-2"
+          disabled={!isEditMode}
+        />
+        MPharmaMBA
+      </label>
+    </div>
+  </div>
+)}
+
+{formData.schools.includes("SAST") && (
+  <div>
+    <label>Branches:</label>
+    <div className="mb-4">
+      <label>
+        <input
+          type="checkbox"
+          name="branches"
+          value="Agriculture"
+          checked={formData.branches.includes("Agriculture")}
+          onChange={(e) => handleCheckboxChange(e, "branches")}
+          className="mr-2"
+          disabled={!isEditMode}
+        />
+        Agriculture
+      </label>
+    </div>
+  </div>
+)}
+
+{formData.branches.includes("BPharma") && (
+  <div>
+    <label>Classes:</label>
+    <div className="mb-4">
+      <label>
+        <input
+          type="checkbox"
+          name="classes"
+          value="B.Pharma"
+          checked={formData.classes.includes("B.Pharma")}
+          onChange={(e) => handleCheckboxChange(e, "classes")}
+          className="mr-2"
+          disabled={!isEditMode}
+        />
+        B.Pharma
+      </label>
+    </div>
+  </div>
+)}
+
+{formData.branches.includes("MPharma") && (
+  <div>
+    <label>Classes:</label>
+    <div className="mb-4">
+      <label>
+        <input
+          type="checkbox"
+          name="classes"
+          value="M.Pharma"
+          checked={formData.classes.includes("M.Pharma")}
+          onChange={(e) => handleCheckboxChange(e, "classes")}
+          className="mr-2"
+          disabled={!isEditMode}
+        />
+        M.Pharma
+      </label>
+    </div>
+  </div>
+)}
+
+{formData.branches.includes("BPharmaMBA") && (
+  <div>
+    <label>Classes:</label>
+    <div className="mb-4">
+      <label>
+        <input
+          type="checkbox"
+          name="classes"
+          value="BPharma + MBA"
+          checked={formData.classes.includes("BPharma + MBA")}
+          onChange={(e) => handleCheckboxChange(e, "classes")}
+          className="mr-2"
+          disabled={!isEditMode}
+        />
+        BPharma + MBA
+      </label>
+    </div>
+  </div>
+)}
+
+{formData.branches.includes("MPharmaMBA") && (
+  <div>
+    <label>Classes:</label>
+    <div className="mb-4">
+      <label>
+        <input
+          type="checkbox"
+          name="classes"
+          value="MPharma + MBA"
+          checked={formData.classes.includes("MPharma + MBA")}
+          onChange={(e) => handleCheckboxChange(e, "classes")}
+          className="mr-2"
+          disabled={!isEditMode}
+        />
+        MPharma + MBA
+      </label>
+    </div>
+  </div>
+)}
+
+{formData.branches.includes("BTech") && (
+  <div>
+    <label>Classes:</label>
+    <div className="mb-4">
+      <label>
+        <input
+          type="checkbox"
+          name="classes"
+          value="CE"
+          checked={formData.classes.includes("CE")}
+          onChange={(e) => handleCheckboxChange(e, "classes")}
+          className="mr-2"
+          disabled={!isEditMode}
+        />
+        CE
+      </label>
+      <label className="ml-4">
+        <input
+          type="checkbox"
+          name="classes"
+          value="CS"
+          checked={formData.classes.includes("CS")}
+          onChange={(e) => handleCheckboxChange(e, "classes")}
+          className="mr-2"
+          disabled={!isEditMode}
+        />
+        CS
+      </label>
+      <label className="ml-4">
+        <input
+          type="checkbox"
+          name="classes"
+          value="IT"
+          checked={formData.classes.includes("IT")}
+          onChange={(e) => handleCheckboxChange(e, "classes")}
+          className="mr-2"
+          disabled={!isEditMode}
+        />
+        IT
+      </label>
+      <label className="ml-4">
+        <input
+          type="checkbox"
+          name="classes"
+          value="AI/ML"
+          checked={formData.classes.includes("AI/ML")}
+          onChange={(e) => handleCheckboxChange(e, "classes")}
+          className="mr-2"
+          disabled={!isEditMode}
+        />
+        AI/ML
+      </label>
+    </div>
+  </div>
+)}
+
+{formData.branches.includes("Agriculture") && (
+  <div>
+    <label>Classes:</label>
+    <div className="mb-4">
+      <label>
+        <input
+          type="checkbox"
+          name="classes"
+          value="Agriculture"
+          checked={formData.classes.includes("Agriculture")}
+          onChange={(e) => handleCheckboxChange(e, "classes")}
+          className="mr-2"
+          disabled={!isEditMode}
+        />
+        Agriculture
+      </label>
+    </div>
+  </div>
+)}
+
+{formData.classes.length > 0 && (
+  <div>
+    <label>Years:</label>
+    <div className="mb-4">
+      <label>
+        <input
+          type="checkbox"
+          name="years"
+          value="1st Year"
+          checked={formData.years.includes("1st Year")}
+          onChange={(e) => handleCheckboxChange(e, "years")}
+          className="mr-2"
+          disabled={!isEditMode}
+        />
+        First Year
+      </label>
+      <label className="ml-4">
+        <input
+          type="checkbox"
+          name="years"
+          value="2nd Year"
+          checked={formData.years.includes("2nd Year")}
+          onChange={(e) => handleCheckboxChange(e, "years")}
+          className="mr-2"
+          disabled={!isEditMode}
+        />
+        Second Year
+      </label>
+      <label className="ml-4">
+        <input
+          type="checkbox"
+          name="years"
+          value="3rd Year"
+          checked={formData.years.includes("3rd Year")}
+          onChange={(e) => handleCheckboxChange(e, "years")}
+          className="mr-2"
+          disabled={!isEditMode}
+        />
+        Third Year
+      </label>
+      <label className="ml-4">
+        <input
+          type="checkbox"
+          name="years"
+          value="4th Year"
+          checked={formData.years.includes("4th Year")}
+          onChange={(e) => handleCheckboxChange(e, "years")}
+          className="mr-2"
+          disabled={!isEditMode}
+        />
+        Fourth Year
+      </label>
+    </div>
+  </div>
+)}
         <label>Audience description:</label>
         <input
           type="text"

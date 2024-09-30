@@ -76,14 +76,14 @@ export const generatePdf = async ({ formData }) => {
   }
 
   // Add the school, branch, and year fields
-  doc.text(`School: ${formData.schools}`, 10, yOffset);
+  doc.text(`School: ${formData.school}`, 10, yOffset);
   yOffset += 10;
   if (yOffset > 280) {
     // Check if we need to add a new page
     doc.addPage();
     yOffset = 10;
   }
-  doc.text(`Branch: ${formData.branches}`, 10, yOffset);
+  doc.text(`Branch: ${formData.branch}`, 10, yOffset);
   yOffset += 10;
   if (yOffset > 280) {
     // Check if we need to add a new page
