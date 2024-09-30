@@ -100,10 +100,10 @@ const LeftGraph = ({
     scales: {
       y: {
         beginAtZero: true,
-        min: 1,
-        max: 20,
+        min: 0,
+        max: 10,
         ticks: {
-          stepSize: 2,
+          stepSize: 1,
         },
       },
     },
