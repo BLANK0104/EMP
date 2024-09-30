@@ -130,8 +130,6 @@ app.post(
       eventType,
       objectives,
       guests,
-      otherClub,
-      otherEvent,
     } = req.body;
 
     const currentApproverQuery = await db.query(
@@ -156,9 +154,7 @@ app.post(
       currentApprover,
       eventType,
       objectives,
-      guests,
-      otherClub,
-      otherEvent
+      guests
     );
     try {
       // Insert event details into the database, including parsed JSONB fields
@@ -175,8 +171,6 @@ app.post(
         eventType: eventType,
         objectives: objectives,
         guests: guests,
-        otherClub: otherClub,
-        otherEvent: otherEvent,
       });
 
       return res.status(201);

@@ -467,7 +467,7 @@ const RequestForm = () => {
         consolidatedVenues.push(`${event.otherVenue}`);
       }
 
-      // If "LR" is selected, add wing, floor, and room details
+      // If "LR" is selected, add room details
       if (event.venues.includes("LR")) {
         consolidatedVenues = consolidatedVenues.concat(
           event.selectedRooms.map((room) => `LR - ${room}`)
@@ -479,31 +479,31 @@ const RequestForm = () => {
         (venue) => venue !== "Classroom" && venue !== "Others" && venue !== "LR"
       );
 
-      const formattedDate = new Date(event.date).toISOString().split("T")[0];
+      const formattedDate = new Date(event.date).toISOString().split("T")[0]; // Format the date
 
       // Return the event with the consolidated venues
       return {
         ...event,
-        date: formattedDate, // Format the date to "YYYY-MM-DD"
-        venues: consolidatedVenues, // Overwrite the venues with the consolidated data
+        date: formattedDate, // Format date to "YYYY-MM-DD"
+        venues: consolidatedVenues, // Overwrite the venues with consolidated data
       };
     });
 
     // Consolidate event types (including "Other" event type if provided)
     let consolidatedEventType = [...eventType];
     if (eventType.includes("Other") && otherEvent) {
-      consolidatedEventType.push(`Other - ${otherEvent}`);
+      consolidatedEventType = consolidatedEventType.map((type) =>
+        type === "Other" ? otherEvent : type
+      );
     }
-    consolidatedEventType = consolidatedEventType.filter(
-      (type) => type !== "Other"
-    ); // Remove the base "Other" type after consolidation
 
     // Consolidate clubs (including "Other" club if provided)
     let consolidatedClubs = [...clubs];
-    if (clubs.includes("Other") && otherClub) {
-      consolidatedClubs.push(`Other - ${otherClub}`);
+    if (clubs.includes("Others") && otherClub) {
+      consolidatedClubs = consolidatedClubs.map((club) =>
+        club === "Others" ? otherClub : club
+      );
     }
-    consolidatedClubs = consolidatedClubs.filter((club) => club !== "Other");
 
     // Create formData object
     const formData = {
@@ -511,8 +511,8 @@ const RequestForm = () => {
       description,
       audience: parseInt(audience, 10),
       resources: JSON.stringify(resources),
-      clubs: consolidatedClubs,
-      eventType: consolidatedEventType,
+      clubs: consolidatedClubs, // Final clubs array
+      eventType: consolidatedEventType, // Final event type array
       objectives: objectives,
       guests: JSON.stringify(guests),
       eventDates: JSON.stringify(
