@@ -11,7 +11,7 @@ const db = require("./db");
 const addEvent = require("./Events/addEvent");
 const { getRequestStatus } = require("./Request/latestRequest");
 const requests = require("./Request/requests");
-const reporttab = require("./Report/reporttab")
+const reporttab = require("./Report/reporttab");
 const acceptRequest = require("./Request/acceptRequest");
 const rejectRequest = require("./Request/rejectRequest");
 const modifyRequest = require("./Request/modifyRequest");
@@ -216,7 +216,8 @@ app.get(
     const { id } = req.user;
     try {
       const response = await requests(id);
-      // console.log(response);
+      console.log(response);
+
       res.json(response);
     } catch {}
   }
@@ -331,7 +332,6 @@ app.get(
   }
 );
 
-
 app.post(
   "/api/Available",
   authenticateToken,
@@ -342,9 +342,14 @@ app.post(
     try {
       const availability = await Available(id, venue, eventDateTime);
       if (availability === 1) {
-        return res.status(200).json({ Available: false, message: "Venue is already booked for the specified date and time." });
+        return res.status(200).json({
+          Available: false,
+          message: "Venue is already booked for the specified date and time.",
+        });
       } else {
-        return res.status(200).json({ Available: true, message: "Venue is Available." });
+        return res
+          .status(200)
+          .json({ Available: true, message: "Venue is Available." });
       }
     } catch (error) {
       console.error("Error checking availability:", error);
@@ -456,66 +461,13 @@ app.get(
     const { id, role } = req.user;
     // console.log(id);
     // console.log("Role", role);
-    {(role === "faculty" || role === "centralAuthority") ?
-      Facultydashboard(id, req, res, role) : DeanDirectorDashboard(id, req, res, role)
+    {
+      role === "faculty" || role === "centralAuthority"
+        ? Facultydashboard(id, req, res, role)
+        : DeanDirectorDashboard(id, req, res, role);
     }
-    
   }
 );
-
-// Dummy data (remove this when you have a real database)
-const dummyClubsData = {
-  "Google Developer Student Club": {
-    name: "Google Developer Student Club",
-    slogan: "Building solutions that matter.",
-    logo: "./images/gdscs.jpeg",
-    facultyIncharge: ["Dr. John Doe", "Prof. Jane Smith"],
-    events: [
-      { name: "hackthon", description: "A coding marathon." },
-      { name: "Tech Talks", description: "Latest trends in technology." },
-      { name: "Code Sprint", description: "Competitive coding event." },
-      { name: "Workshops", description: "Hands-on coding workshops." },
-    ],
-    teams: [
-      { name: "hitesh", position: "A coding marathon." },
-      { name: "Tech Talks", position: "Latest trends in technology." },
-      { name: "Code Sprint", position: "Competitive coding event." },
-      { name: "Workshops", position: "Hands-on coding workshops." },
-    ],
-    objectives: [
-      "Promoting student learning through coding.",
-      "Engaging in tech-driven projects.",
-      "Collaboration on innovative solutions.",
-    ],
-    socialLinks: {
-      instagram: "https://instagram.com/gdsc",
-      twitter: "https://twitter.com/gdsc",
-    },
-  },
-  "Google Develop": {
-    name: "Google Develope",
-    slogan: "Building solutions that matter.",
-    logo: "./images/gdscs1233.jpeg",
-    facultyIncharge: ["Dr. John Dvff", "Prof. Jane Smith"],
-    events: [
-      { name: "sdv", description: "A coding marathon." },
-      { name: "dv Talks", description: "Latest trends in technology." },
-      { name: "s Sprint", description: "Competitive coding event." },
-      { name: "Workshops", description: "Hands-on coding workshops." },
-    ],
-    objectives: [
-      "Promoting student learning through coding.",
-      "Engaging in tech-driven projects.",
-      "Collaboration on innovative solutions.",
-    ],
-    socialLinks: {
-      instagram: "https://instagram.com/gdsc",
-      twitter: "https://twitter.com/gdsc",
-    },
-  },
-
-  //   // Add more dummy data for other clubs...
-};
 
 // API endpoint to get all clubs
 app.get("/api/clubs", (req, res) => {
@@ -596,9 +548,9 @@ app.get(
       let historyData;
       if (role === "faculty" || role === "centralAuthority") {
         historyData = await history(id); // Pass the user ID
-      }else if(role === "dean"){
+      } else if (role === "dean") {
         historyData = await historyDean(id); // Pass the user ID
-      }else if(role === "director"){
+      } else if (role === "director") {
         historyData = await historyDirector(id); // Pass the user ID
       }
       res.json(historyData);

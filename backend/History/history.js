@@ -20,7 +20,7 @@ JOIN
 JOIN 
     LATERAL jsonb_array_elements(ed.event_dates) AS event_detail ON true
 WHERE 
-    e.status IN ('Pending', 'Approved', 'Modified', 'Rejected')
+    e.status IN ('Approved', 'Modified', 'Rejected')
     AND u.id = $1;  -- Filter by user ID
 
     `;

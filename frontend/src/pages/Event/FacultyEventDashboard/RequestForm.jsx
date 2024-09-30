@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import TermsPopup from "./Termspop";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
 const backendUrl =
   import.meta.env.VITE_BACKEND_URL || "http://localhost:5000/api";
 
@@ -84,7 +88,7 @@ const RequestForm = () => {
   const [selectedCourses, setSelectedCourses] = useState([]);
   const [selectedBranches, setSelectedBranches] = useState([]);
   const [selectedYears, setSelectedYears] = useState([]);
-  const [audience, setAudience] = useState(0);
+  const [audience, setAudience] = useState("");
   const [eventTitle, setEventTitle] = useState("");
   const [description, setDescription] = useState("");
   const [resources, setResources] = useState([]);
@@ -110,82 +114,26 @@ const RequestForm = () => {
   const [clubs, setClubs] = useState([]);
   const [guests, setGuests] = useState([{ name: "", designation: "" }]);
 
-  // useEffect(() => {
-  //   async function fetchDraft() {
-  //     try {
-  //         const response = await fetch(`${backendUrl}/get-draft`, {
-  //         method: "GET",
-  //         credentials: "include",
-  //       });
-  //       // console.log(response);
-  //       if (!response.ok) {
-  //         throw new Error("Network response was not ok");
-  //       }
-
-  //       const data = await response.json();
-
-  //       console.log(data);
-
-  //       // Populate form state with draft data
-  //       setSelectedSchools(data.selectedSchools || []);
-  //       setSelectedCourses(data.selectedCourses || []);
-  //       setSelectedBranches(data.selectedBranches || []);
-  //       setSelectedYears(data.selectedYears || []);
-  //       setAudience(data.audience || 0);
-  //       setEventTitle(data.eventTitle || "");
-  //       setDescription(data.description || "");
-  //       setResources(data.resources || []);
-  //       setEventDates(
-  //         data.eventDates.length > 0
-  //           ? data.eventDates
-  //           : [
-  //               {
-  //                 date: "",
-  //                 startTime: "",
-  //                 endTime: "",
-  //                 venues: [""],
-  //                 classroomVenues: [],
-  //                 otherVenue: "",
-  //                 selectedWings: [],
-  //                 selectedFloors: [],
-  //                 selectedRooms: [],
-  //               },
-  //             ]
-  //       );
-  //       setEventType(data.eventType || []);
-  //       setObjectives(data.objectives || ["", "", ""]);
-  //       setOtherEvent(data.otherEvent || "");
-  //       setOtherClub(data.otherClub || "");
-  //       setClubs(data.clubs || []);
-  //       setGuests(data.guests || [{ name: "", designation: "" }]);
-  //     } catch (error) {
-  //       console.error("Error fetching draft data:", error);
-  //     }
-  //   }
-
-  //   fetchDraft();
-  // }, []);
-
   const validClassroomRanges = [
     { start: 101, end: 104 },
     { start: 201, end: 203 },
   ];
 
   const floorOptions = {
-    "B-Wing": ["Ground Floor", "1st Floor", "2nd Floor"],
-    "C-Wing": ["1st Floor", "2nd Floor"],
+    "B-Wing": ["Ground Floor", "First Floor", "Second Floor"],
+    "C-Wing": ["First Floor", "Second Floor"],
     "D-Wing": ["Ground Floor"],
   };
 
   const roomOptions = {
     "B-Wing": {
       "Ground Floor": [1, 2, 3, 4, 5],
-      "1st Floor": [6, 7, 8, 9],
-      "2nd Floor": [10, 11, 12],
+      "First Floor": [6, 7, 8, 9],
+      "Second Floor": [10, 11, 12],
     },
     "C-Wing": {
-      "1st Floor": [11, 12, 13, 14, 15, 16],
-      "2nd Floor": [17, 18, 19],
+      "First Floor": [11, 12, 13, 14, 15, 16],
+      "Second Floor": [17, 18, 19],
     },
     "D-Wing": {
       "Ground Floor": [20, 21, 22, 23, 24, 25],
@@ -195,25 +143,24 @@ const RequestForm = () => {
   const handleVenueChange = (dateIndex, venueIndex, value) => {
     const updatedDates = [...eventDates];
     const event = updatedDates[dateIndex];
-
     updatedDates[dateIndex].venues[venueIndex] = value;
 
     // Check and clear data only if necessary
-    if (value !== "Classroom") {
+    if (value === "Classroom") {
       // Reset classroom venues only if the previous venue was Classroom
       if (event.venues[venueIndex] === "Classroom") {
         updatedDates[dateIndex].classroomVenues = [];
       }
     }
 
-    if (value !== "Others") {
+    if (value === "Others") {
       // Reset other venue only if the previous venue was Others
       if (event.venues[venueIndex] === "Others") {
         updatedDates[dateIndex].otherVenue = "";
       }
     }
 
-    if (value !== "LR") {
+    if (value === "LR") {
       // Reset selectedWings, selectedFloors, selectedRooms only if the previous venue was LR
       if (event.venues[venueIndex] === "LR") {
         updatedDates[dateIndex].selectedWings = [];
@@ -319,14 +266,6 @@ const RequestForm = () => {
     setEventDates(updatedDates);
   };
 
-  const today = new Date();
-  const formattedDate =
-    today.getFullYear() +
-    "-" +
-    ("0" + (today.getMonth() + 1)).slice(-2) +
-    "-" +
-    ("0" + today.getDate()).slice(-2);
-
   const handleAddVenue = (dateIndex) => {
     const updatedDates = [...eventDates];
     updatedDates[dateIndex].venues.push("");
@@ -349,7 +288,7 @@ const RequestForm = () => {
 
   const branches = {
     BTech: ["AI/ML", "CE", "CS", "IT"],
-    MBATech: ["MBATech CE"],
+    MBATech: ["CE"],
     BPharmaMBA: ["BPharma + MBA"],
     MPharmaMBA: ["MPharma + MBA"],
     BPharma: ["B.Pharma"],
@@ -512,28 +451,76 @@ const RequestForm = () => {
   };
 
   const handleFinalSubmit = async () => {
+    // Consolidate venues and other relevant data
+    const finalEventDates = eventDates.map((event) => {
+      let consolidatedVenues = [...event.venues]; // Start with the venues
+
+      // If "Classroom" is selected, merge classroom details
+      if (event.venues.includes("Classroom")) {
+        consolidatedVenues = consolidatedVenues.concat(
+          event.classroomVenues.map((room) => `Classroom - ${room}`)
+        );
+      }
+
+      // If "Others" is selected, add other venue details
+      if (event.venues.includes("Others") && event.otherVenue) {
+        consolidatedVenues.push(`${event.otherVenue}`);
+      }
+
+      // If "LR" is selected, add wing, floor, and room details
+      if (event.venues.includes("LR")) {
+        consolidatedVenues = consolidatedVenues.concat(
+          event.selectedRooms.map((room) => `LR - ${room}`)
+        );
+      }
+
+      // Filter out the base venue types ("Classroom", "Others", "LR")
+      consolidatedVenues = consolidatedVenues.filter(
+        (venue) => venue !== "Classroom" && venue !== "Others" && venue !== "LR"
+      );
+
+      const formattedDate = new Date(event.date).toISOString().split("T")[0];
+
+      // Return the event with the consolidated venues
+      return {
+        ...event,
+        date: formattedDate, // Format the date to "YYYY-MM-DD"
+        venues: consolidatedVenues, // Overwrite the venues with the consolidated data
+      };
+    });
+
+    // Consolidate event types (including "Other" event type if provided)
+    let consolidatedEventType = [...eventType];
+    if (eventType.includes("Other") && otherEvent) {
+      consolidatedEventType.push(`Other - ${otherEvent}`);
+    }
+    consolidatedEventType = consolidatedEventType.filter(
+      (type) => type !== "Other"
+    ); // Remove the base "Other" type after consolidation
+
+    // Consolidate clubs (including "Other" club if provided)
+    let consolidatedClubs = [...clubs];
+    if (clubs.includes("Other") && otherClub) {
+      consolidatedClubs.push(`Other - ${otherClub}`);
+    }
+    consolidatedClubs = consolidatedClubs.filter((club) => club !== "Other");
+
     // Create formData object
     const formData = {
       eventTitle,
       description,
       audience: parseInt(audience, 10),
       resources: JSON.stringify(resources),
-      clubs: clubs,
-      otherClub: otherClub,
-      eventType: eventType,
-      otherEvent: otherEvent,
+      clubs: consolidatedClubs,
+      eventType: consolidatedEventType,
       objectives: objectives,
       guests: JSON.stringify(guests),
       eventDates: JSON.stringify(
-        eventDates.map((event) => ({
-          date: event.date,
+        finalEventDates.map((event) => ({
+          date: event.date, // Use formatted date
           start_time: event.startTime,
           end_time: event.endTime,
-          venues: event.venues,
-          classroomVenues: event.classroomVenues,
-          otherVenue: event.otherVenue,
-          selectedWings: event.selectedWings,
-          selectedFloors: event.selectedFloors,
+          venues: event.venues, // Use consolidated and filtered venues
         }))
       ),
       school_audience: JSON.stringify({
@@ -544,7 +531,7 @@ const RequestForm = () => {
       }),
     };
 
-    console.log(formData);
+    console.log(formData); // Debugging: Check if formData is correct
 
     try {
       const response = await fetch(`${backendUrl}/event-request`, {
@@ -552,12 +539,14 @@ const RequestForm = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include",
-        body: JSON.stringify(formData),
+        credentials: "include", // Sends cookies with the request
+        body: JSON.stringify(formData), // Convert formData to JSON string
       });
 
       if (response.ok) {
         setFormSubmitted(true);
+
+        // Reset form fields
         setSelectedSchools([]);
         setSelectedCourses([]);
         setSelectedBranches([]);
@@ -573,6 +562,7 @@ const RequestForm = () => {
         setEventType([]);
         setObjectives([""]);
         setGuests("");
+
         // Optional: Navigate away or show a success message
       } else {
         const errorData = await response.json();
@@ -590,9 +580,11 @@ const RequestForm = () => {
 
   return (
     <div
-      className={`w-full min-h-screen mx-auto p-8 rounded-lg shadow-md dark:bg-gray-700 dark:text-white bg-white text-gray-900`}
+      className={`w-full min-h-screen p-4 sm:p-6 md:p-8 rounded-lg shadow-md dark:bg-gray-700 dark:text-white bg-white text-gray-900`}
     >
-      <h2 className="text-2xl font-bold mb-6">Event Request Form</h2>
+      <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">
+        Event Request Form
+      </h2>
       <form onSubmit={handleFormSubmit}>
         <motion.form
           onSubmit={handleFormSubmit}
@@ -614,7 +606,7 @@ const RequestForm = () => {
               type="text"
               value={eventTitle}
               onChange={(e) => setEventTitle(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg bg-white border-gray-300 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
+              className="w-full px-3 py-2 sm:px-4 sm:py-2 border rounded-lg bg-white border-gray-300 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
               required
             />
           </motion.div>
@@ -632,7 +624,7 @@ const RequestForm = () => {
             <select
               value={eventType.length > 0 ? eventType[0] : ""}
               onChange={handleEventTypeChange}
-              className="w-full px-4 py-2 border rounded-lg bg-white border-gray-300 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
+              className="w-full px-3 py-2 sm:px-4 sm:py-2 border rounded-lg bg-white border-gray-300 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
               required
             >
               <option value="">Select Event Type</option>
@@ -657,7 +649,7 @@ const RequestForm = () => {
                   type="text"
                   value={otherEvent}
                   onChange={handleOtherEventChange}
-                  className="w-full px-4 py-2 border rounded-lg bg-white border-gray-300 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
+                  className="w-full px-3 py-2 sm:px-4 sm:py-2 border rounded-lg bg-white border-gray-300 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
                   placeholder="Enter event type"
                 />
               </motion.div>
@@ -678,13 +670,13 @@ const RequestForm = () => {
               type="text"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg bg-white border-gray-300 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
+              className="w-full px-3 py-2 sm:px-4 sm:py-2 border rounded-lg bg-white border-gray-300 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
               required
             />
           </motion.div>
         </motion.form>
 
-        {/*Event*/}
+        {/* Event */}
         <AnimatePresence>
           {eventDates.map((event, index) => (
             <motion.div
@@ -695,26 +687,34 @@ const RequestForm = () => {
               exit={{ opacity: 0, y: -20 }}
               layout
             >
-              <div className="flex space-x-3">
+              <div className="flex flex-wrap items-end -mx-2 mb-2">
                 {/* Date */}
-                <div className="mb-4">
+                <div className="w-full sm:w-auto px-2 mb-4 sm:mb-0">
                   <label className="block font-semibold mb-2 text-gray-700 dark:text-gray-300">
                     Date
                   </label>
-                  <input
-                    type="date"
-                    value={eventDates[0].date}
-                    onChange={(e) =>
-                      handleEventDateChange(0, "date", e.target.value)
-                    }
-                    min={formattedDate} // Set the min attribute to today's date to prevent selecting past dates
-                    className="w-full px-4 py-2 border rounded-lg bg-white dark:bg-gray-600"
-                    required
-                  />
+                  <div className="relative">
+                    <DatePicker
+                      selected={event.date}
+                      onChange={(date) =>
+                        handleEventDateChange(index, "date", date)
+                      }
+                      minDate={new Date()}
+                      dateFormat="yyyy-MM-dd"
+                      className="w-40 px-8 py-2 border rounded-lg bg-white dark:bg-gray-600 "
+                      required
+                    />
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <FontAwesomeIcon
+                        icon={faCalendarAlt}
+                        className="text-black dark:text-gray-400"
+                      />
+                    </div>
+                  </div>
                 </div>
 
                 {/* Start Time */}
-                <div className="mb-4">
+                <div className="w-1/2 sm:w-28 px-2 mb-4 sm:mb-0">
                   <label className="block font-semibold mb-2 text-gray-700 dark:text-gray-300">
                     Start Time
                   </label>
@@ -724,13 +724,13 @@ const RequestForm = () => {
                     onChange={(e) =>
                       handleEventDateChange(index, "startTime", e.target.value)
                     }
-                    className="w-full px-4 py-2 border rounded-lg bg-white dark:bg-gray-600"
+                    className="w-full px-2 py-2 border rounded-lg bg-white dark:bg-gray-600"
                     required
                   />
                 </div>
 
                 {/* End Time */}
-                <div className="mb-4">
+                <div className="w-1/2 sm:w-28 px-2 mb-4 sm:mb-0">
                   <label className="block font-semibold mb-2 text-gray-700 dark:text-gray-300">
                     End Time
                   </label>
@@ -740,7 +740,7 @@ const RequestForm = () => {
                     onChange={(e) =>
                       handleEventDateChange(index, "endTime", e.target.value)
                     }
-                    className="w-full px-4 py-2 border rounded-lg bg-white dark:bg-gray-600"
+                    className="w-full px-2 py-2 border rounded-lg bg-white dark:bg-gray-600"
                     required
                   />
                 </div>
@@ -795,7 +795,7 @@ const RequestForm = () => {
                           <label className="block font-semibold mb-2 text-gray-700 dark:text-gray-300">
                             Select Classroom Numbers:
                           </label>
-                          <div className="grid grid-cols-4 gap-4">
+                          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                             {validClassroomRanges.map((range) =>
                               Array.from(
                                 { length: range.end - range.start + 1 },
@@ -861,7 +861,8 @@ const RequestForm = () => {
                       {/* LR */}
                       {venue === "LR" && (
                         <div className="mt-2">
-                          <div className="flex flex-wrap gap-4">
+                          <div className="flex flex-col sm:flex-row gap-4">
+                            {/* Select Wing */}
                             <div className="flex-1 min-w-[150px]">
                               <label className="block font-semibold mb-2 text-gray-700 dark:text-gray-300">
                                 Select Wing:
@@ -890,53 +891,61 @@ const RequestForm = () => {
                               ))}
                             </div>
 
+                            {/* Select Floor */}
                             {event.selectedWings.length > 0 && (
                               <div className="flex-1 min-w-[150px]">
                                 <label className="block font-semibold mb-2 text-gray-700 dark:text-gray-300">
                                   Select Floor:
                                 </label>
-                                {event.selectedWings.map((wing) =>
-                                  floorOptions[wing]?.map((floor) => (
-                                    <div
-                                      key={floor}
-                                      className="flex items-center mb-2"
+                                {/* Create a Set to store unique floors */}
+                                {Array.from(
+                                  new Set(
+                                    event.selectedWings.flatMap(
+                                      (wing) => floorOptions[wing] || []
+                                    )
+                                  )
+                                ).map((floor) => (
+                                  <div
+                                    key={floor}
+                                    className="flex items-center mb-2"
+                                  >
+                                    <input
+                                      type="checkbox"
+                                      id={floor}
+                                      checked={event.selectedFloors.includes(
+                                        floor
+                                      )}
+                                      onChange={() =>
+                                        handleFloorChange(index, floor)
+                                      }
+                                      className="mr-2"
+                                    />
+                                    <label
+                                      htmlFor={floor}
+                                      className="text-gray-700 dark:text-gray-300"
                                     >
-                                      <input
-                                        type="checkbox"
-                                        id={floor}
-                                        checked={event.selectedFloors.includes(
-                                          floor
-                                        )}
-                                        onChange={() =>
-                                          handleFloorChange(index, floor)
-                                        }
-                                        className="mr-2"
-                                      />
-                                      <label
-                                        htmlFor={floor}
-                                        className="text-gray-700 dark:text-gray-300"
-                                      >
-                                        {floor}
-                                      </label>
-                                    </div>
-                                  ))
-                                )}
+                                      {floor}
+                                    </label>
+                                  </div>
+                                ))}
                               </div>
                             )}
 
+                            {/* Select Room Number */}
                             {event.selectedFloors.length > 0 && (
                               <div className="flex-1 min-w-[150px]">
                                 <label className="block font-semibold mb-2 text-gray-700 dark:text-gray-300">
                                   Select Room Number:
                                 </label>
-                                <div className="grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] grid-rows-auto max-h-[400px] overflow-y-auto gap-2">
+                                <div className="grid grid-cols-3 max-h-[400px] overflow-y-auto gap-2">
                                   {event.selectedFloors.map((floor) =>
                                     event.selectedWings.map((wing) =>
-                                      roomOptions[wing]?.[floor]?.map(
-                                        (room) => (
+                                      roomOptions[wing]?.[floor]
+                                        ?.slice(0, 24)
+                                        .map((room) => (
                                           <div
                                             key={room}
-                                            className="min-w-[100px] flex items-center"
+                                            className="flex items-center"
                                           >
                                             <input
                                               type="checkbox"
@@ -956,8 +965,7 @@ const RequestForm = () => {
                                               {room}
                                             </label>
                                           </div>
-                                        )
-                                      )
+                                        ))
                                     )
                                   )}
                                 </div>
@@ -1009,29 +1017,33 @@ const RequestForm = () => {
             {objectives.map((objective, index) => (
               <motion.div
                 key={index}
-                className="flex items-center mb-2"
+                className="flex flex-col md:flex-row items-center mb-2"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
               >
-                <input
-                  type="text"
-                  value={objective}
-                  onChange={(e) => handleObjectiveChange(index, e.target.value)}
-                  className="w-11/12 mb-2 px-4 py-2 border rounded-lg bg-white border-gray-300 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
-                  required
-                />
-                {objectives.length > 3 && (
-                  <motion.button
-                    type="button"
-                    onClick={() => removeObjective(index)}
-                    className="ml-2 px-4 py-2 text-white bg-red-500 rounded-lg"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    Remove
-                  </motion.button>
-                )}
+                <div className="flex items-center w-full">
+                  <input
+                    type="text"
+                    value={objective}
+                    onChange={(e) =>
+                      handleObjectiveChange(index, e.target.value)
+                    }
+                    className="flex-grow mb-2 px-4 py-2 border rounded-lg bg-white border-gray-300 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
+                    required
+                  />
+                  {objectives.length > 3 && (
+                    <motion.button
+                      type="button"
+                      onClick={() => removeObjective(index)}
+                      className="ml-2 px-4 py-2 text-white bg-red-500 rounded-lg"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      Remove
+                    </motion.button>
+                  )}
+                </div>
               </motion.div>
             ))}
           </AnimatePresence>
@@ -1062,36 +1074,18 @@ const RequestForm = () => {
               Select Schools
             </label>
             <div className="flex flex-col">
-              <label className="flex items-center mb-2">
-                <input
-                  type="checkbox"
-                  value="MPSTME"
-                  checked={selectedSchools.includes("MPSTME")}
-                  onChange={handleSchoolChange}
-                  className="mr-2"
-                />
-                MPSTME
-              </label>
-              <label className="flex items-center mb-2">
-                <input
-                  type="checkbox"
-                  value="SPTM"
-                  checked={selectedSchools.includes("SPTM")}
-                  onChange={handleSchoolChange}
-                  className="mr-2"
-                />
-                SPTM
-              </label>
-              <label className="flex items-center mb-2">
-                <input
-                  type="checkbox"
-                  value="SAST"
-                  checked={selectedSchools.includes("SAST")}
-                  onChange={handleSchoolChange}
-                  className="mr-2"
-                />
-                SAST
-              </label>
+              {["MPSTME", "SPTM", "SAST"].map((school) => (
+                <label key={school} className="flex items-center mb-2">
+                  <input
+                    type="checkbox"
+                    value={school}
+                    checked={selectedSchools.includes(school)}
+                    onChange={handleSchoolChange}
+                    className="mr-2"
+                  />
+                  {school}
+                </label>
+              ))}
             </div>
           </motion.div>
 
@@ -1138,8 +1132,13 @@ const RequestForm = () => {
                   Select Branch
                 </label>
                 <div className="flex flex-col">
-                  {selectedCourses.map((course) =>
-                    branches[course].map((branch) => (
+                  {
+                    // Flatten the branches and filter out duplicates
+                    [
+                      ...new Set(
+                        selectedCourses.flatMap((course) => branches[course])
+                      ),
+                    ].map((branch) => (
                       <label key={branch} className="flex items-center mb-2">
                         <input
                           type="checkbox"
@@ -1151,7 +1150,7 @@ const RequestForm = () => {
                         {branch}
                       </label>
                     ))
-                  )}
+                  }
                 </div>
               </motion.div>
             )}
@@ -1232,23 +1231,25 @@ const RequestForm = () => {
               />
             </motion.div>
 
-            <button
-              type="button"
-              onClick={addGuest}
-              className="px-4 py-2 bg-green-500 text-white rounded-lg mb-4 mr-96"
-            >
-              Add Guest
-            </button>
-
-            {guests.length > 1 && (
+            <div className="flex justify-between mt-4">
               <button
                 type="button"
-                onClick={() => removeGuest(index)}
-                className="px-4 py-2 text-white bg-red-500 rounded-lg ml-96"
+                onClick={addGuest}
+                className="px-4 py-2 bg-green-500 text-white rounded-lg"
               >
-                Remove Guest
+                Add Guest
               </button>
-            )}
+
+              {guests.length > 1 && (
+                <button
+                  type="button"
+                  onClick={() => removeGuest(index)}
+                  className="px-4 py-2 text-white bg-red-500 rounded-lg"
+                >
+                  Remove Guest
+                </button>
+              )}
+            </div>
           </div>
         ))}
 
@@ -1263,11 +1264,22 @@ const RequestForm = () => {
             Maximum Audience / Participation
           </label>
           <input
-            type="text"
+            type="number" // Keeps the input type as number
             value={audience}
-            onChange={(e) => setAudience(e.target.value)}
-            className="w-full px-4 py-2 border rounded-lg bg-white border-gray-300 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
+            onChange={(e) => {
+              const value = e.target.value;
+              // Update state only if value is a positive integer
+              if (value === "" || parseInt(value, 10) >= 0) {
+                setAudience(value);
+              }
+            }}
+            min="0" // Prevents negative values
+            className="w-full px-4 py-2 border rounded-lg bg-white border-gray-300 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 appearance-none" // Add appearance-none
             required
+            style={{
+              MozAppearance: "textfield", // Firefox
+              WebkitAppearance: "none", // Chrome/Safari
+            }}
           />
         </motion.div>
 
@@ -1364,7 +1376,7 @@ const RequestForm = () => {
           <motion.button
             type="button"
             onClick={handleAddClub}
-            className="px-4 py-2 text-white bg-blue-500 rounded-lg "
+            className="px-4 py-2 text-white bg-blue-500 rounded-lg"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -1372,26 +1384,29 @@ const RequestForm = () => {
           </motion.button>
         </motion.div>
 
-        {/* Draft Button */}
-        <motion.button
-          type="button"
-          className="flex ml-0 px-4 py-2 text-white bg-green-500 rounded-lg "
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={handleDraft}
-        >
-          Save As Draft
-        </motion.button>
+        {/* Buttons Container */}
+        <div className="flex justify-between mt-4">
+          {/* Draft Button */}
+          <motion.button
+            type="button"
+            className="flex px-4 py-2 text-white bg-green-500 rounded-lg"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={handleDraft}
+          >
+            Save As Draft
+          </motion.button>
 
-        {/* Submit Button */}
-        <motion.button
-          type="submit"
-          className="flex ml-auto px-4 py-2 text-white bg-green-500 rounded-lg"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          Submit
-        </motion.button>
+          {/* Submit Button */}
+          <motion.button
+            type="submit"
+            className="flex px-4 py-2 text-white bg-green-500 rounded-lg"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            Submit
+          </motion.button>
+        </div>
 
         {formSubmitted && (
           <div className="mt-6 text-green-600 font-semibold">

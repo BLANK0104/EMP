@@ -1,6 +1,7 @@
 const db = require("../db");
 
 const requests = async (id) => {
+  console.log("Entered Requests");
   const query = `
   SELECT 
     e.id, 
@@ -9,7 +10,6 @@ const requests = async (id) => {
     e.created_by, 
     e.created_at,
     u.username,
-    u.coordinator,
     ed.event_dates, 
     ed.school_audience, 
     ed.audience, 

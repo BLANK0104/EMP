@@ -57,12 +57,12 @@ const App = () => {
 
         console.log(data);
         if (data.role === "faculty" || data.role === "centralAuthority") {
-          if (data.reportStatus === false) {
-            setCurrentStatus(`Please submit the report of the event`);
-          } else if (data.reportStatus === null) {
+          if (data.reportStatus === null) {
             setCurrentStatus("No request added");
+          } else if (data.reportStatus === false) {
+            setCurrentStatus(`Please submit the report of the event`);
           } else {
-            setCurrentStatus( 
+            setCurrentStatus(
               `${data.latestData.status} by ${data.latestData.username}`
             );
           }
