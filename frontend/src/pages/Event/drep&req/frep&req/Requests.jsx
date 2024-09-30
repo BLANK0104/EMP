@@ -146,7 +146,7 @@ const Request = ({ requests, selectedRequest, setSelectedRequest }) => {
                 <td className="px-6 py-4 pl-4 whitespace-nowrap text-center">{request.title}</td>
                 <td className="px-6 py-4 pl-4 whitespace-nowrap text-center">{request.username}</td>
                 <td className="px-6 py-4 pl-4 whitespace-nowrap text-center">
-                  {/* Faculty Coordinator - Add later */}
+                  {request.coordinator}
                 </td>
                 <td className="px-6 py-4 pl-4 whitespace-nowrap text-center">
                   {request.event_dates.length > 0
@@ -216,7 +216,7 @@ const Request = ({ requests, selectedRequest, setSelectedRequest }) => {
         <strong>Club:</strong> {selectedRequest.username}
       </p>
       <p className="dark:text-gray-300">
-        <strong>Faculty Coordinator:</strong> {/* Add later */}
+        <strong>Faculty Coordinator:</strong> {selectedRequest.coordinator}
       </p>
       <p className="dark:text-gray-300">
         <strong>Venue:</strong>{" "}

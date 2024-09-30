@@ -19,6 +19,8 @@ const Available = require("./Events/Available");
 const calendar = require("./Calendar/calendar");
 const Facultydashboard = require("./Dashboard/Facultydasboard");
 const history = require("./History/history");
+const historyDean = require("./History/historyDean");
+const historyDirector = require("./History/historyDirector");
 const addDraft = require("./Events/addDraft");
 const { getDraft } = require("./Events/getDraft");
 const DeanDirectorDashboard = require("./Dashboard/DeanDirectorDashboard");
@@ -589,9 +591,16 @@ app.get(
   authenticateToken,
   authorizedRole(["dean", "director", "faculty", "centralAuthority"]),
   async (req, res) => {
-    const { id } = req.user; // Extract user ID from the token
+    const { id, role } = req.user; // Extract user ID from the token
     try {
-      const historyData = await history(id); // Pass the user ID to the history function
+      let historyData;
+      if (role === "faculty" || role === "centralAuthority") {
+        historyData = await history(id); // Pass the user ID
+      }else if(role === "dean"){
+        historyData = await historyDean(id); // Pass the user ID
+      }else if(role === "director"){
+        historyData = await historyDirector(id); // Pass the user ID
+      }
       res.json(historyData);
     } catch (error) {
       res.status(500).send("Failed to fetch history data");
