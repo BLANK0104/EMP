@@ -27,7 +27,7 @@ const Facultydashboard = async (id, req, res, role) => {
     `;
     const response = await db.query(eventStatusQuery, [id]);
     const data = response.rows;
-    console.log(data)
+    // console.log(data);
 
     // Fetch upcoming events
     const upcomingevent = await upcomingEvents();
@@ -44,11 +44,14 @@ const Facultydashboard = async (id, req, res, role) => {
     `;
     const latest = await db.query(latestEventQuery, [id]);
     const latestData = latest.rows[0];
+    console.log("latestData: ", latestData);
 
     let reportStatus = true;
 
     // Handle case when no latest event is found
-    if (!latestData) {
+    if (latestData.status === "Modified" || latestData.status === "Rejected") {
+      reportStatus = null;
+    } else if (!latestData) {
       reportStatus = null;
     } else if (latestData.username === null) {
       // Check if a report exists for the latest event
@@ -71,7 +74,7 @@ const Facultydashboard = async (id, req, res, role) => {
       upcomingevent,
       latestData,
       reportStatus,
-      role
+      role,
     };
 
     // Return the fetched event data
