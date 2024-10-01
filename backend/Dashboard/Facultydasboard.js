@@ -49,9 +49,7 @@ const Facultydashboard = async (id, req, res, role) => {
     let reportStatus = true;
 
     // Handle case when no latest event is found
-    if (latestData.status === "Modified" || latestData.status === "Rejected") {
-      reportStatus = null;
-    } else if (!latestData) {
+     if (!latestData) {
       reportStatus = null;
     } else if (latestData.username === null) {
       // Check if a report exists for the latest event

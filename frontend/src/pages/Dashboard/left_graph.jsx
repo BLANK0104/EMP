@@ -132,8 +132,8 @@ const LeftGraph = ({
               onChange={handleSemesterTypeChange}
               className="border border-gray-300 dark:border-gray-700 rounded p-1 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
             >
-              <option value="Odd">Odd Semester</option>
-              <option value="Even">Even Semester</option>
+              <option value="Even">Odd Semester</option>
+              <option value="Odd">Even Semester</option>
             </select>
           )}
         </div>

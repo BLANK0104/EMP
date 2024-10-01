@@ -6,8 +6,8 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import "tailwindcss/tailwind.css"; // Ensure Tailwind CSS is imported
 import Popup from "./Popup"; // Import the Popup component
-const backendUrl =
-  import.meta.env.VITE_BACKEND_URL || "http://localhost:5000/api";
+
+const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000/api";
 
 export default function DemoApp() {
   const [weekendsVisible, setWeekendsVisible] = useState(true);
@@ -80,7 +80,7 @@ export default function DemoApp() {
         day: "numeric",
       }),
       time: formatDate(event.start, { hour: "numeric", minute: "numeric" }),
-      eventType: event.extendedProps.eventType,
+      eventtype: event.extendedProps.eventtype, // Ensure this matches the backend field
     };
     setSelectedEvent(eventDetails);
   };
@@ -144,13 +144,13 @@ export default function DemoApp() {
               Today
             </button>
           </div>
-            {/* Overlay for closing popup when clicking outside */}
-            {selectedEvent && (
+          {/* Overlay for closing popup when clicking outside */}
+          {selectedEvent && (
             <div
               className="fixed inset-0 bg-black opacity-50 z-50"
               onClick={() => setSelectedEvent(null)}
             ></div>
-            )}
+          )}
           {/* Calendar Section */}
           <FullCalendar
             ref={calendarRef} // Attach the ref to FullCalendar
