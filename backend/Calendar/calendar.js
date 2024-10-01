@@ -4,20 +4,22 @@ const calendar = async (req, res) => {
   try {
     const query = `
           SELECT 
-            e.id AS event_id,
-            ed.title,
-            ed.event_dates
+            ed.*
           FROM 
-            events e
+            event_details ed
           LEFT JOIN 
-            event_details ed ON e.id = ed.event_id
+            eventapprovals ea ON ed.event_id = ea.event_id
           WHERE
-            e.status = 'Approved'
+            ea.status = 'Approved'
         `;
 
+    console.log("Executing query:", query); // Log the query being executed
+
     const result = await db.query(query);
+    console.log("Query result:", result); // Log the raw result from the query
+
     const events = [];
-    // console.log(result.rows);
+    console.log("Result rows:", result.rows); // Log the rows returned from the query
 
     // Map the events into the format required by FullCalendar
     result.rows.forEach((event) => {
@@ -27,18 +29,21 @@ const calendar = async (req, res) => {
         venues.forEach((venue) => {
           events.push({
             id: `event_${event.event_id}_${venue}`, // Ensure a unique ID
-            title: `${event.title.substring(0, 5)}@${venue.substring(0, 5)}`, // Include venue in title if needed
+            title: `${event.title.substring(0, 50)} at ${venue.substring(0, 50)}`, // Include venue in title if needed
             start: `${date.date}T${date.start_time}`, // Format start time
             end: `${date.date}T${date.end_time}`, // Format end time
           });
         });
       });
     });
-    // console.log(events);
+
+    console.log("Mapped events:", events); // Log the mapped events
+
     res.json(events);
   } catch (error) {
     console.error("Error fetching events:", error);
     res.status(500).json({ message: "Error fetching events" });
   }
 };
+
 module.exports = calendar;
