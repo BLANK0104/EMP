@@ -8,6 +8,7 @@ const History = ({ data }) => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [semester, setSemester] = useState("All");
+  const [selectedEntries, setSelectedEntries] = useState([]);
   const entriesPerPage = 6;
 
   const handlePreviousPage = () => {
@@ -66,10 +67,18 @@ const History = ({ data }) => {
 
   const totalPages = Math.ceil(filteredData.length / entriesPerPage);
   const startIndex = (currentPage - 1) * entriesPerPage;
-  const selectedEntries = filteredData.slice(
+  const currentEntries = filteredData.slice(
     startIndex,
     startIndex + entriesPerPage
   );
+
+  const handleCheckboxChange = (item) => {
+    setSelectedEntries((prevSelected) =>
+      prevSelected.includes(item)
+        ? prevSelected.filter((i) => i !== item)
+        : [...prevSelected, item]
+    );
+  };
 
   const generatePDF = () => {
     const doc = new jsPDF();
@@ -80,9 +89,9 @@ const History = ({ data }) => {
     doc.text(`Semester: ${semester}`, 10, 50);
     selectedEntries.forEach((item, index) => {
       doc.text(
-        `${startIndex + index + 1}. ${item.club} - ${item.event} - ${
-          item.date
-        } - ${item.venue} - ${item.status}`,
+        `${index + 1}. ${item.club} - ${item.event} - ${item.date} - ${
+          item.venue
+        } - ${item.status}`,
         10,
         60 + index * 10
       );
@@ -172,6 +181,18 @@ const History = ({ data }) => {
           <thead>
             <tr>
               <th className="px-2 py-1 border-b text-center bg-red-100 rounded-tl-lg dark:bg-red-900 text-xs md:text-base">
+                <input
+                  type="checkbox"
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setSelectedEntries(currentEntries);
+                    } else {
+                      setSelectedEntries([]);
+                    }
+                  }}
+                />
+              </th>
+              <th className="px-2 py-1 border-b text-center bg-red-100 dark:bg-red-900 text-xs md:text-base">
                 Sr No
               </th>
               <th className="px-2 py-1 border-b text-center bg-red-100 dark:bg-red-900 text-xs md:text-base">
@@ -195,69 +216,77 @@ const History = ({ data }) => {
             </tr>
           </thead>
           <tbody>
-            {selectedEntries.map((item, index) => {
+            {currentEntries.map((item, index) => {
               const eventDate = new Date(item.date);
               const currentDate = new Date();
-                return (
+              return (
                 <tr
                   key={index}
                   className="hover:bg-gray-100 dark:hover:bg-gray-700"
                 >
                   <td className="px-2 py-1 border-b text-center align-middle dark:border-gray-600">
-                  {startIndex + index + 1}
+                    <input
+                      type="checkbox"
+                      checked={selectedEntries.includes(item)}
+                      onChange={() => handleCheckboxChange(item)}
+                    />
                   </td>
                   <td className="px-2 py-1 border-b text-center align-middle dark:border-gray-600">
-                  {item.club}
+                    {startIndex + index + 1}
                   </td>
                   <td className="px-2 py-1 border-b text-center align-middle dark:border-gray-600">
-                  {item.event}
+                    {item.club}
                   </td>
                   <td className="px-2 py-1 border-b text-center align-middle dark:border-gray-600">
-                  {Array.isArray(item.date) ? item.date[0] : item.date}
+                    {item.event}
                   </td>
                   <td className="px-2 py-1 border-b text-center align-middle dark:border-gray-600">
-                  {Array.isArray(item.venue) ? (
-                    item.venue.map((venue, i) => (
-                    <span key={i}>
-                      {venue}
-                      {i < item.venue.length - 1 && ", "}
-                      {i % 2 === 1 && <br />}
-                    </span>
-                    ))
-                  ) : (
-                    item.venue
-                  )}
+                    {Array.isArray(item.date) ? item.date[0] : item.date}
                   </td>
                   <td className="px-2 py-1 border-b text-center align-middle dark:border-gray-600">
-                  {item.status}
+                    {Array.isArray(item.venue) ? (
+                      item.venue.map((venue, i) => (
+                        <span key={i}>
+                          {venue}
+                          {i < item.venue.length - 1 && ", "}
+                          {i % 2 === 1 && <br />}
+                        </span>
+                      ))
+                    ) : (
+                      item.venue
+                    )}
                   </td>
                   <td className="px-2 py-1 border-b text-center align-middle dark:border-gray-600">
-                  {item.status === "Approved" && currentDate > new Date(Array.isArray(item.date) ? item.date[0] : item.date) && (
-                    <a
-                    href={`/Reports/${item.event}.pdf`}
-                    download
-                    className="text-blue-500 hover:underline"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      fetch(`/Reports/${item.event}.pdf`, { method: 'HEAD' })
-                      .then((response) => {
-                        if (response.ok) {
-                        window.location.href = `/Reports/${item.event}.pdf`;
-                        } else {
-                        alert("Report has yet to be generated");
-                        }
-                      })
-                      .catch(() => {
-                        alert("Report has yet to be generated");
-                      });
-                    }}
-                    >
-                    Download
-                    </a>
-                  )}
+                    {item.status}
+                  </td>
+                  <td className="px-2 py-1 border-b text-center align-middle dark:border-gray-600">
+                    {item.status === "Approved" &&
+                      currentDate > new Date(Array.isArray(item.date) ? item.date[0] : item.date) && (
+                        <a
+                          href={`/Reports/${item.event}.pdf`}
+                          download
+                          className="text-blue-500 hover:underline"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            fetch(`/Reports/${item.event}.pdf`, { method: 'HEAD' })
+                              .then((response) => {
+                                if (response.ok) {
+                                  window.location.href = `/Reports/${item.event}.pdf`;
+                                } else {
+                                  alert("Report has yet to be generated");
+                                }
+                              })
+                              .catch(() => {
+                                alert("Report has yet to be generated");
+                              });
+                          }}
+                        >
+                          Download
+                        </a>
+                      )}
                   </td>
                 </tr>
-                );
+              );
             })}
           </tbody>
         </table>
