@@ -55,7 +55,7 @@ const App = () => {
           setUpcomingEvents(data.upcomingevent);
         }
 
-        console.log(data);
+        // console.log(data);
         if (data.role === "faculty" || data.role === "centralAuthority") {
           if (data.reportStatus === null) {
             setCurrentStatus("No request added");
