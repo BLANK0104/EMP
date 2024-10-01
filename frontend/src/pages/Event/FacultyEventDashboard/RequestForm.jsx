@@ -145,6 +145,145 @@ const RequestForm = () => {
     },
   };
 
+  // Available
+  const handleAvailable = async (index) => {
+    const event = eventDates[index]; // Access the event at the specified index
+    const { date, startTime, endTime } = event; // Destructure date, startTime, and endTime
+
+    // Ensure that date, startTime, and endTime are valid before proceeding
+    if (!date || !startTime || !endTime) {
+      console.error("Invalid date, startTime, or endTime:", {
+        date,
+        startTime,
+        endTime,
+      });
+      return;
+    }
+
+    // Consolidate the venues based on user selection
+    let consolidatedVenues = [...event.venues]; // Start with the selected venues
+
+    // If "Classroom" is selected, merge classroom details
+    if (consolidatedVenues.includes("Classroom")) {
+      consolidatedVenues = consolidatedVenues.concat(
+        event.classroomVenues.map((room) => `Classroom - ${room}`)
+      );
+    }
+
+    // If "Others" is selected, add the "otherVenue" details
+    if (consolidatedVenues.includes("Others") && event.otherVenue) {
+      consolidatedVenues.push(`${event.otherVenue}`);
+    }
+
+    // If "LR" is selected, merge selected room details for LR
+    if (consolidatedVenues.includes("LR")) {
+      consolidatedVenues = consolidatedVenues.concat(
+        event.selectedRooms.map((room) => `LR - ${room}`)
+      );
+    }
+
+    // Filter out base venue types ("Classroom", "Others", "LR")
+    consolidatedVenues = consolidatedVenues.filter(
+      (venue) => venue !== "Classroom" && venue !== "Others" && venue !== "LR"
+    );
+
+    // Log the event details for debugging
+    // console.log("Event:", event);
+    // console.log("Consolidated Venues:", consolidatedVenues);
+
+    // Parse the date to 'yyyy-mm-dd' format using toLocaleDateString
+    const parsedDate = new Date(date).toLocaleDateString("en-CA"); // 'en-CA' format returns 'yyyy-mm-dd'
+
+    // Log parsed date, startTime, and endTime for debugging
+    // console.log("Parsed Date:", parsedDate);
+    // console.log("Start Time:", startTime);
+    // console.log("End Time:", endTime);
+    // console.log("Venues:", consolidatedVenues);
+
+    // Make a POST request to check venue availability
+    const response = await fetch(`${backendUrl}/check-venue`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({
+        date: parsedDate,
+        startTime,
+        endTime,
+        venues: consolidatedVenues, // Include the consolidated venues
+      }),
+    });
+
+    const data = await response.json();
+    console.log(data);
+
+    // Prepare a message to show both available and conflicting venues
+    let message = "";
+
+    // Check for conflicting venues
+    if (data.conflictingVenues && data.conflictingVenues.length > 0) {
+      message += "Conflicting Venues:\n";
+      data.conflictingVenues.forEach((conflict) => {
+        message += `Venue: ${conflict.venue} - Status: ${conflict.status}\n`;
+      });
+    } else {
+      message += "No conflicting venues found.\n";
+    }
+
+    // Check for available venues
+    if (data.availableVenues && data.availableVenues.length > 0) {
+      message += "\nAvailable Venues:\n";
+      data.availableVenues.forEach((venue) => {
+        message += `Venue: ${venue}\n`;
+      });
+    }
+    // Show the alert with all the information together
+    alert(message);
+  };
+
+  useEffect(() => {
+    eventDates.forEach((event, index) => {
+      const filteredVenues = event.venues.filter((venue) => {
+        // Log the venue for debugging
+        console.log("Current venue:", venue);
+
+        // Ensure venue is a string before calling trim()
+        return typeof venue === "string" && venue.trim() !== "";
+      });
+
+      const hasValidVenues = filteredVenues.length > 0; // Check if there are any valid venues
+
+      const hasValidLR =
+        filteredVenues.includes("LR") &&
+        Array.isArray(event.selectedRooms) &&
+        event.selectedRooms.length > 0;
+
+      const hasValidClassroom =
+        filteredVenues.includes("Classroom") &&
+        Array.isArray(event.classroomVenues) &&
+        event.classroomVenues.length > 0;
+
+      const hasValidOthers =
+        filteredVenues.includes("Others") &&
+        event.otherVenue &&
+        event.otherVenue.trim() !== "";
+
+      // Ensure valid date, time, and venues before calling handleAvailable
+      if (
+        event.date &&
+        event.startTime &&
+        event.endTime &&
+        hasValidVenues &&
+        (!filteredVenues.includes("LR") || hasValidLR) &&
+        (!filteredVenues.includes("Classroom") || hasValidClassroom) &&
+        (!filteredVenues.includes("Others") || hasValidOthers)
+      ) {
+        handleAvailable(index); // Call handleAvailable only if all required fields are valid
+      }
+    });
+  }, [eventDates, handleAvailable]);
+
   const handleVenueChange = (dateIndex, venueIndex, value) => {
     const updatedDates = [...eventDates];
     const event = updatedDates[dateIndex];
@@ -367,12 +506,13 @@ const RequestForm = () => {
     const updatedDates = eventDates.map((event, i) =>
       i === index ? { ...event, [field]: value } : event
     );
+    console.log("update:", updatedDates);
     setEventDates(updatedDates);
   };
 
   const handleAddVenue = (dateIndex) => {
     const updatedDates = [...eventDates];
-    updatedDates[dateIndex].venues.push("");
+    updatedDates[dateIndex].venues.push([]);
     setEventDates(updatedDates);
   };
 
@@ -571,8 +711,6 @@ const RequestForm = () => {
   };
 
   const handleDraft = async () => {
-    // Create formData object
-    console.log(otherClub);
     const formData = {
       eventTitle,
       description,
@@ -871,9 +1009,9 @@ const RequestForm = () => {
                   <div className="relative">
                     <DatePicker
                       selected={event.date}
-                      onChange={(date) =>
-                        handleEventDateChange(index, "date", date)
-                      }
+                      onChange={(date) => {
+                        handleEventDateChange(index, "date", date);
+                      }}
                       minDate={new Date()}
                       dateFormat="yyyy-MM-dd"
                       className="w-40 px-8 py-2 border rounded-lg bg-white dark:bg-gray-600 "
@@ -896,9 +1034,9 @@ const RequestForm = () => {
                   <input
                     type="time"
                     value={event.startTime}
-                    onChange={(e) =>
-                      handleEventDateChange(index, "startTime", e.target.value)
-                    }
+                    onChange={(e) => {
+                      handleEventDateChange(index, "startTime", e.target.value);
+                    }}
                     className="w-full px-2 py-2 border rounded-lg bg-white dark:bg-gray-600"
                     required
                   />
@@ -912,9 +1050,9 @@ const RequestForm = () => {
                   <input
                     type="time"
                     value={event.endTime}
-                    onChange={(e) =>
-                      handleEventDateChange(index, "endTime", e.target.value)
-                    }
+                    onChange={(e) => {
+                      handleEventDateChange(index, "endTime", e.target.value);
+                    }}
                     className="w-full px-2 py-2 border rounded-lg bg-white dark:bg-gray-600"
                     required
                   />

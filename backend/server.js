@@ -451,6 +451,17 @@ app.post("/api/report-data", async (req, res) => {
   }
 });
 
+app.post(
+  "/api/check-venue",
+  authenticateToken,
+  authorizedRole(["faculty", "centralAuthority"]),
+  async (req, res) => {
+    const { date, startTime, endTime, venues } = req.body;
+    console.log(venues);
+    Available(date, startTime, endTime, venues, req, res);
+  }
+);
+
 app.get(
   "/api/dashboard",
   authenticateToken,
