@@ -35,8 +35,7 @@ CREATE TABLE event_details (
     title TEXT,
     description TEXT,
     guests JSONB,
-    otherclub VARCHAR,
-    otherevent VARCHAR
+    registration TEXT
 );
 
 -- Create Event Approvals Table

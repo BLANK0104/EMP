@@ -244,16 +244,23 @@ const RequestForm = () => {
 
   useEffect(() => {
     eventDates.forEach((event, index) => {
-      const filteredVenues = event.venues.filter((venue) => {
-        // Log the venue for debugging
-        console.log("Current venue:", venue);
+      // Check if venues is empty or not an array
+      if (!Array.isArray(event.venues) || event.venues.length === 0) {
+        console.warn(`No venues selected for event at index ${index}`);
+        return; // Skip this event if no valid venues are present
+      }
 
-        // Ensure venue is a string before calling trim()
-        return typeof venue === "string" && venue.trim() !== "";
-      });
+      // Filter out invalid venues (like empty arrays)
+      const filteredVenues = event.venues.filter(
+        (venue) => typeof venue === "string" && venue.trim() !== ""
+      );
 
-      const hasValidVenues = filteredVenues.length > 0; // Check if there are any valid venues
+      if (filteredVenues.length === 0) {
+        console.warn(`Event at index ${index} has no valid venues`);
+        return; // Skip this event if all venues are invalid
+      }
 
+      // Continue your logic using filteredVenues
       const hasValidLR =
         filteredVenues.includes("LR") &&
         Array.isArray(event.selectedRooms) &&
@@ -269,17 +276,18 @@ const RequestForm = () => {
         event.otherVenue &&
         event.otherVenue.trim() !== "";
 
-      // Ensure valid date, time, and venues before calling handleAvailable
       if (
         event.date &&
         event.startTime &&
         event.endTime &&
-        hasValidVenues &&
+        filteredVenues.length > 0 &&
         (!filteredVenues.includes("LR") || hasValidLR) &&
         (!filteredVenues.includes("Classroom") || hasValidClassroom) &&
         (!filteredVenues.includes("Others") || hasValidOthers)
       ) {
-        handleAvailable(index); // Call handleAvailable only if all required fields are valid
+        handleAvailable(index); // Call handleAvailable if all conditions are met
+      } else {
+        console.warn(`Event at index ${index} is missing valid fields`);
       }
     });
   }, [eventDates, handleAvailable]);
