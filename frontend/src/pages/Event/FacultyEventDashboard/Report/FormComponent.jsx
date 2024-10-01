@@ -27,7 +27,7 @@ const FormComponent = ({ onSubmit }) => {
     branches: [],
     classes: [],
     years: [],
-    clubs: "",
+    clubs: "N/A",
   });
 
   const [event_id, setEventId] = useState(null); // Initialize event_id separately
