@@ -12,7 +12,7 @@ const Tab = ({ label, isActive, onClick, isDisabled }) => {
         isDisabled
           ? "bg-stone-300 text-gray-500 cursor-not-allowed"
           : isActive
-          ? "bg-white font-semibold text-black shadow-sm z-10 rounded-t-lg dark:text-white dark:bg-zinc-700"
+          ? "bg-white font-semibold text-black shadow-sm rounded-t-lg dark:text-white dark:bg-zinc-700"
           : "text-gray-700 hover:bg-white hover:rounded-t-md dark:text-white dark:hover:bg-zinc-900"
       }`}
       onClick={!isDisabled ? onClick : null}
