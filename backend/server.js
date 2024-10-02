@@ -330,31 +330,7 @@ app.get(
   }
 );
 
-app.post(
-  "/api/Available",
-  authenticateToken,
-  authorizedRole(["faculty", "centralAuthority"]),
-  async (req, res) => {
-    const { id, venue, eventDateTime } = req.body;
 
-    try {
-      const availability = await Available(id, venue, eventDateTime);
-      if (availability === 1) {
-        return res.status(200).json({
-          Available: false,
-          message: "Venue is already booked for the specified date and time.",
-        });
-      } else {
-        return res
-          .status(200)
-          .json({ Available: true, message: "Venue is Available." });
-      }
-    } catch (error) {
-      console.error("Error checking availability:", error);
-      return res.status(500).json({ error: "Internal server error" });
-    }
-  }
-);
 
 app.post("/api/report-data", async (req, res) => {
   console.log("body:", req.body);
@@ -478,23 +454,6 @@ app.get(
   }
 );
 
-// API endpoint to get all clubs
-app.get("/api/clubs", (req, res) => {
-  // When you have a real database, replace this with a database query
-  res.json(Object.values(dummyClubsData));
-});
-
-// API endpoint to get a specific club
-app.get("/api/clubs/:name", (req, res) => {
-  const clubName = req.params.name;
-  // When you have a real database, replace this with a database query
-  const club = dummyClubsData[clubName];
-  if (club) {
-    res.json(club);
-  } else {
-    res.status(404).json({ error: "Club not found" });
-  }
-});
 
 app.get(
   "/api/report",
@@ -757,6 +716,58 @@ app.get(
 
       res.json(response);
     } catch {}
+  }
+);
+
+
+
+
+    // Add the /fetch-data/:table route
+app.post(
+  "/api/fetch-data",
+  authenticateToken,
+  authorizedRole(["dean", "director", "faculty"]),
+  async (req, res) => {
+    console.log("Request received at /api/fetch-data");
+    console.log(req.body)
+    const { table } = req.body; 
+    const validTables = [
+      'app_development_club',
+      'atrangi_club',
+      'coding_club',
+      'competitive_preparation',
+      'computer_society_of_india',
+      'crs_ilc',
+      'cultural_activity_forum',
+      'eoso',
+      'ieee',
+      'iste',
+      'learn_tech',
+      'nmmun',
+      's4ds',
+      'soft_skill_club',
+      'team_uas_nmims',
+      'the_writers_hub'
+    ];
+
+    // Check if the table is valid
+    if (!validTables.includes(table)) {
+      return res.status(400).json({ error: "Invalid table name" });
+    }
+
+    try {
+      const result = await db.query(`SELECT * FROM ${table}`);
+      
+      if (result.rows.length === 0) {
+        return res.status(404).json({ message: `No data found in table: ${table}` });
+      }
+      console.log(result.rows)
+      res.status(200).json(result.rows);
+      console.log("sending data")
+    } catch (error) {
+      console.error(`Error fetching data from table ${table}:`, error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
   }
 );
 

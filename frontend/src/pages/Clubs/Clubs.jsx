@@ -1,121 +1,132 @@
-import React, { useState, useEffect } from "react";
-import "./Clubs.css";
-const backendUrl =
-  import.meta.env.VITE_BACKEND_URL || "http://localhost:5000/api";
+import React, { useState } from 'react';
+import axios from 'axios';
 
-const ClubSection = () => {
-  const [clubs, setClubs] = useState([]);
-  const [selectedClub, setSelectedClub] = useState(null);
-  const [loading, setLoading] = useState(true);
+const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000/api";
 
-  useEffect(() => {
-    fetchClubs();
-  }, []);
+const App = () => {
+  const [selectedTable, setSelectedTable] = useState('');
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const fetchClubs = async () => {
-    try {
-      const response = await fetch(`${backendUrl}/clubs`);
-      const data = await response.json();
-      setClubs(data);
-      if (data.length > 0) {
-        setSelectedClub(data[0]);
-      }
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching clubs:", error);
-      setLoading(false);
+  const tables = [
+    { value: 'app_development_club', label: 'App Development Club' },
+    { value: 'atrangi_club', label: 'Atrangi Club' },
+    { value: 'coding_club', label: 'Coding Club' },
+    { value: 'competitive_preparation', label: 'Competitive Preparation' },
+    { value: 'computer_society_of_india', label: 'Computer Society of India' },
+    { value: 'crs_ilc', label: 'CRS ILC' },
+    { value: 'cultural_activity_forum', label: 'Cultural Activity Forum' },
+    { value: 'eoso', label: 'EOSO' },
+    { value: 'ieee', label: 'IEEE' },
+    { value: 'iste', label: 'ISTE' },
+    { value: 'learn_tech', label: 'Learn Tech' },
+    { value: 'nmmun', label: 'NMMUN' },
+    { value: 's4ds', label: 'S4DS' },
+    { value: 'soft_skill_club', label: 'Soft Skill Club' },
+    { value: 'team_uas_nmims', label: 'Team UAS NMIMS' },
+    { value: 'the_writers_hub', label: 'The Writers Hub' },
+  ];
+
+  const fetchData = async () => {
+    if (!selectedTable) {
+      setError("Please select a Club");
+      return;
     }
-  };
-
-  const handleClubChange = async (e) => {
-    const clubName = e.target.value;
+    
+    const data = { table: selectedTable };
+  
+    setLoading(true);
+    setError(null);
+  
     try {
-      const response = await fetch(
-        `${backendUrl}/clubs/${clubName}`
+      console.log(`Fetching data for ${selectedTable}`);
+      const token = localStorage.getItem("token"); // Assuming token is stored in localStorage
+      
+      const response = await axios.post(
+        `${backendUrl}/fetch-data`,
+        data,  // Pass the object directly, no need to stringify
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,  // Include the token
+          },
+          withCredentials: true,  // If you need cookies included
+        }
       );
-      const data = await response.json();
-      setSelectedClub(data);
-    } catch (error) {
-      console.error("Error fetching club details:", error);
+  
+      // No need to call response.json() here, as Axios automatically parses JSON responses
+      console.log("Response:", response.data);
+      setData(response.data); // Set the fetched data
+    } catch (err) {
+      console.error("Error fetching data:", err);
+      setError("Failed to fetch data");
+    } finally {
+      setLoading(false);
     }
   };
-
-  if (loading) {
-    return <div className="loading">Loading...</div>;
-  }
-
-  if (!selectedClub) {
-    return <div className="no-data">No club data available</div>;
-  }
-
-  const {
-    name = "",
-    slogan = "",
-    logo = "",
-    facultyIncharge = [],
-    events = [],
-    teams = [],
-    objectives = [],
-    socialLinks = {},
-  } = selectedClub;
+  
 
   return (
-    <div className="club-section">
-      <header className="hero">
-        <div className="hero-content">
-          <img src={logo} alt={`${name} Logo`} className="club-logo" />
-          <h1>{name}</h1>
-          <div className="faculty-incharge">
-            <h3>Faculty In-charge:</h3>
-            {facultyIncharge.map((faculty, index) => (
-              <p key={index}>{faculty}</p>
-            ))}
-          </div>
-          <p className="hero-slogan">{slogan}</p>
-          <select className="club-select" onChange={handleClubChange}>
-            {clubs.map((club) => (
-              <option key={club.name} value={club.name}>
-                {club.name}
-              </option>
-            ))}
-          </select>
-        </div>
-      </header>
-
-      <section className="featured-events">
-        <h2>Featured Events</h2>
-        <div className="featured-event-cards">
-          {events.map((event, index) => (
-            <div className="featured-event" key={index}>
-              <h3>{event.name}</h3>
-              <p>{event.description}</p>
-            </div>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg">
+        <h2 className="text-2xl font-semibold mb-4">Select a Club</h2>
+        <select
+          className="w-full p-2 border border-gray-300 rounded mb-4"
+          value={selectedTable}
+          onChange={(e) => setSelectedTable(e.target.value)}
+        >
+          <option value="">-- Select a table --</option>
+          {tables.map((table) => (
+            <option key={table.value} value={table.value}>
+              {table.label}
+            </option>
           ))}
-        </div>
-      </section>
+        </select>
+        <button
+          className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+          onClick={fetchData}
+          disabled={loading}
+        >
+          {loading ? 'Loading...' : 'Fetch Data'}
+        </button>
 
-      <section className="team-section">
-        <h2>Our Team</h2>
-        <div className="team-member-cards">
-          {teams.map((member, index) => (
-            <div className="team-member" key={index}>
-              <h3>{member.name}</h3>
-              <p>{member.position}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+        {error && <p className="text-red-500 mt-4">{error}</p>}
+      </div>
 
-      <section className="objectives">
-        <h2>Club Objectives</h2>
-        <ul>
-          {objectives.map((objective, index) => (
-            <li key={index}>{objective}</li>
-          ))}
-        </ul>
-      </section>
+      {/* Data Display */}
+      <div className="mt-8 w-full max-w-5xl">
+        {data.length > 0 && (
+          <table className="min-w-full table-auto bg-white shadow-lg rounded-lg">
+            <thead>
+              <tr className="bg-gray-200">
+                <th className="py-2 px-4 border">ID</th>
+                <th className="py-2 px-4 border">Name</th>
+                <th className="py-2 px-4 border">Role</th>
+                <th className="py-2 px-4 border">Objectives</th>
+                <th className="py-2 px-4 border">Outcomes</th>
+                <th className="py-2 px-4 border">Functions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.map((row, index) => (
+                <tr key={index} className="border-b">
+                  <td className="py-2 px-4 border">{row.id}</td>
+                  <td className="py-2 px-4 border">{row.name}</td>
+                  <td className="py-2 px-4 border">{row.role}</td>
+                  <td className="py-2 px-4 border">{row.objectives}</td>
+                  <td className="py-2 px-4 border">{row.outcomes}</td>
+                  <td className="py-2 px-4 border">{row.functions}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
+
+      {data.length === 0 && !loading && <p className="mt-8 text-gray-500">No data to display.</p>}
     </div>
   );
 };
 
-export default ClubSection;
+export default App;
