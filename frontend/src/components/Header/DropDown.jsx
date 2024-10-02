@@ -41,7 +41,7 @@ const DropDown = ({ isVisible, onClose }) => {
               { name: "Dashboard", path: "/", icon: DashboardIcon },
               { name: "Events", path: "/events", icon: EventsIcon },
               { name: "Calendar", path: "/calendar", icon: CalendarIcon },
-             // { name: "Clubs", path: "/clubs", icon: ClubsIcon },
+              { name: "Clubs", path: "/clubs", icon: ClubsIcon },
               { name: "History", path: "/history", icon: HistoryIcon },
             ].map((item, index) => (
               <li
