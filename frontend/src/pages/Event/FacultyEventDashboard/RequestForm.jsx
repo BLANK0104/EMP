@@ -5,6 +5,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
+
 const backendUrl =
   import.meta.env.VITE_BACKEND_URL || "http://localhost:5000/api";
 
@@ -118,6 +119,7 @@ const RequestForm = () => {
   const [otherClub, setOtherClub] = useState("");
   const [clubs, setClubs] = useState([]);
   const [guests, setGuests] = useState([{ name: "", designation: "" }]);
+  const [venueMessage, setVenueMessage] = useState(""); // State to store venue message
 
   const validClassroomRanges = [
     { start: 101, end: 104 },
@@ -144,6 +146,15 @@ const RequestForm = () => {
       "Ground Floor": [20, 21, 22, 23, 24],
     },
   };
+  //Time Check function
+  function isEndTimeBeforeStartTime(startTime, endTime) {
+    // Create new Date objects for the start and end times
+    const start = new Date(`1970-01-01T${startTime}:00`);
+    const end = new Date(`1970-01-01T${endTime}:00`);
+
+    // Compare the two times
+    return end < start;
+  }
 
   // Available
   const handleAvailable = async (index) => {
@@ -152,11 +163,13 @@ const RequestForm = () => {
 
     // Ensure that date, startTime, and endTime are valid before proceeding
     if (!date || !startTime || !endTime) {
-      console.error("Invalid date, startTime, or endTime:", {
-        date,
-        startTime,
-        endTime,
-      });
+      setVenueMessage(
+        "Please enter date, start time, end time and venue to check the availability"
+      );
+      return;
+    }
+    if (isEndTimeBeforeStartTime(startTime, endTime)) {
+      setVenueMessage("End time should be after start time");
       return;
     }
 
@@ -187,18 +200,8 @@ const RequestForm = () => {
       (venue) => venue !== "Classroom" && venue !== "Others" && venue !== "LR"
     );
 
-    // Log the event details for debugging
-    // console.log("Event:", event);
-    // console.log("Consolidated Venues:", consolidatedVenues);
-
     // Parse the date to 'yyyy-mm-dd' format using toLocaleDateString
     const parsedDate = new Date(date).toLocaleDateString("en-CA"); // 'en-CA' format returns 'yyyy-mm-dd'
-
-    // Log parsed date, startTime, and endTime for debugging
-    // console.log("Parsed Date:", parsedDate);
-    // console.log("Start Time:", startTime);
-    // console.log("End Time:", endTime);
-    // console.log("Venues:", consolidatedVenues);
 
     // Make a POST request to check venue availability
     const response = await fetch(`${backendUrl}/check-venue`, {
@@ -238,59 +241,18 @@ const RequestForm = () => {
         message += `Venue: ${venue}\n`;
       });
     }
-    // Show the alert with all the information together
-    alert(message);
+
+    // Update the venueMessage state with the message
+    setVenueMessage(message);
   };
 
+  // Trigger the alert only when venueMessage changes
   useEffect(() => {
-    eventDates.forEach((event, index) => {
-      // Check if venues is empty or not an array
-      if (!Array.isArray(event.venues) || event.venues.length === 0) {
-        console.warn(`No venues selected for event at index ${index}`);
-        return; // Skip this event if no valid venues are present
-      }
-
-      // Filter out invalid venues (like empty arrays)
-      const filteredVenues = event.venues.filter(
-        (venue) => typeof venue === "string" && venue.trim() !== ""
-      );
-
-      if (filteredVenues.length === 0) {
-        console.warn(`Event at index ${index} has no valid venues`);
-        return; // Skip this event if all venues are invalid
-      }
-
-      // Continue your logic using filteredVenues
-      const hasValidLR =
-        filteredVenues.includes("LR") &&
-        Array.isArray(event.selectedRooms) &&
-        event.selectedRooms.length > 0;
-
-      const hasValidClassroom =
-        filteredVenues.includes("Classroom") &&
-        Array.isArray(event.classroomVenues) &&
-        event.classroomVenues.length > 0;
-
-      const hasValidOthers =
-        filteredVenues.includes("Others") &&
-        event.otherVenue &&
-        event.otherVenue.trim() !== "";
-
-      if (
-        event.date &&
-        event.startTime &&
-        event.endTime &&
-        filteredVenues.length > 0 &&
-        (!filteredVenues.includes("LR") || hasValidLR) &&
-        (!filteredVenues.includes("Classroom") || hasValidClassroom) &&
-        (!filteredVenues.includes("Others") || hasValidOthers)
-      ) {
-        handleAvailable(index); // Call handleAvailable if all conditions are met
-      } else {
-        console.warn(`Event at index ${index} is missing valid fields`);
-      }
-    });
-  }, [eventDates, handleAvailable]);
+    if (venueMessage) {
+      alert(venueMessage);
+      setVenueMessage("");
+    }
+  }, [venueMessage]);
 
   const handleVenueChange = (dateIndex, venueIndex, value) => {
     const updatedDates = [...eventDates];
@@ -729,7 +691,12 @@ const RequestForm = () => {
       eventType: eventType,
       otherEvent: otherEvent,
       objectives: objectives,
-      guests: JSON.stringify(guests),
+      guests: JSON.stringify(
+        guests.map((guest) => ({
+          name: guest.name,
+          designation: guest.designation,
+        }))
+      ),
       eventDates: JSON.stringify(
         eventDates.map((event) => ({
           date: event.date,
@@ -768,8 +735,12 @@ const RequestForm = () => {
 
   const handleFinalSubmit = async () => {
     // Consolidate venues and other relevant data
+
     const finalEventDates = eventDates.map((event) => {
       let consolidatedVenues = [...event.venues]; // Start with the venues
+      if (isEndTimeBeforeStartTime(event.startTime, event.endTime)) {
+        alert("End time can't be before Start time!!");
+      }
 
       // If "Classroom" is selected, merge classroom details
       if (event.venues.includes("Classroom")) {
@@ -830,7 +801,12 @@ const RequestForm = () => {
       clubs: consolidatedClubs, // Final clubs array
       eventType: consolidatedEventType, // Final event type array
       objectives: objectives,
-      guests: JSON.stringify(guests),
+      guests: JSON.stringify(
+        guests.map((guest) => ({
+          name: guest.name,
+          designation: guest.designation,
+        }))
+      ),
       registration,
       eventDates: JSON.stringify(
         finalEventDates.map((event) => ({
@@ -1341,13 +1317,22 @@ const RequestForm = () => {
                     </motion.div>
                   ))}
                 </AnimatePresence>
-                <button
-                  type="button"
-                  onClick={() => handleAddVenue(index)}
-                  className="mt-4 px-4 py-2 text-white bg-blue-500 rounded-lg"
-                >
-                  Add Venue
-                </button>
+                <div className="flex justify-between">
+                  <button
+                    type="button"
+                    onClick={() => handleAddVenue(index)}
+                    className="mt-4 px-4 py-2 text-white bg-blue-500 rounded-lg"
+                  >
+                    Add Venue
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleAvailable(index)}
+                    className="mt-4 px-4 py-2 text-white bg-red-500 rounded-lg"
+                  >
+                    Check Availability
+                  </button>
+                </div>
               </div>
 
               {/* Conditionally render "Remove Event Date" button only if there's more than one event date */}
@@ -1683,7 +1668,7 @@ const RequestForm = () => {
           exit={{ opacity: 0, y: -20 }}
         >
           <label className="block font-semibold mb-2 text-gray-700 dark:text-gray-300">
-            Expected Audience / Participation
+            Expected Number Of Audience / Participation
           </label>
           <input
             type="number" // Keeps the input type as number
@@ -1698,7 +1683,7 @@ const RequestForm = () => {
             min="0" // Prevents negative values
             className="w-full px-4 py-2 border rounded-lg bg-white border-gray-300 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 appearance-none" // Add appearance-none
             required
-            placeholder="Enter Maximum Audience / Participation"
+            placeholder="Enter Expected Number Of Audience / Participation"
             style={{
               MozAppearance: "textfield", // Firefox
               WebkitAppearance: "none", // Chrome/Safari
@@ -1722,7 +1707,6 @@ const RequestForm = () => {
             onChange={(e) => setResources(e.target.value)}
             className="w-full px-4 py-2 border rounded-lg bg-white border-gray-300 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
             placeholder="Enter Resources Utilize (Provided by Faculty)"
-            required
           />
         </motion.div>
 
@@ -1734,7 +1718,7 @@ const RequestForm = () => {
           exit={{ opacity: 0, y: -20 }}
         >
           <label className="block font-semibold mb-2 text-gray-700 dark:text-gray-300">
-            If Registration Link available :
+            Registration (If available) :
           </label>
           <input
             type="url"
