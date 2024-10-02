@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000/api";
@@ -8,6 +8,8 @@ const App = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [isPopupOpen, setIsPopupOpen] = useState(false); // For popup visibility
+  const popupRef = useRef(); // For detecting clicks outside the popup
 
   const tables = [
     { value: 'app_development_club', label: 'App Development Club' },
@@ -40,32 +42,55 @@ const App = () => {
     setError(null);
   
     try {
-      console.log(`Fetching data for ${selectedTable}`);
-      const token = localStorage.getItem("token"); // Assuming token is stored in localStorage
+      const token = localStorage.getItem("token");
       
       const response = await axios.post(
         `${backendUrl}/fetch-data`,
-        data,  // Pass the object directly, no need to stringify
+        data,
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,  // Include the token
+            Authorization: `Bearer ${token}`,
           },
-          withCredentials: true,  // If you need cookies included
+          withCredentials: true,
         }
       );
   
-      // No need to call response.json() here, as Axios automatically parses JSON responses
-      console.log("Response:", response.data);
-      setData(response.data); // Set the fetched data
+      setData(response.data);
+
+      if (window.innerWidth < 640) {
+        // Open popup only for mobile devices
+        setIsPopupOpen(true);  
+      }
     } catch (err) {
-      console.error("Error fetching data:", err);
       setError("Failed to fetch data");
     } finally {
       setLoading(false);
     }
   };
-  
+
+  const closePopup = () => {
+    setIsPopupOpen(false);
+  };
+
+  // Detect click outside the popup to close it
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (popupRef.current && !popupRef.current.contains(event.target)) {
+        closePopup();
+      }
+    };
+
+    if (isPopupOpen) {
+      document.addEventListener('mousedown', handleOutsideClick);
+    } else {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    };
+  }, [isPopupOpen]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
@@ -94,35 +119,80 @@ const App = () => {
         {error && <p className="text-red-500 mt-4">{error}</p>}
       </div>
 
-      {/* Data Display */}
-      <div className="mt-8 w-full max-w-5xl">
+      {/* For PC view: Render table normally */}
+      <div className="hidden md:block mt-8 w-full max-w-5xl overflow-x-auto">
         {data.length > 0 && (
-          <table className="min-w-full table-auto bg-white shadow-lg rounded-lg">
-            <thead>
-              <tr className="bg-gray-200">
-                <th className="py-2 px-4 border">ID</th>
-                <th className="py-2 px-4 border">Name</th>
-                <th className="py-2 px-4 border">Role</th>
-                <th className="py-2 px-4 border">Objectives</th>
-                <th className="py-2 px-4 border">Outcomes</th>
-                <th className="py-2 px-4 border">Functions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.map((row, index) => (
-                <tr key={index} className="border-b">
-                  <td className="py-2 px-4 border">{row.id}</td>
-                  <td className="py-2 px-4 border">{row.name}</td>
-                  <td className="py-2 px-4 border">{row.role}</td>
-                  <td className="py-2 px-4 border">{row.objectives}</td>
-                  <td className="py-2 px-4 border">{row.outcomes}</td>
-                  <td className="py-2 px-4 border">{row.functions}</td>
+          <div className="w-full h-full overflow-x-auto overflow-y-auto">
+            <table className="min-w-full table-auto bg-white shadow-lg rounded-lg">
+              <thead>
+                <tr className="bg-gray-200">
+                  <th className="py-2 px-4 border">ID</th>
+                  <th className="py-2 px-4 border">Name</th>
+                  <th className="py-2 px-4 border">Role</th>
+                  <th className="py-2 px-4 border">Objectives</th>
+                  <th className="py-2 px-4 border">Outcomes</th>
+                  <th className="py-2 px-4 border">Functions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {data.map((row, index) => (
+                  <tr key={index} className="border-b">
+                    <td className="py-2 px-4 border">{row.id}</td>
+                    <td className="py-2 px-4 border">{row.name}</td>
+                    <td className="py-2 px-4 border">{row.role}</td>
+                    <td className="py-2 px-4 border">{row.objectives}</td>
+                    <td className="py-2 px-4 border">{row.outcomes}</td>
+                    <td className="py-2 px-4 border">{row.functions}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
+
+      {/* Popup for mobile devices */}
+      {isPopupOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 sm:block md:hidden">
+          <div
+            ref={popupRef}
+            className="relative bg-white w-full max-w-xs h-3/4 rounded-lg overflow-hidden"
+          >
+            <button
+              onClick={closePopup}
+              className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1"
+            >
+              X
+            </button>
+            <div className="p-4 h-full w-full overflow-x-auto overflow-y-auto">
+              <table className="min-w-full table-auto bg-white shadow-lg rounded-lg">
+                <thead>
+                  <tr className="bg-gray-200">
+                    <th className="py-2 px-4 border">ID</th>
+                    <th className="py-2 px-4 border">Name</th>
+                    <th className="py-2 px-4 border">Role</th>
+                    <th className="py-2 px-4 border">Objectives</th>
+                    <th className="py-2 px-4 border">Outcomes</th>
+                    <th className="py-2 px-4 border">Functions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.map((row, index) => (
+                    <tr key={index} className="border-b">
+                      <td className="py-2 px-4 border">{row.id}</td>
+                      <td className="py-2 px-4 border">{row.name}</td>
+                      <td className="py-2 px-4 border">{row.role}</td>
+                      <td className="py-2 px-4 border">{row.objectives}</td>
+                      <td className="py-2 px-4 border">{row.outcomes}</td>
+                      <td className="py-2 px-4 border">{row.functions}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
 
       {data.length === 0 && !loading && <p className="mt-8 text-gray-500">No data to display.</p>}
     </div>
