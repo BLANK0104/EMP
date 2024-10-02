@@ -464,9 +464,17 @@ app.get(
     console.log("report");
 
     try {
+      const usernameResult = await db.query(
+        "SELECT username, coordinator FROM users WHERE id = $1",
+        [id]
+      );
+      const username = usernameResult.rows[0]?.username;
+
       const events = await db.query(
         `
       SELECT 
+        u.username,
+        u.coordinator,
         e.id, 
         ed.title, 
         ed.description,
@@ -480,12 +488,15 @@ app.get(
         ed.audience
       FROM events e
       JOIN event_details ed ON e.id = ed.event_id
+      JOIN users u ON e.created_by = u.id
       WHERE e.created_by = $1
       ORDER BY e.created_at DESC
       LIMIT 1;
-    `,
+        `,
         [id]
       );
+      console.log(`result of the query is ${events.rows}`); // Log the result of the query
+     // console.log(`Username is: ${username}`);
 
       if (events.rows.length === 0) {
         return res
