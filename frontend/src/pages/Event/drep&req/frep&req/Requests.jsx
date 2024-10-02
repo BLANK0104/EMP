@@ -5,17 +5,6 @@ const backendUrl =
 const Request = ({ requests, selectedRequest, setSelectedRequest }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modification, setModification] = useState("");
-  const [isDarkMode, setIsDarkMode] = useState(false);
-
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
-    if (isDarkMode) {
-      document.documentElement.classList.remove("dark");
-    } else {
-      document.documentElement.classList.add("dark");
-    }
-  };
-
   const handleRequestClick = (request) => {
     setSelectedRequest(request);
     setIsModalOpen(true);
@@ -154,7 +143,7 @@ const Request = ({ requests, selectedRequest, setSelectedRequest }) => {
                 <td className="px-6 py-4 pl-4 whitespace-nowrap text-center">
                   {request.coordinator}
                 </td>
-                <td className="px-6 py-4 pl-4 whitespace-nowrap text-center">
+                <td className="px-6 py-4 pl-4 whitespace-nowrap  text-center">
                   {request.event_dates.length > 0 &&
                   request.event_dates[0].venues.length > 0
                     ? request.event_dates[0].venues.map((venue, index) => (

@@ -25,6 +25,7 @@ const Available = async (date, startTime, endTime, venues, req, res) => {
       event_detail->>'venues' AS venue,
       e.status,
       COUNT(*) FILTER (WHERE e.status = 'Pending') AS pending_count
+      
     FROM 
       event_details ed
     JOIN 

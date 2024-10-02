@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import TermsPopup from "./Termspop";
+import VenueDisplay from "./Venuedisplay";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -120,6 +121,9 @@ const RequestForm = () => {
   const [clubs, setClubs] = useState([]);
   const [guests, setGuests] = useState([{ name: "", designation: "" }]);
   const [venueMessage, setVenueMessage] = useState(""); // State to store venue message
+  const [isLoading, setIsLoading] = useState(false);
+  const [venueDisplay, setVenueDisplay] = useState(false);
+  const [venueDetails, setVenueDetails] = useState(null);
 
   const validClassroomRanges = [
     { start: 101, end: 104 },
@@ -244,15 +248,18 @@ const RequestForm = () => {
 
     // Update the venueMessage state with the message
     setVenueMessage(message);
+
+    // Set the venue display to true to show the popup
+    setVenueDisplay(true);
   };
 
   // Trigger the alert only when venueMessage changes
-  useEffect(() => {
-    if (venueMessage) {
-      alert(venueMessage);
-      setVenueMessage("");
-    }
-  }, [venueMessage]);
+  // useEffect(() => {
+  //   if (venueMessage) {
+  //     alert(venueMessage);
+  //     setVenueMessage("");
+  //   }
+  // }, [venueMessage]);
 
   const handleVenueChange = (dateIndex, venueIndex, value) => {
     const updatedDates = [...eventDates];
@@ -826,6 +833,7 @@ const RequestForm = () => {
     };
 
     console.log(formData); // Debugging: Check if formData is correct
+    setIsLoading(true);
 
     try {
       const response = await fetch(`${backendUrl}/event-request`, {
@@ -837,7 +845,8 @@ const RequestForm = () => {
         body: JSON.stringify(formData), // Convert formData to JSON string
       });
 
-      if (response.ok) {
+      if (response.status === 201) {
+        setIsLoading(false);
         setFormSubmitted(true);
 
         // Reset form fields
@@ -876,6 +885,13 @@ const RequestForm = () => {
     <div
       className={`w-full min-h-screen p-4 sm:p-6 md:p-8 rounded-lg shadow-md dark:bg-gray-700 dark:text-white bg-white text-gray-900`}
     >
+      {isLoading ? (
+        <div className="flex justify-center items-center">
+          <div className="w-10 h-10 border-4 border-blue-500 border-dotted rounded-full animate-spin"></div>
+        </div>
+      ) : (
+        ""
+      )}
       <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">
         Event Request Form
       </h2>
@@ -1332,6 +1348,15 @@ const RequestForm = () => {
                   >
                     Check Availability
                   </button>
+
+                  <VenueDisplay
+                    show={venueDisplay}
+                    onClose={() => setVenueDisplay(false)}
+                    onAgree={() => {
+                      setVenueDisplay(false); // Close the popup
+                    }}
+                    venueMessage={venueMessage}
+                  />
                 </div>
               </div>
 
