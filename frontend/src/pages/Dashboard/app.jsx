@@ -55,9 +55,13 @@ const App = () => {
           setUpcomingEvents(data.upcomingevent);
         }
 
-        // console.log(data);
+        console.log("latest: ", data);
         if (data.role === "faculty" || data.role === "centralAuthority") {
-          if (data.reportStatus === null) {
+          if (
+            data.reportStatus === null ||
+            data.latestData.status === "Rejected" ||
+            data.latestData.status === "Modified"
+          ) {
             setCurrentStatus("No request added");
           } else if (data.reportStatus === false) {
             setCurrentStatus(`Please submit the report of the event`);

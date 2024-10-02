@@ -6,8 +6,10 @@ import {
   faLinkedinIn,
   faYoutube,
 } from "@fortawesome/free-brands-svg-icons";
+const email = import.meta.env.VITE_EMAIL;
 
 const Footer = () => {
+  console.log("email", email);
   return (
     <footer
       id="foot"
@@ -90,11 +92,8 @@ const Footer = () => {
           <h4 className="text-lg sm:text-xl font-semibold mb-2">Contact Us</h4>
           <p className="text-sm sm:text-base">
             Email:{" "}
-            <a
-              href="mailto:info@example.com"
-              className="text-white hover:underline"
-            >
-              info@example.com
+            <a href={`mailto:${email}`} className="text-white hover:underline">
+              {email}
             </a>
           </p>
 

@@ -1,0 +1,125 @@
+-- Active: 1727179020532@@127.0.0.1@5432@ems@public
+-- Create the table
+
+-- Insert the data
+-- Create the table with a password column before role
+CREATE TABLE ClubInfo (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(255),
+    email VARCHAR(100),
+    password VARCHAR(100),
+    role VARCHAR(50)
+);
+
+-- Insert the data with the password for all entries
+INSERT INTO users (username, email, password, role)
+VALUES 
+('INSTITUTIONS INNOVATION COUNCIL (IIC)', 'iic_mptp.shirpur@nmims.edu', '$2a$10$4qTzgZdVtr7NnecdCPBu9.zbm.wMCpJ5eSq5Z3OF4wABFygzYiMEa', 'faculty'),
+('IPR CELL', NULL, '$2a$10$4qTzgZdVtr7NnecdCPBu9.zbm.wMCpJ5eSq5Z3OF4wABFygzYiMEa', 'faculty'),
+('E-CELL', NULL, '$2a$10$4qTzgZdVtr7NnecdCPBu9.zbm.wMCpJ5eSq5Z3OF4wABFygzYiMEa', 'faculty'),
+('INSTITUTE–INDUSTRY INTERACTION AND INTERNSHIP CELL (I4C)', NULL, '$2a$10$4qTzgZdVtr7NnecdCPBu9.zbm.wMCpJ5eSq5Z3OF4wABFygzYiMEa', 'faculty'),
+('NATIONAL INNOVATION AND START-UP POLICY (NISP) CELL', NULL, '$2a$10$4qTzgZdVtr7NnecdCPBu9.zbm.wMCpJ5eSq5Z3OF4wABFygzYiMEa', 'faculty'),
+('Saturday 10 am', 'saturday10am@nmims.edu', '$2a$10$4qTzgZdVtr7NnecdCPBu9.zbm.wMCpJ5eSq5Z3OF4wABFygzYiMEa', 'faculty'),
+('EACH ONE SAVE ONE', 'socialforumshirpur@nmims.edu', '$2a$10$4qTzgZdVtr7NnecdCPBu9.zbm.wMCpJ5eSq5Z3OF4wABFygzYiMEa', 'faculty'),
+('The Writers Hub', 'thewritershub.shirpur@nmims.edu', '$2a$10$4qTzgZdVtr7NnecdCPBu9.zbm.wMCpJ5eSq5Z3OF4wABFygzYiMEa', 'faculty'),
+('RAW VISION CLUB', 'RAWVISION_MPTP.shirpur@nmims.edu', '$2a$10$4qTzgZdVtr7NnecdCPBu9.zbm.wMCpJ5eSq5Z3OF4wABFygzYiMEa', 'faculty'),
+('ATRANGI CLUB', NULL, '$2a$10$4qTzgZdVtr7NnecdCPBu9.zbm.wMCpJ5eSq5Z3OF4wABFygzYiMEa', 'faculty'),
+('Computer Society of India (CSI)', 'CSI_MPSTME.shirpur@nmims.edu', '$2a$10$4qTzgZdVtr7NnecdCPBu9.zbm.wMCpJ5eSq5Z3OF4wABFygzYiMEa', 'faculty'),
+('NMMUN (Narsee Monjee Model United Nation)', 'Nmmun_mptp.shirpur@nmims.edu', '$2a$10$4qTzgZdVtr7NnecdCPBu9.zbm.wMCpJ5eSq5Z3OF4wABFygzYiMEa', 'faculty'),
+('Coding Club', 'CODINGCLUB_MPSTME.shirpur@nmims.edu', '$2a$10$4qTzgZdVtr7NnecdCPBu9.zbm.wMCpJ5eSq5Z3OF4wABFygzYiMEa', 'faculty'),
+('App Development Club', 'APPDEVCLUB_MPSTME.shirpur@nmims.edu', '$2a$10$4qTzgZdVtr7NnecdCPBu9.zbm.wMCpJ5eSq5Z3OF4wABFygzYiMEa', 'faculty'),
+('Google Developer''s Club', 'Gdsc_mpstme.shirpur@nmims.edu', '$2a$10$4qTzgZdVtr7NnecdCPBu9.zbm.wMCpJ5eSq5Z3OF4wABFygzYiMEa', 'faculty'),
+('TEAM UAS NMIMS (Drone Club)', 'DRONECLUB_MPSTME.shirpur@nmims.edu', '$2a$10$4qTzgZdVtr7NnecdCPBu9.zbm.wMCpJ5eSq5Z3OF4wABFygzYiMEa', 'faculty'),
+('ISTE', 'ISTE_MPSTME.shirpur@nmims.edu', '$2a$10$4qTzgZdVtr7NnecdCPBu9.zbm.wMCpJ5eSq5Z3OF4wABFygzYiMEa', 'faculty'),
+('IEEE', 'IEEE_MPSTME.shirpur@nmims.edu', '$2a$10$4qTzgZdVtr7NnecdCPBu9.zbm.wMCpJ5eSq5Z3OF4wABFygzYiMEa', 'faculty'),
+('Society 4DS', 'SOCIETY4Ds_MPSTME.shirpur@nmims.edu', '$2a$10$4qTzgZdVtr7NnecdCPBu9.zbm.wMCpJ5eSq5Z3OF4wABFygzYiMEa', 'faculty'),
+('AVINYA - IOT LAB', NULL, '$2a$10$4qTzgZdVtr7NnecdCPBu9.zbm.wMCpJ5eSq5Z3OF4wABFygzYiMEa', 'faculty'),
+('Learn Tech with NMIMS Shirpur', 'LEARNTECH_MPSTME.shirpur@nmims.edu', '$2a$10$4qTzgZdVtr7NnecdCPBu9.zbm.wMCpJ5eSq5Z3OF4wABFygzYiMEa', 'faculty'),
+('FLAVIUM', 'FLAVIUM_MPSTME.shirpur@nmims.edu', '$2a$10$4qTzgZdVtr7NnecdCPBu9.zbm.wMCpJ5eSq5Z3OF4wABFygzYiMEa', 'faculty'),
+('AMBIORA - Technical Event', 'AMBIORA_MPSTME.shirpur@nmims.edu', '$2a$10$4qTzgZdVtr7NnecdCPBu9.zbm.wMCpJ5eSq5Z3OF4wABFygzYiMEa', 'faculty'),
+('PROTSAHAN', 'PROTSAHAN_MPSTME.shirpur@nmims.edu', '$2a$10$4qTzgZdVtr7NnecdCPBu9.zbm.wMCpJ5eSq5Z3OF4wABFygzYiMEa', 'faculty');
+
+
+-- Alter the table to change the size of username to varchar(100)
+ALTER TABLE users
+ALTER COLUMN username TYPE VARCHAR(100);
+
+
+ALTER TABLE users
+ALTER COLUMN email DROP NOT NULL;
+
+
+
+
+-- Active: 1727179020532@@127.0.0.1@5432@ems@public
+-- Alter the users table to add a 'coordinator' column
+ALTER TABLE users 
+ADD COLUMN coordinator VARCHAR(255);
+
+-- Update the coordinator column based on the provided names
+UPDATE users 
+SET coordinator = CASE username
+    WHEN 'INSTITUTIONS INNOVATION COUNCIL (IIC)' THEN 'Dr. Sachin Bhandari'
+    WHEN 'IPR CELL' THEN 'Dr. Shashikant Bagade'
+    WHEN 'E-CELL' THEN 'Dr. Saurabh Maru'
+    WHEN 'INSTITUTE–INDUSTRY INTERACTION AND INTERNSHIP CELL (I4C)' THEN 'Prof. Bhushan Inje'
+    WHEN 'NATIONAL INNOVATION AND START-UP POLICY (NISP) CELL' THEN 'Prof. Rajesh Verma'
+    WHEN 'Saturday 10 am' THEN 'Dr. Payal Dande and Prof. Harshal Kotwal'
+    WHEN 'EACH ONE SAVE ONE' THEN 'Dr. Payal Dande'
+    WHEN 'The Writers Hub' THEN 'Dr. Preeti Sangave and Dr. Sanjay Shrivastava'
+    WHEN 'RAW VISION CLUB' THEN 'Dr. Piyush Ghode & Prof. Bhushan Inje'
+    WHEN 'ATRANGI CLUB' THEN 'Dr. Piyush Ghode & Prof. Sonia Relan'
+    WHEN 'Computer Society of India (CSI)' THEN 'Dr. Mayank Sohani & Dr. Piyush Soni'
+    WHEN 'NMMUN (Narsee Monjee Model United Nation)' THEN 'Dr. Rakesh Chaudhari, Dr. Upendra Verma and Dr. Preeti Sangave'
+    WHEN 'Coding Club' THEN 'Dr. Suraj Patil & Dr. Pravin Landge'
+    WHEN 'App Development Club' THEN 'Prof. Dhiraj Bhise'
+    WHEN 'TEAM UAS NMIMS (Drone Club)' THEN 'Prof. Sachin Chavan & Prof. Mayank Kothari'
+    WHEN 'ISTE' THEN 'Dr. Suresh Kurumbanshi'
+    WHEN 'IEEE' THEN 'Prof. Atul Patil and Prof. Rehan Ahmad'
+    WHEN 'Society 4DS' THEN 'Prof. Rajesh Verma'
+    WHEN 'AVINYA - IOT LAB' THEN 'Dr. Suresh Kurumbanshi'
+    WHEN 'Learn Tech with NMIMS Shirpur' THEN 'Prof. Dhananjay Joshi'
+    WHEN 'FLAVIUM' THEN 'Dr. Vishal Fegade, Prof. Kiran Salunke, Prof. Mayank Kothari, Dr. Tawseef Rashid'
+    WHEN 'AMBIORA - Technical Event' THEN 'Dr. Suyog Pande'
+    WHEN 'PROTSAHAN' THEN 'Dr. Rakesh Chaudhari and Prof. Sonia Relan'
+END
+WHERE username IN (
+    'INSTITUTIONS INNOVATION COUNCIL (IIC)',
+    'IPR CELL',
+    'E-CELL',
+    'INSTITUTE–INDUSTRY INTERACTION AND INTERNSHIP CELL (I4C)',
+    'NATIONAL INNOVATION AND START-UP POLICY (NISP) CELL',
+    'Saturday 10 am',
+    'EACH ONE SAVE ONE',
+    'The Writers Hub',
+    'RAW VISION CLUB',
+    'ATRANGI CLUB',
+    'Computer Society of India (CSI)',
+    'NMMUN (Narsee Monjee Model United Nation)',
+    'Coding Club',
+    'App Development Club',
+    'TEAM UAS NMIMS (Drone Club)',
+    'ISTE',
+    'IEEE',
+    'Society 4DS',
+    'AVINYA - IOT LAB',
+    'Learn Tech with NMIMS Shirpur',
+    'FLAVIUM',
+    'AMBIORA - Technical Event',
+    'PROTSAHAN'
+);
+
+
+
+
+
+
+
+
+
+INSERT INTO request_assign (created_by, approver)
+VALUES 
+(14, 2), (15, 2), (16, 2), (17, 2), (18, 2), (19, 2), (20, 2), 
+(21, 2), (22, 2), (23, 2), (24, 2), (25, 2), (26, 2), (27, 2), 
+(28, 2), (29, 2), (30, 2), (31, 2), (32, 2), (33, 2), (34, 2), 
+(35, 2), (36, 2), (37, 2);

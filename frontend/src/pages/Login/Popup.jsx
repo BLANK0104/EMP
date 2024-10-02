@@ -1,4 +1,5 @@
 import React from "react";
+const email = import.meta.env.VITE_EMAIL;
 
 const Popup = ({ isVisible, onClose }) => {
   if (!isVisible) return null;
@@ -12,7 +13,7 @@ const Popup = ({ isVisible, onClose }) => {
         className="bg-white p-6 rounded shadow-lg"
         onClick={(e) => e.stopPropagation()}
       >
-        <p>Please contact the EMS team at EMSPORTAL@outlook.com for further assistance.</p>
+        <p>Please contact the EMS team at {email} for further assistance.</p>
       </div>
     </div>
   );
