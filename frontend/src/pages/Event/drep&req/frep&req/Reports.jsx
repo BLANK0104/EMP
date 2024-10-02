@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 
-const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000/api";
+const backendUrl =
+  import.meta.env.VITE_BACKEND_URL || "http://localhost:5000/api";
 
 const Report = ({ selectedReport, setSelectedReport }) => {
   const [reports, setReports] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const popupRef = useRef(null);
 
   useEffect(() => {
@@ -51,15 +51,6 @@ const Report = ({ selectedReport, setSelectedReport }) => {
     };
   }, [showPopup]);
 
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
-    if (isDarkMode) {
-      document.documentElement.classList.remove("dark");
-    } else {
-      document.documentElement.classList.add("dark");
-    }
-  };
-
   const handleReportClick = (report) => {
     setSelectedReport(report);
     setShowPopup(true);
@@ -96,7 +87,9 @@ const Report = ({ selectedReport, setSelectedReport }) => {
       a.remove();
 
       // Remove the downloaded report from the reports state
-      setReports((prevReports) => prevReports.filter((report) => report.title !== reportTitle));
+      setReports((prevReports) =>
+        prevReports.filter((report) => report.title !== reportTitle)
+      );
       setShowPopup(false);
     } catch (error) {
       console.error("Error downloading report:", error);
@@ -104,45 +97,68 @@ const Report = ({ selectedReport, setSelectedReport }) => {
   };
 
   return (
-    <div className={`p-4 ${isDarkMode ? "dark" : ""}`}>
-      <div className="max-w-full">
-        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+    <div className={`p-4 `}>
+      <div className="max-w-full ">
+        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 ">
           <thead>
             <tr>
-              <th className={`px-2 py-1 border-b text-center bg-red-100 dark:bg-red-900 text-xs md:text-base ${isDarkMode ? "text-white" : "text-black"}`}>
+              <th
+                className={`px-2 py-1 border-b text-center bg-red-100 dark:bg-red-900 text-xs md:text-base dark:text-white  text-black`}
+              >
                 Sr No
               </th>
-              <th className={`px-2 py-1 border-b text-center bg-red-100 dark:bg-red-900 text-xs md:text-base ${isDarkMode ? "text-white" : "text-black"}`}>
+              <th
+                className={`px-2 py-1 border-b text-center bg-red-100 dark:bg-red-900 text-xs md:text-base dark:text-white text-black
+                }`}
+              >
                 Title
               </th>
-              <th className={`px-2 py-1 border-b text-center bg-red-100 dark:bg-red-900 text-xs md:text-base ${isDarkMode ? "text-white" : "text-black"}`}>
+              <th
+                className={`px-2 py-1 border-b text-center bg-red-100 dark:bg-red-900 text-xs md:text-base dark:text-white text-black`}
+              >
                 Club
               </th>
-              <th className={`px-2 py-1 border-b text-center bg-red-100 dark:bg-red-900 text-xs md:text-base ${isDarkMode ? "text-white" : "text-black"}`}>
+              <th
+                className={`px-2 py-1 border-b text-center bg-red-100 dark:bg-red-900 text-xs md:text-base dark:text-white text-black`}
+              >
                 Faculty Coordinator
               </th>
-              <th className={`px-2 py-1 border-b text-center bg-red-100 dark:bg-red-900 text-xs md:text-base ${isDarkMode ? "text-white" : "text-black"}`}>
+              <th
+                className={`px-2 py-1 border-b text-center bg-red-100 dark:bg-red-900 text-xs md:text-base dark:text-white text-black`}
+              >
                 Venue
               </th>
             </tr>
           </thead>
-          <tbody className={`bg-white dark:bg-gray-900 divide-y text-center divide-gray-200 dark:divide-gray-700 ${isDarkMode ? "text-white" : "text-black"}`}>
+          <tbody
+            className={`bg-white dark:bg-gray-900 divide-y text-center divide-gray-200 dark:divide-gray-700 dark:text-white text-black`}
+          >
             {reports.map((report, index) => (
               <tr
                 key={report.id}
                 onClick={() => {
                   handleReportClick(report);
-                  console.log(`Title: ${report.title}, Club: ${report.clubs}, Venue: ${report.venue}`);
+                  console.log(
+                    `Title: ${report.title}, Club: ${report.clubs}, Venue: ${report.venue}`
+                  );
                 }}
-                className={`hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer text-center ${isDarkMode ? "text-white" : "text-black"}`}
+                className={`hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer text-center dark:text-white  text-black`}
               >
-                <td className="px-6 py-4 whitespace-nowrap text-center">{index + 1}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-center">{report.title}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-center">{report.clubs}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-center">
+                  {index + 1}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-center">
+                  {report.title}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-center">
+                  {report.clubs}
+                </td>
                 <td className="px-6 py-4 whitespace-nowrap text-center">
                   {report.facultyCoordinator}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-center">{report.venue}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-center">
+                  {report.venue}
+                </td>
               </tr>
             ))}
           </tbody>
@@ -150,7 +166,10 @@ const Report = ({ selectedReport, setSelectedReport }) => {
       </div>
       {showPopup && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div ref={popupRef} className="bg-white dark:bg-gray-800 p-4 rounded shadow-lg">
+          <div
+            ref={popupRef}
+            className="bg-white dark:bg-gray-800 p-4 rounded shadow-lg"
+          >
             <button
               onClick={() => handleDownloadReport(selectedReport.title)}
               className="mt-2 px-4 py-2 bg-green-500 text-white rounded"
