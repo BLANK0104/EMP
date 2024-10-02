@@ -20,7 +20,6 @@ const venueOptions = [
   "Conference Room",
   "Dance Room",
   "Drawing hall",
-  "Lab",
   "LR",
   "Music Room",
   "Playground",
