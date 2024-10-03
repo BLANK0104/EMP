@@ -143,18 +143,31 @@ const Request = ({ requests, selectedRequest, setSelectedRequest }) => {
                 <td className="px-6 py-4 pl-4 whitespace-nowrap text-center">
                   {request.coordinator}
                 </td>
-                <td className="px-6 py-4 pl-4 whitespace-nowrap  text-center">
+                <td className="px-6 py-4 pl-4 whitespace-nowrap text-wrap max-w-36  text-center">
                   {request.event_dates.length > 0 &&
-                  request.event_dates[0].venues.length > 0
-                    ? request.event_dates[0].venues.map((venue, index) => (
-                        <span key={index}>
-                          {venue}
-                          {index < request.event_dates[0].venues.length - 1
-                            ? ", "
-                            : ""}
-                        </span>
-                      ))
-                    : "N/A"}
+                  request.event_dates[0].venues.length > 0 ? (
+                    <>
+                      {request.event_dates[0].venues
+                        .slice(0, 3)
+                        .map((venue, index) => (
+                          <span key={index}>
+                            {venue}
+                            {index <
+                            Math.min(
+                              2,
+                              request.event_dates[0].venues.length - 1
+                            )
+                              ? ", "
+                              : ""}
+                          </span>
+                        ))}
+                      {request.event_dates[0].venues.length > 3 && (
+                        <span>...</span>
+                      )}
+                    </>
+                  ) : (
+                    "N/A"
+                  )}
                 </td>
               </tr>
             ))
