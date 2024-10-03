@@ -270,14 +270,15 @@ app.get(
     try {
       // Fetch the latest event created by the user
       const events = await db.query(
-        `SELECT e.id, e.status
-       FROM events e
-       WHERE e.created_by = $1
-       ORDER BY e.created_at DESC
-       LIMIT 1;`,
+        `SELECT e.id, e.status, ed.event_dates
+      FROM events e
+      JOIN event_details ed ON e.id = ed.event_id
+      WHERE e.created_by = $1
+      ORDER BY e.created_at DESC
+      LIMIT 1;`,
         [id]
       );
-      // console.log(events.rows.length);
+      console.log(events.rows);
 
       if (events.rows.length === 0) {
         return res.json({
@@ -288,13 +289,22 @@ app.get(
       }
 
       const latestEventStatus = events.rows[0].status;
-      console.log(`Latest event Status: ${latestEventStatus}`);
       const latestEventId = events.rows[0].id;
-      console.log(`Latest Event id ${latestEventId}`);
+      const eventDates = events.rows[0].event_dates;
 
-      const report = await db.query(`select 1 from report where event_id =$1`, [
-        latestEventId,
-      ]);
+      // Check if all event dates have passed
+      const currentDateTime = new Date();
+
+      const allDatesPassed = eventDates.every((event) => {
+        const eventDate = new Date(event.date);
+        return eventDate < currentDateTime;
+      });
+
+      // Check if a report already exists for the event
+      const report = await db.query(
+        `SELECT 1 FROM report WHERE event_id = $1`,
+        [latestEventId]
+      );
 
       if (report.rowCount > 0) {
         return res.json({
@@ -308,17 +318,26 @@ app.get(
         return res.json({
           canSubmitRequest: false,
           canSubmitReport: false,
-          eventId: events.rows[0].id,
+          eventId: latestEventId,
         });
-      } else if (latestEventStatus === "Approved") {
+      } else if (latestEventStatus === "Approved" && allDatesPassed) {
         return res.json({
           canSubmitRequest: false,
           canSubmitReport: true,
           eventId: null,
         });
-      } else {
+      } else if (
+        latestEventStatus === "Modified" ||
+        latestEventStatus === "Rejected"
+      ) {
         return res.json({
           canSubmitRequest: true,
+          canSubmitReport: false,
+          eventId: null,
+        });
+      } else {
+        return res.json({
+          canSubmitRequest: false,
           canSubmitReport: false,
           eventId: null,
         });
@@ -329,8 +348,6 @@ app.get(
     }
   }
 );
-
-
 
 app.post("/api/report-data", async (req, res) => {
   console.log("body:", req.body);
@@ -454,7 +471,6 @@ app.get(
   }
 );
 
-
 app.get(
   "/api/report",
   authenticateToken,
@@ -464,9 +480,17 @@ app.get(
     console.log("report");
 
     try {
+      const usernameResult = await db.query(
+        "SELECT username, coordinator FROM users WHERE id = $1",
+        [id]
+      );
+      const username = usernameResult.rows[0]?.username;
+
       const events = await db.query(
         `
       SELECT 
+        u.username,
+        u.coordinator,
         e.id, 
         ed.title, 
         ed.description,
@@ -480,12 +504,15 @@ app.get(
         ed.audience
       FROM events e
       JOIN event_details ed ON e.id = ed.event_id
+      JOIN users u ON e.created_by = u.id
       WHERE e.created_by = $1
       ORDER BY e.created_at DESC
       LIMIT 1;
-    `,
+        `,
         [id]
       );
+      console.log(`result of the query is ${events.rows}`); // Log the result of the query
+      // console.log(`Username is: ${username}`);
 
       if (events.rows.length === 0) {
         return res
@@ -717,35 +744,32 @@ app.get(
   }
 );
 
-
-
-
-    // Add the /fetch-data/:table route
+// Add the /fetch-data/:table route
 app.post(
   "/api/fetch-data",
   authenticateToken,
   authorizedRole(["dean", "director", "faculty"]),
   async (req, res) => {
     console.log("Request received at /api/fetch-data");
-    console.log(req.body)
-    const { table } = req.body; 
+    console.log(req.body);
+    const { table } = req.body;
     const validTables = [
-      'app_development_club',
-      'atrangi_club',
-      'coding_club',
-      'competitive_preparation',
-      'computer_society_of_india',
-      'crs_ilc',
-      'cultural_activity_forum',
-      'eoso',
-      'ieee',
-      'iste',
-      'learn_tech',
-      'nmmun',
-      's4ds',
-      'soft_skill_club',
-      'team_uas_nmims',
-      'the_writers_hub'
+      "app_development_club",
+      "atrangi_club",
+      "coding_club",
+      "competitive_preparation",
+      "computer_society_of_india",
+      "crs_ilc",
+      "cultural_activity_forum",
+      "eoso",
+      "ieee",
+      "iste",
+      "learn_tech",
+      "nmmun",
+      "s4ds",
+      "soft_skill_club",
+      "team_uas_nmims",
+      "the_writers_hub",
     ];
 
     // Check if the table is valid
@@ -755,13 +779,15 @@ app.post(
 
     try {
       const result = await db.query(`SELECT * FROM ${table}`);
-      
+
       if (result.rows.length === 0) {
-        return res.status(404).json({ message: `No data found in table: ${table}` });
+        return res
+          .status(404)
+          .json({ message: `No data found in table: ${table}` });
       }
-      console.log(result.rows)
+      console.log(result.rows);
       res.status(200).json(result.rows);
-      console.log("sending data")
+      console.log("sending data");
     } catch (error) {
       console.error(`Error fetching data from table ${table}:`, error);
       res.status(500).json({ error: "Internal Server Error" });

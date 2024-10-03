@@ -57,18 +57,28 @@ const App = () => {
 
         console.log("latest: ", data);
         if (data.role === "faculty" || data.role === "centralAuthority") {
-          if (
-            data.reportStatus === null ||
-            data.latestData.status === "Rejected" ||
-            data.latestData.status === "Modified"
-          ) {
-            setCurrentStatus("No request added");
+          if (data.latestData.status === "Rejected") {
+            setCurrentStatus("Rejected");
+          } else if (data.latestData.status === "Modified") {
+            setCurrentStatus(
+              `Modified - Reason: ${data.latestData.modification_reason}`
+            );
+          } else if (data.latestData.status === "Approved" && data.nextevent) {
+            setCurrentStatus("Event approved, awaiting event date");
           } else if (data.reportStatus === false) {
-            setCurrentStatus(`Please submit the report of the event`);
-          } else {
+            setCurrentStatus("Please submit the report of the event");
+          } else if (data.latestData.status === "Approved" && !data.nextevent) {
+            setCurrentStatus("Event approved");
+          } else if (
+            data.latestData.status === "Pending" &&
+            data.latestData.username
+          ) {
+            // For pending approvals, showing the current approver
             setCurrentStatus(
               `${data.latestData.status} by ${data.latestData.username}`
             );
+          } else {
+            setCurrentStatus("No request pending");
           }
         } else {
           if (
