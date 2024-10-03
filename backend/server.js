@@ -727,6 +727,13 @@ app.get(
   }
 );
 
+app.get("/api/header", authenticateToken, async(req, res) => {
+  const {id} = req.user;
+  const query = `select username from users where id = $1;`
+  const response = await db.query(query,[id]) 
+  res.json(response.rows)
+})
+
 app.get(
   "/api/clubs",
   authenticateToken,

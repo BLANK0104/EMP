@@ -7,12 +7,34 @@ import Logo from "./Logo";
 import Title from "./Title";
 import NotificationIcon from "./NotificationIcon";
 import ProfileIcon from "./ProfileIcon";
+const backendUrl =
+  import.meta.env.VITE_BACKEND_URL || "http://localhost:5000/api";
 
 const Header = () => {
   const [profileMenuVisible, setProfileMenuVisible] = useState(false); // Profile dropdown state
   const [notificationDropdownVisible, setNotificationDropdownVisible] =
     useState(false); // Notification dropdown state
   const [dropdownVisible, setDropdownVisible] = useState(false); // State for dropdown visibility
+  const [image, setImage] = useState("");
+
+  useEffect(() => {
+    const fetchHeader = async () => {
+      try {
+        const api = await fetch(`${backendUrl}/header`, {
+          method: "GET",
+          credentials: "include"
+        });
+        const data = await api.json(); // Parse response as JSON
+        console.log("Header: ", data);
+        setImage(data[0].username)
+      } catch (error) {
+        console.error("Error fetching header: ", error);
+      }
+    };
+  
+    fetchHeader();
+  }, []);
+  
 
   const handleSidebarToggle = () => {
     setDropdownVisible(!dropdownVisible);
@@ -30,6 +52,7 @@ const Header = () => {
     setProfileMenuVisible(false); // Close profile menu if open
   };
 
+ 
   // Close both dropdowns if clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -51,6 +74,7 @@ const Header = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+  console.log("header image:", image)
 
   return (
     <header
@@ -101,6 +125,7 @@ const Header = () => {
         <ProfileIcon
           profileMenuVisible={profileMenuVisible} // Pass state as prop
           toggleProfileMenu={toggleProfileMenu} // Pass toggle function as prop
+          image={image}
         />
       </div>
 
