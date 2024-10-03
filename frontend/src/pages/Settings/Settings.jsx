@@ -178,23 +178,6 @@ const SettingsPage = () => {
           </form>
         </div>
 
-        {/* Signature Section */}
-        <div className="mb-6 sm:mb-8 bg-gray-100 dark:bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg border border-gray-300 dark:border-gray-700">
-          <h3 className="text-xl sm:text-2xl mb-4 sm:mb-5 text-gray-900 dark:text-gray-100">
-            Signature
-          </h3>
-          <div className="flex flex-col items-center sm:items-start">
-            <img
-              src={img}
-              alt="Signature"
-              className="w-20 h-20 sm:w-24 sm:h-24 object-cover mb-3 sm:mb-4"
-            />
-            <button className="w-full py-2 sm:py-3 bg-gradient-to-r from-red-500 to-red-700 dark:from-red-700 dark:to-red-900 text-white rounded-md hover:from-red-600 hover:to-red-800 dark:hover:from-red-800 dark:hover:to-red-900 transition-all duration-300">
-              Edit Signature
-            </button>
-          </div>
-        </div>
-
         {/* Logout Section */}
         <div className="mb-6 sm:mb-8 bg-gray-100 dark:bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg border border-gray-300 dark:border-gray-700">
           <button
