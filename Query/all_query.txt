@@ -102,7 +102,6 @@ CREATE TABLE event_details (
     title TEXT NOT NULL,
     description TEXT NOT NULL,
     guests JSONB,
-    otherclub VARCHAR,
-    otherevent VARCHAR
+    registration TEXT
 );
 
