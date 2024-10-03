@@ -31,7 +31,7 @@ const App = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        console.log("DATA:",  data);
         let acceptedCount = 0;
         let rejectedCount = 0;
         let modifiedCount = 0;
@@ -54,10 +54,13 @@ const App = () => {
         } else {
           setUpcomingEvents(data.upcomingevent);
         }
+        console.log("latestDATA: ", data.latestData)
 
         console.log("latest: ", data);
         if (data.role === "faculty" || data.role === "centralAuthority") {
-          if (data.latestData.status === "Rejected") {
+          if(data.latestData === undefined){
+            setCurrentStatus("No request pending")
+          }else if (data.latestData.status === "Rejected") {
             setCurrentStatus("Rejected");
           } else if (data.latestData.status === "Modified") {
             setCurrentStatus(
