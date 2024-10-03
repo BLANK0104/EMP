@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Camera, Edit3 } from "lucide-react";
-import img from "./img.jpeg";
 const backendUrl =
   import.meta.env.VITE_BACKEND_URL || "http://localhost:5000/api";
 
 const SettingsPage = () => {
   const [name, setName] = useState("");
-  const [image, setImage] = useState(img);
+  const [image, setImage] = useState("");
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -30,6 +29,7 @@ const SettingsPage = () => {
         console.log(data);
         setName(data.username.username);
         setEmail(data.email);
+        setImage(`/Club_logo/${data.username.username}.jpg`);
         setLoading(false);
       } catch (error) {
         console.error("Failed to fetch user settings:", error);
@@ -96,12 +96,11 @@ const SettingsPage = () => {
         <h1 className="text-transparent font-bold bg-clip-text bg-gradient-to-r from-red-500 to-red-700 dark:from-red-600 dark:to-red-800 text-2xl sm:text-3xl text-center mb-6 sm:mb-8">
           Settings
         </h1>
-
         {/* Profile Section */}
         <div className="mb-6 sm:mb-8 bg-gray-100 dark:bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg border border-gray-300 dark:border-gray-700">
           <div className="flex flex-col sm:flex-row items-center">
             <img
-              src={img}
+              src={image}
               alt="Profile Photo"
               className="w-24 sm:w-36 h-24 sm:h-36 rounded-full object-cover mb-4 sm:mb-0 sm:mr-7"
             />

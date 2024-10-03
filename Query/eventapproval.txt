@@ -1,0 +1,12 @@
+CREATE TABLE eventapprovals(
+    id SERIAL NOT NULL,
+    event_id integer NOT NULL,
+    approver_id integer NOT NULL,
+    status new_event_status DEFAULT 'Pending'::new_event_status,
+    reason text,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY(id),
+    CONSTRAINT eventapprovals_event_id_fkey FOREIGN key(event_id) REFERENCES events(id),
+    CONSTRAINT eventapprovals_approver_id_fkey FOREIGN key(approver_id) REFERENCES users(id)
+);

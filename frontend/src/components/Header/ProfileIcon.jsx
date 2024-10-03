@@ -1,7 +1,16 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Logout from "../../pages/Logout/Logout";
 
-const ProfileIcon = ({ profileMenuVisible, toggleProfileMenu }) => {
+const ProfileIcon = ({ profileMenuVisible, toggleProfileMenu, image }) => {
+  const [imageUrl, setImageUrl] = useState("");
+
+  useEffect(() => {
+    if (image) {
+      setImageUrl(`/Club_logo/${image}.jpg`);
+    }
+  }, [image]);
+
   return (
     <div className="relative">
       <button
@@ -10,7 +19,7 @@ const ProfileIcon = ({ profileMenuVisible, toggleProfileMenu }) => {
         onClick={toggleProfileMenu} // Use the toggle function passed as a prop
       >
         <img
-          src="https://via.placeholder.com/40"
+          src={imageUrl}
           alt="User Avatar"
           className="rounded-full w-6 h-6 sm:w-6 sm:h-6"
         />
