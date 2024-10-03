@@ -176,8 +176,10 @@ app.post(
         guests: guests,
         registration: registration,
       });
+      return res
+        .status(201)
+        .json({ message: "Event request submitted successfully", eventId });
 
-      return res.status(201);
       // .json({ message: "Event request submitted successfully", eventId });
     } catch (err) {
       console.error(`Error creating event request for user ${id}:`, err);
@@ -727,12 +729,12 @@ app.get(
   }
 );
 
-app.get("/api/header", authenticateToken, async(req, res) => {
-  const {id} = req.user;
-  const query = `select username from users where id = $1;`
-  const response = await db.query(query,[id]) 
-  res.json(response.rows)
-})
+app.get("/api/header", authenticateToken, async (req, res) => {
+  const { id } = req.user;
+  const query = `select username from users where id = $1;`;
+  const response = await db.query(query, [id]);
+  res.json(response.rows);
+});
 
 app.get(
   "/api/clubs",

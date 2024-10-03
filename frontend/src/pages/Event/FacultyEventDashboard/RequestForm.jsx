@@ -122,7 +122,6 @@ const RequestForm = () => {
   const [venueMessage, setVenueMessage] = useState(""); // State to store venue message
   const [isLoading, setIsLoading] = useState(false);
   const [venueDisplay, setVenueDisplay] = useState(false);
-  const [venueDetails, setVenueDetails] = useState(null);
 
   const validClassroomRanges = [
     { start: 101, end: 104 },
@@ -160,105 +159,122 @@ const RequestForm = () => {
   }
 
   // Available
-  const handleAvailable = async (index) => {
+  const handleAvailable = async (index, type) => {
     const event = eventDates[index]; // Access the event at the specified index
-    const { date, startTime, endTime } = event; // Destructure date, startTime, and endTime
+    const { date, startTime, endTime, venues } = event; // Destructure date, startTime, endTime, and venues
 
-    // Ensure that date, startTime, and endTime are valid before proceeding
-    if (!date || !startTime || !endTime) {
+    // Ensure all required fields are provided
+    if (!date || !startTime || !endTime || !venues.length) {
       alert(
-        "Please enter date, start time, end time and venue to check the availability"
+        "Please enter date, time, and select a venue to check availability."
       );
       return;
     }
+
+    // Validate time input
     if (isEndTimeBeforeStartTime(startTime, endTime)) {
-      alert("End time should be after start time");
+      alert("End time should be after the start time.");
       return;
     }
 
     // Consolidate the venues based on user selection
-    let consolidatedVenues = [...event.venues]; // Start with the selected venues
+    let consolidatedVenues = [...venues];
 
-    // If "Classroom" is selected, merge classroom details
+    // If "Classroom" is selected, add classroom-specific details
     if (consolidatedVenues.includes("Classroom")) {
       consolidatedVenues = consolidatedVenues.concat(
         event.classroomVenues.map((room) => `Classroom - ${room}`)
       );
     }
 
-    // If "Others" is selected, add the "otherVenue" details
+    // If "Others" is selected, include the "otherVenue" details
     if (consolidatedVenues.includes("Others") && event.otherVenue) {
-      consolidatedVenues.push(`${event.otherVenue}`);
+      consolidatedVenues.push(event.otherVenue);
     }
 
-    // If "LR" is selected, merge selected room details for LR
+    // If "LR" is selected, include specific room details for LR
     if (consolidatedVenues.includes("LR")) {
       consolidatedVenues = consolidatedVenues.concat(
         event.selectedRooms.map((room) => `LR - ${room}`)
       );
     }
 
-    // Filter out base venue types ("Classroom", "Others", "LR")
+    // Filter out base venue types from the final list
     consolidatedVenues = consolidatedVenues.filter(
       (venue) => venue !== "Classroom" && venue !== "Others" && venue !== "LR"
     );
 
-    // Parse the date to 'yyyy-mm-dd' format using toLocaleDateString
-    const parsedDate = new Date(date).toLocaleDateString("en-CA"); // 'en-CA' format returns 'yyyy-mm-dd'
+    // Parse the date to 'yyyy-mm-dd' format
+    const parsedDate = new Date(date).toLocaleDateString("en-CA"); // 'yyyy-mm-dd'
 
-    // Make a POST request to check venue availability
-    const response = await fetch(`${backendUrl}/check-venue`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        date: parsedDate,
-        startTime,
-        endTime,
-        venues: consolidatedVenues, // Include the consolidated venues
-      }),
-    });
-
-    const data = await response.json();
-    console.log(data);
-
-    // Prepare a message to show both available and conflicting venues
-    let message = "";
-
-    // Check for conflicting venues
-    if (data.conflictingVenues && data.conflictingVenues.length > 0) {
-      message += "Conflicting Venues:\n";
-      data.conflictingVenues.forEach((conflict) => {
-        message += `Venue: ${conflict.venue} - Status: ${conflict.status}\n`;
+    try {
+      // Make a POST request to check venue availability
+      const response = await fetch(`${backendUrl}/check-venue`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          date: parsedDate,
+          startTime,
+          endTime,
+          venues: consolidatedVenues, // Use consolidated venues
+        }),
       });
-    } else {
-      message += "No conflicting venues found.\n";
+
+      const data = await response.json();
+      console.log(data); // Log data for debugging
+
+      let message = "";
+
+      // Handle button click case
+      if (type === "button") {
+        // Prepare message for both available and conflicting venues
+
+        // Check for conflicting venues
+        if (data.conflictingVenues && data.conflictingVenues.length > 0) {
+          message += "Conflicting Venues:\n";
+          data.conflictingVenues.forEach((conflict) => {
+            message += `- Venue: ${conflict.venue}, Status: ${conflict.status}\n`;
+          });
+        } else {
+          message += "No venue conflicts found.\n";
+        }
+
+        // Check for available venues
+        if (data.availableVenues && data.availableVenues.length > 0) {
+          message += "\nAvailable Venues:\n";
+          data.availableVenues.forEach((venue) => {
+            message += `- Venue: ${venue}\n`;
+          });
+        }
+
+        // Display the message to the user
+        setVenueMessage(message);
+        setVenueDisplay(true);
+      }
+      // Handle form submit case
+      else if (type === "submit") {
+        if (data.conflictingVenues && data.conflictingVenues.length > 0) {
+          // Show conflicting venues and prevent submission
+          message += "Conflicting Venues:\n";
+          data.conflictingVenues.forEach((conflict) => {
+            message += `- Venue: ${conflict.venue}, Status: ${conflict.status}\n`;
+          });
+
+          setVenueMessage(message);
+          setVenueDisplay(true);
+          return true; // Return true to indicate a clash
+        } else {
+          return false; // No clash, proceed with submission
+        }
+      }
+    } catch (error) {
+      console.error("Error checking venue availability:", error);
+      alert("An error occurred while checking venue availability.");
     }
-
-    // Check for available venues
-    if (data.availableVenues && data.availableVenues.length > 0) {
-      message += "\nAvailable Venues:\n";
-      data.availableVenues.forEach((venue) => {
-        message += `Venue: ${venue}\n`;
-      });
-    }
-
-    // Update the venueMessage state with the message
-    setVenueMessage(message);
-
-    // Set the venue display to true to show the popup
-    setVenueDisplay(true);
   };
-
-  // Trigger the alert only when venueMessage changes
-  // useEffect(() => {
-  //   if (venueMessage) {
-  //     alert(venueMessage);
-  //     setVenueMessage("");
-  //   }
-  // }, [venueMessage]);
 
   const handleVenueChange = (dateIndex, venueIndex, value) => {
     const updatedDates = [...eventDates];
@@ -741,100 +757,119 @@ const RequestForm = () => {
 
   const handleFinalSubmit = async () => {
     // Consolidate venues and other relevant data
-
-    const finalEventDates = eventDates.map((event) => {
-      let consolidatedVenues = [...event.venues]; // Start with the venues
-      if (isEndTimeBeforeStartTime(event.startTime, event.endTime)) {
-        alert("End time can't be before Start time!!");
-      }
-
-      // If "Classroom" is selected, merge classroom details
-      if (event.venues.includes("Classroom")) {
-        consolidatedVenues = consolidatedVenues.concat(
-          event.classroomVenues.map((room) => `Classroom - ${room}`)
-        );
-      }
-
-      // If "Others" is selected, add other venue details
-      if (event.venues.includes("Others") && event.otherVenue) {
-        consolidatedVenues.push(`${event.otherVenue}`);
-      }
-
-      // If "LR" is selected, add room details
-      if (event.venues.includes("LR")) {
-        consolidatedVenues = consolidatedVenues.concat(
-          event.selectedRooms.map((room) => `LR - ${room}`)
-        );
-      }
-
-      // Filter out the base venue types ("Classroom", "Others", "LR")
-      consolidatedVenues = consolidatedVenues.filter(
-        (venue) => venue !== "Classroom" && venue !== "Others" && venue !== "LR"
-      );
-
-      const formattedDate = new Date(event.date).toISOString().split("T")[0]; // Format the date
-
-      // Return the event with the consolidated venues
-      return {
-        ...event,
-        date: formattedDate, // Format date to "YYYY-MM-DD"
-        venues: consolidatedVenues, // Overwrite the venues with consolidated data
-      };
-    });
-
-    // Consolidate event types (including "Other" event type if provided)
-    let consolidatedEventType = [...eventType];
-    if (eventType.includes("Other") && otherEvent) {
-      consolidatedEventType = consolidatedEventType.map((type) =>
-        type === "Other" ? otherEvent : type
-      );
-    }
-
-    // Consolidate clubs (including "Other" club if provided)
-    let consolidatedClubs = [...clubs];
-    if (clubs.includes("Others") && otherClub) {
-      consolidatedClubs = consolidatedClubs.map((club) =>
-        club === "Others" ? otherClub : club
-      );
-    }
-
-    // Create formData object
-    const formData = {
-      eventTitle,
-      description,
-      audience: parseInt(audience, 10),
-      resources: JSON.stringify(resources),
-      clubs: consolidatedClubs, // Final clubs array
-      eventType: consolidatedEventType, // Final event type array
-      objectives: objectives,
-      guests: JSON.stringify(
-        guests.map((guest) => ({
-          name: guest.name,
-          designation: guest.designation,
-        }))
-      ),
-      registration,
-      eventDates: JSON.stringify(
-        finalEventDates.map((event) => ({
-          date: event.date, // Use formatted date
-          start_time: event.startTime,
-          end_time: event.endTime,
-          venues: event.venues, // Use consolidated and filtered venues
-        }))
-      ),
-      school_audience: JSON.stringify({
-        school: formState.selectedSchools,
-        branch: formState.selectedCourses,
-        class: formState.selectedBranches,
-        year: formState.selectedYears,
-        externalInput: formState.externalInput,
-      }),
-    };
-
-    console.log(formData); // Debugging: Check if formData is correct
     setIsLoading(true);
 
     try {
+      const finalEventDates = await Promise.all(
+        eventDates.map(async (event, index) => {
+          let consolidatedVenues = [...event.venues]; // Start with the venues
+
+          // Check for valid time inputs
+          if (isEndTimeBeforeStartTime(event.startTime, event.endTime)) {
+            alert("End time can't be before Start time!!");
+            setIsLoading(false); // Stop loading spinner on error
+            return null; // Return null to indicate an invalid entry
+          }
+
+          // Check for venue availability
+          if (await handleAvailable(index, "submit")) {
+            setIsLoading(false); // Stop loading spinner on error
+            return null; // Return null to indicate a clash
+          }
+
+          // Handle special venue types
+          if (event.venues.includes("Classroom")) {
+            consolidatedVenues = consolidatedVenues.concat(
+              event.classroomVenues.map((room) => `Classroom - ${room}`)
+            );
+          }
+          if (event.venues.includes("Others") && event.otherVenue) {
+            consolidatedVenues.push(`${event.otherVenue}`);
+          }
+          if (event.venues.includes("LR")) {
+            consolidatedVenues = consolidatedVenues.concat(
+              event.selectedRooms.map((room) => `LR - ${room}`)
+            );
+          }
+
+          // Filter out base venue types ("Classroom", "Others", "LR")
+          consolidatedVenues = consolidatedVenues.filter(
+            (venue) =>
+              venue !== "Classroom" && venue !== "Others" && venue !== "LR"
+          );
+
+          // Format the date
+          const formattedDate = new Date(event.date)
+            .toISOString()
+            .split("T")[0];
+
+          return {
+            ...event,
+            date: formattedDate, // Format date to "YYYY-MM-DD"
+            venues: consolidatedVenues, // Overwrite with consolidated venues
+          };
+        })
+      );
+
+      // Filter out null entries (conflicting or invalid events)
+      const validEventDates = finalEventDates.filter((event) => event !== null);
+
+      if (validEventDates.length === 0) {
+        alert("Form submission aborted due to conflicting or invalid events.");
+        return;
+      }
+
+      // Consolidate event types (including "Other" event type if provided)
+      let consolidatedEventType = [...eventType];
+      if (eventType.includes("Other") && otherEvent) {
+        consolidatedEventType = consolidatedEventType.map((type) =>
+          type === "Other" ? otherEvent : type
+        );
+      }
+
+      // Consolidate clubs (including "Other" club if provided)
+      let consolidatedClubs = [...clubs];
+      if (clubs.includes("Others") && otherClub) {
+        consolidatedClubs = consolidatedClubs.map((club) =>
+          club === "Others" ? otherClub : club
+        );
+      }
+
+      // Prepare formData object
+      const formData = {
+        eventTitle,
+        description,
+        audience: parseInt(audience, 10),
+        resources: JSON.stringify(resources),
+        clubs: consolidatedClubs, // Final clubs array
+        eventType: consolidatedEventType, // Final event type array
+        objectives: objectives,
+        guests: JSON.stringify(
+          guests.map((guest) => ({
+            name: guest.name,
+            designation: guest.designation,
+          }))
+        ),
+        registration,
+        eventDates: JSON.stringify(
+          validEventDates.map((event) => ({
+            date: event.date, // Use formatted date
+            start_time: event.startTime,
+            end_time: event.endTime,
+            venues: event.venues, // Use consolidated and filtered venues
+          }))
+        ),
+        school_audience: JSON.stringify({
+          school: formState.selectedSchools,
+          branch: formState.selectedCourses,
+          class: formState.selectedBranches,
+          year: formState.selectedYears,
+          externalInput: formState.externalInput,
+        }),
+      };
+
+      console.log(formData); // Debugging: Check if formData is correct
+
       const response = await fetch(`${backendUrl}/event-request`, {
         method: "POST",
         headers: {
@@ -844,49 +879,44 @@ const RequestForm = () => {
         body: JSON.stringify(formData), // Convert formData to JSON string
       });
 
+      const data = await response.json();
+      console.log("Response data: ", data); // Debugging: Check if data is correct
+
       if (response.status === 201) {
-        setIsLoading(false);
         setFormSubmitted(true);
-
-        // Reset form fields
-        setFormState.selectedSchools([]);
-        setFormState.selectedCourses([]);
-        setFormState.selectedBranches([]);
-        setFormState.selectedYears([]);
-        setClubs([]);
-        setAudience(0);
-        setEventTitle("");
-        setGuestName("");
-        setGuestDesignation("");
-        setDescription("");
-        setResources([]);
-        setEventDates([{ date: "", startTime: "", endTime: "", venues: [""] }]);
-        setEventType([]);
-        setObjectives([""]);
-        setGuests("");
-
-        // Optional: Navigate away or show a success message
+        window.location.reload(); // Optional: Reload the page or navigate
       } else {
         const errorData = await response.json();
         console.error(
           "Error saving event details:",
           errorData.message || "Unknown error"
         );
-        // Optional: Set an error state to show user feedback
+        alert(
+          "An error occurred while submitting the event. Please try again."
+        );
       }
     } catch (error) {
       console.error("Error in form submission:", error);
-      // Optional: Set an error state to show user feedback
+      alert("An unexpected error occurred. Please try again.");
+    } finally {
+      setIsLoading(false); // Stop the loading spinner in all cases
     }
   };
+
+  useEffect(() => {
+    if (formSubmitted) {
+      alert("Form Submitted Successfully!!");
+      setFormSubmitted(false);
+    }
+  }, [formSubmitted]);
 
   return (
     <div
       className={`w-full min-h-screen p-4 sm:p-6 md:p-8 rounded-lg shadow-md dark:bg-gray-700 dark:text-white bg-white text-gray-900`}
     >
       {isLoading ? (
-        <div className="flex justify-center items-center">
-          <div className="w-10 h-10 border-4 border-blue-500 border-dotted rounded-full animate-spin"></div>
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="w-10 h-10 border-4 border-gray-600 dark:border-gray-200 border-dotted rounded-full animate-spin"></div>
         </div>
       ) : (
         ""
@@ -1342,7 +1372,7 @@ const RequestForm = () => {
                   </button>
                   <button
                     type="button"
-                    onClick={() => handleAvailable(index)}
+                    onClick={() => handleAvailable(index, "button")}
                     className="mt-4 px-4 py-2 text-white bg-red-500 rounded-lg"
                   >
                     Check Availability
@@ -1863,12 +1893,6 @@ const RequestForm = () => {
             Submit
           </motion.button>
         </div>
-
-        {formSubmitted && (
-          <div className="mt-6 text-green-600 font-semibold">
-            Form submitted successfully!
-          </div>
-        )}
 
         <TermsPopup
           show={showTerms}
