@@ -27,7 +27,7 @@ const FormComponent = ({ onSubmit }) => {
     branches: [],
     classes: [],
     years: [],
-    clubs: "N/A",
+    clubs: "",
   });
 
   const [event_id, setEventId] = useState(null); // Initialize event_id separately
@@ -81,6 +81,8 @@ const FormComponent = ({ onSubmit }) => {
         classes: data.school_audience?.class || [],
         years: data.school_audience?.year || [],
         event_id: event_id, // Set event_id after fetching
+        fname: data.coordinator || "",
+        cname: data.username
       }));
     }
   }, [data, event_id]); // Runs whenever data or event_id changes
@@ -735,7 +737,7 @@ const FormComponent = ({ onSubmit }) => {
         <input
           type="text"
           name="clubs"
-          value={formData.clubs}
+          value={formData.clubs ||"N/A"}
           onChange={handleChange}
           placeholder="Collaboration"
           className="mb-4 p-2 border border-gray-300 rounded w-full bg-white dark:bg-gray-800"
@@ -792,7 +794,7 @@ const FormComponent = ({ onSubmit }) => {
             <div key={index}>
               <input
                 type="text"
-                name={`facultyCoordinator-${index}`}
+                name={"formData.fname"}
                 value={coordinator.name}
                 onChange={(e) =>
                   handleCoordinatorChange("facultyCoordinators", index, e)

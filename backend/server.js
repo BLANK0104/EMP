@@ -511,8 +511,6 @@ app.get(
         `,
         [id]
       );
-      console.log(`result of the query is ${events.rows}`); // Log the result of the query
-      // console.log(`Username is: ${username}`);
 
       if (events.rows.length === 0) {
         return res

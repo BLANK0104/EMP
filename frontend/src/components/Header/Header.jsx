@@ -90,12 +90,12 @@ const Header = () => {
         <ThemeToggle />
 
         {/* Notification Icon */}
-        <div id="notificationButton">
+        {/* <div id="notificationButton">
           <NotificationIcon
             notificationDropdownVisible={notificationDropdownVisible}
             toggleNotificationDropdown={toggleNotificationDropdown}
           />
-        </div>
+        </div> */}
 
         {/* Profile Icon */}
         <ProfileIcon

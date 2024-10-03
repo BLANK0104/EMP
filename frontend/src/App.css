@@ -1,3 +1,12 @@
 .sidebar-open .flex-grow {
     display: none;
   }
+
+  @media (max-width: 375px) {
+    .overflow-x-auto {
+      max-height: 400px; /* Adjust the height as needed */
+      max-width: 300px; /* Limit the width to 300px */
+      overflow-x: auto; /* Enable horizontal scrolling */
+      overflow-y: auto; /* Enable vertical scrolling */
+    }
+  }
