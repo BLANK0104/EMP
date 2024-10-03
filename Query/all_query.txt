@@ -43,7 +43,7 @@ CREATE TABLE eventapprovals (
 
 --Notification: 
 
-CREATE TABLE notifications (
+CREATE TABLE notification (
     id SERIAL PRIMARY KEY,
     user_id INT NOT NULL,
     event_id INT NOT NULL,
