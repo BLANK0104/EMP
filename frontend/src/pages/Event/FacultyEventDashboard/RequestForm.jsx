@@ -166,13 +166,13 @@ const RequestForm = () => {
 
     // Ensure that date, startTime, and endTime are valid before proceeding
     if (!date || !startTime || !endTime) {
-      setVenueMessage(
+      alert(
         "Please enter date, start time, end time and venue to check the availability"
       );
       return;
     }
     if (isEndTimeBeforeStartTime(startTime, endTime)) {
-      setVenueMessage("End time should be after start time");
+      alert("End time should be after start time");
       return;
     }
 
