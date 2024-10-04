@@ -263,17 +263,24 @@ const Request = ({ requests, selectedRequest, setSelectedRequest }) => {
               {selectedRequest.event_dates[0]?.end_time}
             </p>
             <p className="dark:text-gray-300">
-              <strong>Resources Required:</strong> {selectedRequest.resources}
+              <strong>Resources Required:</strong>{" "}
+              {selectedRequest.resources && selectedRequest.resources.length > 0
+                ? selectedRequest.resources.join(", ")
+                : "N/A"}
             </p>
+
             <p className="dark:text-gray-300">
               <strong>Collaborators:</strong>{" "}
-              {selectedRequest.clubs.map((club, idx) => (
-                <span key={idx}>
-                  {idx + 1}. {club}
-                  <br />
-                </span>
-              ))}
+              {selectedRequest.clubs && selectedRequest.clubs.length > 0
+                ? selectedRequest.clubs.map((club, idx) => (
+                    <span key={idx}>
+                      {idx + 1}. {club}
+                      <br />
+                    </span>
+                  ))
+                : "N/A"}
             </p>
+
             <div className="mt-4">
               <button
                 className="bg-green-500 text-white px-4 py-2 rounded mr-2"
