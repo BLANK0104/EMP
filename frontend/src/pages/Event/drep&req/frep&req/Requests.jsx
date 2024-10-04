@@ -217,15 +217,39 @@ const Request = ({ requests, selectedRequest, setSelectedRequest }) => {
             <p className="dark:text-gray-300">
               <strong>Target Audience:</strong> {selectedRequest.TAudience}
             </p>
-            <p className="dark:text-gray-300 ml-24">
-              <strong>Branch:</strong> {selectedRequest.school_audience.branch}
-            </p>
-            <p className="dark:text-gray-300 ml-24">
-              <strong>Classes:</strong> {selectedRequest.school_audience.class}
-            </p>
-            <p className="dark:text-gray-300 ml-24">
-              <strong>Year:</strong> {selectedRequest.school_audience.year}
-            </p>
+            {/* Branch */}
+            {selectedRequest.school_audience.branch &&
+              selectedRequest.school_audience.branch.length > 0 && (
+                <p className="dark:text-gray-300 ml-24">
+                  <strong>Branch:</strong>{" "}
+                  {selectedRequest.school_audience.branch}
+                </p>
+              )}
+
+            {/* Classes */}
+            {selectedRequest.school_audience.class &&
+              selectedRequest.school_audience.class.length > 0 && (
+                <p className="dark:text-gray-300 ml-24">
+                  <strong>Classes:</strong>{" "}
+                  {selectedRequest.school_audience.class}
+                </p>
+              )}
+
+            {/* Year */}
+            {selectedRequest.school_audience.year &&
+              selectedRequest.school_audience.year.length > 0 && (
+                <p className="dark:text-gray-300 ml-24">
+                  <strong>Year:</strong> {selectedRequest.school_audience.year}
+                </p>
+              )}
+            {/* External Audience */}
+            {selectedRequest.externalAudience &&
+              selectedRequest.externalAudience.length > 0 && (
+                <p className="dark:text-gray-300">
+                  <strong>External Audience:</strong>{" "}
+                  {selectedRequest.externalInput.join(", ")}
+                </p>
+              )}
             <p className="dark:text-gray-300">
               <strong>Max Audience:</strong> {selectedRequest.audience}
             </p>
