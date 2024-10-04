@@ -9,7 +9,7 @@ import ProtectedRoute from "./components/Protected.jsx";
 import SettingsPage from "./pages/Settings/Settings.jsx";
 import History from "./pages/History/app.jsx";
 import Calendar from "./pages/Calender/cal.jsx";
-import Clubs from "./pages/Clubs/Clubs.jsx";
+import Clubs from "./pages/Clubs/MainApp.jsx";
 import TabBar from "./pages/Event/FacultyEventDashboard/TabBar.jsx";
 import Tabs from "./pages/Event/drep&req/frep&req/App.jsx";
 const backendUrl =
