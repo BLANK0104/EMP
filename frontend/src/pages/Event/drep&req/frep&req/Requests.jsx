@@ -249,7 +249,7 @@ const Request = ({ requests, selectedRequest, setSelectedRequest }) => {
               selectedRequest.externalInput.length > 0 && (
                 <p className="dark:text-gray-300">
                   <strong>External Audience:</strong>{" "}
-                  {selectedRequest.externalInput}
+                  {selectedRequest.school_audience.externalInput}
                 </p>
               )}
 
