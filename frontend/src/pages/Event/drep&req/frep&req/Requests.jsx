@@ -245,8 +245,8 @@ const Request = ({ requests, selectedRequest, setSelectedRequest }) => {
               )}
 
             {/* External Audience */}
-            {selectedRequest.externalInput &&
-              selectedRequest.externalInput.length > 0 && (
+            {selectedRequest.school_audience.externalInput &&
+              selectedRequest.school_audience.externalInput.length > 0 && (
                 <p className="dark:text-gray-300">
                   <strong>External Audience:</strong>{" "}
                   {selectedRequest.school_audience.externalInput}
