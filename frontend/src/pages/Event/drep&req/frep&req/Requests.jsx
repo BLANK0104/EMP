@@ -222,7 +222,7 @@ const Request = ({ requests, selectedRequest, setSelectedRequest }) => {
               selectedRequest.school_audience.branch.length > 0 && (
                 <p className="dark:text-gray-300 ml-24">
                   <strong>Branch:</strong>{" "}
-                  {selectedRequest.school_audience.branch}
+                  {selectedRequest.school_audience.branch.join(", ")}
                 </p>
               )}
 
@@ -231,7 +231,7 @@ const Request = ({ requests, selectedRequest, setSelectedRequest }) => {
               selectedRequest.school_audience.class.length > 0 && (
                 <p className="dark:text-gray-300 ml-24">
                   <strong>Classes:</strong>{" "}
-                  {selectedRequest.school_audience.class}
+                  {selectedRequest.school_audience.class.join(", ")}
                 </p>
               )}
 
@@ -239,60 +239,73 @@ const Request = ({ requests, selectedRequest, setSelectedRequest }) => {
             {selectedRequest.school_audience.year &&
               selectedRequest.school_audience.year.length > 0 && (
                 <p className="dark:text-gray-300 ml-24">
-                  <strong>Year:</strong> {selectedRequest.school_audience.year}
+                  <strong>Year:</strong>{" "}
+                  {selectedRequest.school_audience.year.join(", ")}
                 </p>
               )}
+
             {/* External Audience */}
-            {selectedRequest.externalAudience &&
-              selectedRequest.externalAudience.length > 0 && (
+            {selectedRequest.externalInput &&
+              selectedRequest.externalInput.length > 0 && (
                 <p className="dark:text-gray-300">
                   <strong>External Audience:</strong>{" "}
-                  {selectedRequest.externalInput.join(", ")}
+                  {selectedRequest.externalInput}
                 </p>
               )}
+
+            {/* Max Audience */}
             <p className="dark:text-gray-300">
-              <strong>Max Audience:</strong> {selectedRequest.audience}
+              <strong>Max Audience:</strong> {selectedRequest.audience || "N/A"}
             </p>
+
+            {/* Club */}
             <p className="dark:text-gray-300">
-              <strong>Club:</strong> {selectedRequest.username}
+              <strong>Club:</strong> {selectedRequest.username || "N/A"}
             </p>
+
+            {/* Faculty Coordinator */}
             <p className="dark:text-gray-300">
               <strong>Faculty Coordinator:</strong>{" "}
-              {selectedRequest.coordinator}
+              {selectedRequest.coordinator || "N/A"}
             </p>
+
+            {/* Venue */}
             <p className="dark:text-gray-300">
               <strong>Venue:</strong>{" "}
               {selectedRequest.event_dates.length > 0 &&
               selectedRequest.event_dates[0].venues.length > 0
-                ? selectedRequest.event_dates[0].venues.map((venue, index) => (
-                    <span key={index}>
-                      {venue}
-                      {index < selectedRequest.event_dates[0].venues.length - 1
-                        ? ", "
-                        : ""}
-                    </span>
-                  ))
+                ? selectedRequest.event_dates[0].venues.join(", ")
                 : "N/A"}
             </p>
+
+            {/* Event Start Date */}
             <p className="dark:text-gray-300">
               <strong>Event Start Date:</strong>{" "}
-              {selectedRequest.event_dates[0]?.date}
+              {selectedRequest.event_dates[0]?.date || "N/A"}
             </p>
+
+            {/* Event Start Time */}
             <p className="dark:text-gray-300">
               <strong>Event Start Time:</strong>{" "}
-              {selectedRequest.event_dates[0]?.start_time}
+              {selectedRequest.event_dates[0]?.start_time || "N/A"}
             </p>
+
+            {/* Event End Time */}
             <p className="dark:text-gray-300">
               <strong>Event End Time:</strong>{" "}
-              {selectedRequest.event_dates[0]?.end_time}
+              {selectedRequest.event_dates[0]?.end_time || "N/A"}
             </p>
+
+            {/* Resources Required */}
             <p className="dark:text-gray-300">
               <strong>Resources Required:</strong>{" "}
-              {selectedRequest.resources && selectedRequest.resources.length > 0
+              {Array.isArray(selectedRequest.resources) &&
+              selectedRequest.resources.length > 0
                 ? selectedRequest.resources.join(", ")
                 : "N/A"}
             </p>
 
+            {/* Collaborators */}
             <p className="dark:text-gray-300">
               <strong>Collaborators:</strong>{" "}
               {selectedRequest.clubs && selectedRequest.clubs.length > 0
