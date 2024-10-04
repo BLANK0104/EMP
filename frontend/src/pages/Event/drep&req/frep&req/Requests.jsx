@@ -307,7 +307,7 @@ const Request = ({ requests, selectedRequest, setSelectedRequest }) => {
 
             {/* Collaborators */}
             <p className="dark:text-gray-300">
-              <strong>Collaborators:</strong>{" "}
+              <strong>Clubs Collaborators:</strong>{" "}
               {selectedRequest.clubs && selectedRequest.clubs.length > 0
                 ? selectedRequest.clubs.map((club, idx) => (
                     <span key={idx}>
