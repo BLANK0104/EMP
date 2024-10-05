@@ -1,18 +1,17 @@
 const nodemailer = require("nodemailer");
 require("dotenv").config();
-const email = process.env.EMAIL;
 
 const transporter = nodemailer.createTransport({
   service: "Outlook365",
   auth: {
-    user: "emsmptp.shirpur@nmims.edu",
-    pass: "Strength007",
+    user: process.env.EMAIL,
+    pass: process.env.PASSWORD,
   },
 });
 
 const sendNotification = async (userEmail, subject, message) => {
   const mailOptions = {
-    from: "emsmptp.shirpur@nmims.edu",
+    from: process.env.EMAIL,
     to: userEmail,
     subject: subject,
     text: message,
