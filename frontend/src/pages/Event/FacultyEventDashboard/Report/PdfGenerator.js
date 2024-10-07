@@ -99,14 +99,14 @@ export const generatePdf = async ({ formData }) => {
   }
 
   // Add the school, branch, and year fields
-  doc.text(`School: ${formData.school}`, 10, yOffset);
+  doc.text(`School: ${formData.schools}`, 10, yOffset);
   yOffset += 10;
   if (yOffset > 280) {
     // Check if we need to add a new page
     doc.addPage();
     yOffset = 10;
   }
-  doc.text(`Branch: ${formData.branch}`, 10, yOffset);
+  doc.text(`Branch: ${formData.branches}`, 10, yOffset);
   yOffset += 10;
   if (yOffset > 280) {
     // Check if we need to add a new page
@@ -121,6 +121,14 @@ export const generatePdf = async ({ formData }) => {
     yOffset = 10;
   }
 
+
+  doc.text(`External Audience: ${formData.externalInput}`, 10, yOffset);
+  yOffset += 10;
+  if (yOffset > 280) {
+    // Check if we need to add a new page
+    doc.addPage();
+    yOffset = 10;
+  }
   // Add the cname field
   doc.text(`Club Name: ${formData.cname}`, 10, yOffset);
   yOffset += 10;
