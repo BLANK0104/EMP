@@ -29,6 +29,8 @@ const FormComponent = ({ onSubmit }) => {
     years: [],
     clubs: "",
     externalInput: "",
+    cname: "" // Initialize cname as an empty string
+    
   });
 
   const [event_id, setEventId] = useState(null); // Initialize event_id separately
