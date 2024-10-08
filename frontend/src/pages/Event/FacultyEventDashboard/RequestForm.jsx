@@ -922,7 +922,7 @@ const RequestForm = () => {
         ""
       )}
       <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">
-        Event Request Form
+        Event Request Form 
       </h2>
       <form onSubmit={handleFormSubmit}>
         <motion.form
@@ -939,7 +939,7 @@ const RequestForm = () => {
             transition={{ duration: 0.4 }}
           >
             <label className="block font-semibold mb-2 text-gray-700 dark:text-gray-300">
-              Event Title
+              Event Title *
             </label>
             <input
               type="text"
@@ -959,7 +959,7 @@ const RequestForm = () => {
             transition={{ duration: 0.4, delay: 0.1 }}
           >
             <label className="block font-semibold mb-2 text-gray-700 dark:text-gray-300">
-              Event Type
+              Event Type *
             </label>
             <select
               value={eventType.length > 0 ? eventType[0] : ""}
@@ -1005,7 +1005,7 @@ const RequestForm = () => {
             transition={{ duration: 0.4, delay: 0.2 }}
           >
             <label className="block font-semibold mb-2 text-gray-700 dark:text-gray-300">
-              Description
+              Description *
             </label>
             <input
               type="text"
@@ -1033,7 +1033,7 @@ const RequestForm = () => {
                 {/* Date */}
                 <div className="w-full sm:w-auto px-2 mb-4 sm:mb-0">
                   <label className="block font-semibold mb-2 text-gray-700 dark:text-gray-300">
-                    Date
+                    Date *
                   </label>
                   <div className="relative">
                     <DatePicker
@@ -1058,7 +1058,7 @@ const RequestForm = () => {
                 {/* Start Time */}
                 <div className="w-1/2 sm:w-28 px-2 mb-4 sm:mb-0">
                   <label className="block font-semibold mb-2 text-gray-700 dark:text-gray-300">
-                    Start Time
+                    Start Time *
                   </label>
                   <input
                     type="time"
@@ -1074,7 +1074,7 @@ const RequestForm = () => {
                 {/* End Time */}
                 <div className="w-1/2 sm:w-28 px-2 mb-4 sm:mb-0">
                   <label className="block font-semibold mb-2 text-gray-700 dark:text-gray-300">
-                    End Time
+                    End Time *
                   </label>
                   <input
                     type="time"
@@ -1091,7 +1091,7 @@ const RequestForm = () => {
               {/* Venues */}
               <div className="mb-4">
                 <label className="block font-semibold mb-2 text-gray-700 dark:text-gray-300">
-                  Venue(s)
+                  Venue(s) *
                 </label>
                 <AnimatePresence>
                   {event.venues.map((venue, venueIndex) => (
@@ -1414,7 +1414,7 @@ const RequestForm = () => {
         {/* Objectives */}
         <div className="mb-4 w-full border p-4 rounded-md">
           <label className="block font-semibold mb-2 text-gray-700 dark:text-gray-300">
-            Objectives
+            Objectives *
           </label>
           <AnimatePresence>
             {objectives.map((objective, index) => (
@@ -1722,7 +1722,7 @@ const RequestForm = () => {
           exit={{ opacity: 0, y: -20 }}
         >
           <label className="block font-semibold mb-2 text-gray-700 dark:text-gray-300">
-            Expected Number Of Audience / Participation
+            Expected Number Of Audience / Participation *
           </label>
           <input
             type="number" // Keeps the input type as number
