@@ -1,18 +1,17 @@
 const nodemailer = require("nodemailer");
 require("dotenv").config();
-const email = process.env.EMAIL;
 
 const transporter = nodemailer.createTransport({
-  service: "Gmail",
+  service: "Outlook365",
   auth: {
-    user: "itiszeden@gmail.com",
-    pass: "mhwn zjlx cgjt sgxe",
+    user: process.env.EMAIL,
+    pass: process.env.PASSWORD,
   },
 });
 
 const sendNotification = async (userEmail, subject, message) => {
   const mailOptions = {
-    from: "itiszeden@gmail.com",
+    from: process.env.EMAIL,
     to: userEmail,
     subject: subject,
     text: message,

@@ -1,6 +1,11 @@
 import jsPDF from "jspdf";
 import { PdfHeader } from "./PdfHeader";
 
+const getClubLogoPath = (clubName) => {
+  const logoPath = `/public/Club_logo/${clubName}.jpg`;
+  return logoPath;
+};
+
 export const generatePdf = async ({ formData }) => {
   const doc = new jsPDF();
 
@@ -12,9 +17,27 @@ export const generatePdf = async ({ formData }) => {
   doc.text(formData.title, doc.internal.pageSize.getWidth() / 2, 40, {
     align: "center",
   });
-  //Event type
+
+  // Add the club logo if it exists
+  const clubLogoPath = getClubLogoPath(formData.cname);
+  try {
+    const response = await fetch(clubLogoPath);
+    if (response.ok) {
+      const imgData = await response.blob();
+      const reader = new FileReader();
+      reader.onload = () => {
+        doc.addImage(reader.result, "JPEG", 160, 10, 30, 30);
+      };
+      reader.readAsDataURL(imgData);
+    }
+  } catch (error) {
+    console.error("Error fetching club logo:", error);
+  }
+
+  // Event type
   doc.setFontSize(16);
   doc.text(`Event Type: ${formData.type}`, 10, 50);
+
   // Add the guest speakers/judges/mentors section
   doc.setFontSize(12);
   let yOffset = 60;
@@ -76,14 +99,14 @@ export const generatePdf = async ({ formData }) => {
   }
 
   // Add the school, branch, and year fields
-  doc.text(`School: ${formData.school}`, 10, yOffset);
+  doc.text(`School: ${formData.schools}`, 10, yOffset);
   yOffset += 10;
   if (yOffset > 280) {
     // Check if we need to add a new page
     doc.addPage();
     yOffset = 10;
   }
-  doc.text(`Branch: ${formData.branch}`, 10, yOffset);
+  doc.text(`Branch: ${formData.branches}`, 10, yOffset);
   yOffset += 10;
   if (yOffset > 280) {
     // Check if we need to add a new page
@@ -91,6 +114,23 @@ export const generatePdf = async ({ formData }) => {
     yOffset = 10;
   }
   doc.text(`Year: ${formData.years}`, 10, yOffset);
+  yOffset += 10;
+  if (yOffset > 280) {
+    // Check if we need to add a new page
+    doc.addPage();
+    yOffset = 10;
+  }
+
+
+  doc.text(`External Audience: ${formData.externalInput}`, 10, yOffset);
+  yOffset += 10;
+  if (yOffset > 280) {
+    // Check if we need to add a new page
+    doc.addPage();
+    yOffset = 10;
+  }
+  // Add the cname field
+  doc.text(`Club Name: ${formData.cname}`, 10, yOffset);
   yOffset += 10;
   if (yOffset > 280) {
     // Check if we need to add a new page
@@ -220,5 +260,4 @@ export const generatePdf = async ({ formData }) => {
   }
   const fileName = formData.title ? `${formData.title}.pdf` : "form.pdf";
   doc.save(fileName);
-  
 };
