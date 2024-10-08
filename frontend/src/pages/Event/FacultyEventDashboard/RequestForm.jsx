@@ -1872,16 +1872,7 @@ const RequestForm = () => {
 
         {/* Buttons Container */}
         <div className="flex justify-between mt-4">
-          {/* Draft Button */}
-          <motion.button
-            type="button"
-            className="flex px-4 py-2 text-white bg-green-500 rounded-lg"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={handleDraft}
-          >
-            Save As Draft
-          </motion.button>
+          
 
           {/* Submit Button */}
           <motion.button

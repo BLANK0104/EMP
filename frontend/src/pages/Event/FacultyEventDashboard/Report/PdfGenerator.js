@@ -138,6 +138,14 @@ export const generatePdf = async ({ formData }) => {
     yOffset = 10;
   }
 
+  doc.text(`Additional Clubs: ${formData.clubs}`, 10, yOffset);
+  yOffset += 10;
+  if (yOffset > 280) {
+    // Check if we need to add a new page
+    doc.addPage();
+    yOffset = 10;
+  }
+
   // Add the faculty coordinators section
   doc.text("Faculty Coordinators:", 10, yOffset);
   yOffset += 10; // Add some space before listing the faculty coordinators

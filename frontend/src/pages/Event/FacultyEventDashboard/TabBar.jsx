@@ -62,7 +62,6 @@ const TabBar = () => {
   const tabs = [
     { id: "request", label: "Request" },
     { id: "report", label: "Report" },
-    { id: "draft", label: "Draft" },
   ];
 
   return (
