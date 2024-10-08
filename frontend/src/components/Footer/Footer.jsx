@@ -22,7 +22,7 @@ const Footer = ({ userName }) => {
   return (
     <footer
       id="foot"
-      className="bg-gradient-to-br from-red-800 to-brand-light dark:from-red-800 dark:to-brand-dark text-white p-4 z-20 mt-1"
+      className="bg-gradient-to-br from-red-800 to-brand-light dark:from-red-800 dark:to-brand-dark text-white p-4 z-10 mt-1"
     >
       <div className="flex flex-col md:flex-row justify-between px-4 sm:px-8 lg:px-16 space-y-8 md:space-y-0">
         {/* Logo and Event Management Portal Section */}
