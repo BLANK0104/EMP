@@ -208,6 +208,9 @@ const FormComponent = ({ onSubmit }) => {
         const result = await response.json();
         console.log("Form data submitted successfully:", result);
         onSubmit(formData);
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000); // Refresh the website 2 seconds after submitting the form
       } else {
         console.error("Failed to submit form data:", response.statusText);
       }
