@@ -69,6 +69,15 @@ const Footer = ({ userName }) => {
           </ul>
         </div>
 
+        {/* Guided By Section */}
+        <div className="w-full md:w-1/3 mb-6 text-left">
+          <h4 className="text-sm sm:text-base font-semibold mb-2 heading">Guided By</h4>
+          <div className="text-xs sm:text-sm">
+            <p>Prof. Piyush Kumar Soni</p>
+            <p>Professor at MPSTME, Shirpur</p>
+          </div>
+        </div>
+
         {/* Made By Section */}
         <div className="w-full md:w-1/3 mb-6 text-left">
           <h4 className="text-sm sm:text-base font-semibold mb-2 heading">Made By</h4>
