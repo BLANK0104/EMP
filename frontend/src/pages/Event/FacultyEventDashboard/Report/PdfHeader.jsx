@@ -97,8 +97,8 @@ export const PdfHeader = (doc, formData) => {
           const rightLogo = new Image();
           rightLogo.src = clubLogos[rightLogoPath] || "";
           rightLogo.onload = () => {
-            const rightLogoWidth = 30; // Adjust the size as needed
-            const rightLogoHeight = 30; // Adjust the size as needed
+            const rightLogoWidth = 20; // Adjust the size as needed
+            const rightLogoHeight = 20; // Adjust the size as needed
             const pageWidth = doc.internal.pageSize.getWidth();
             doc.addImage(
               rightLogo,

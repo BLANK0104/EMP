@@ -6,10 +6,31 @@ const getClubLogoPath = (clubName) => {
   return logoPath;
 };
 
+const readFileAsDataURL = (file) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+};
+
 export const generatePdf = async ({ formData }) => {
   const doc = new jsPDF();
 
   await PdfHeader(doc);
+
+  const clubLogoPath = getClubLogoPath(formData.cname);
+  try {
+    const response = await fetch(clubLogoPath);
+    if (response.ok) {
+      const imgData = await response.blob();
+      const logoDataUrl = await readFileAsDataURL(imgData);
+      doc.addImage(logoDataUrl, "JPEG", 160, 10, 30, 30);
+    }
+  } catch (error) {
+    console.error("Error fetching club logo:", error);
+  }
 
   // Centralize the title and make its font bigger
   doc.setFontSize(20);
@@ -17,22 +38,6 @@ export const generatePdf = async ({ formData }) => {
   doc.text(formData.title, doc.internal.pageSize.getWidth() / 2, 40, {
     align: "center",
   });
-
-  // Add the club logo if it exists
-  const clubLogoPath = getClubLogoPath(formData.cname);
-  try {
-    const response = await fetch(clubLogoPath);
-    if (response.ok) {
-      const imgData = await response.blob();
-      const reader = new FileReader();
-      reader.onload = () => {
-        doc.addImage(reader.result, "JPEG", 160, 10, 30, 30);
-      };
-      reader.readAsDataURL(imgData);
-    }
-  } catch (error) {
-    console.error("Error fetching club logo:", error);
-  }
 
   // Event type
   doc.setFontSize(16);
@@ -120,7 +125,6 @@ export const generatePdf = async ({ formData }) => {
     doc.addPage();
     yOffset = 10;
   }
-
 
   doc.text(`External Audience: ${formData.externalInput}`, 10, yOffset);
   yOffset += 10;
@@ -216,16 +220,6 @@ export const generatePdf = async ({ formData }) => {
   // Add the photos section
   doc.text("Here are a few glimpses from the event:", 10, yOffset);
   yOffset += 18; // Add some space before listing the photos
-
-  // Add photos to the PDF
-  const readFileAsDataURL = (file) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
-    });
-  };
 
   let photoCount = 0;
   for (const photo of formData.photos) {

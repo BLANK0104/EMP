@@ -210,7 +210,7 @@ const FormComponent = ({ onSubmit }) => {
         onSubmit(formData);
         setTimeout(() => {
           window.location.reload();
-        }, 2000); // Refresh the website 2 seconds after submitting the form
+        }, 4000); // Refresh the website 2 seconds after submitting the form
       } else {
         console.error("Failed to submit form data:", response.statusText);
       }
