@@ -144,8 +144,8 @@ const Request = ({ requests, selectedRequest, setSelectedRequest }) => {
                   {request.coordinator}
                 </td>
                 <td className="px-6 py-4 pl-4 whitespace-nowrap text-wrap max-w-36  text-center">
-                  {request.event_dates.length > 0 &&
-                  request.event_dates[0].venues.length > 0 ? (
+                  {request.event_dates && request.event_dates.length > 0 &&
+                  request.event_dates[0].venues && request.event_dates[0].venues.length > 0 ? (
                     <>
                       {request.event_dates[0].venues
                         .slice(0, 3)
@@ -272,8 +272,8 @@ const Request = ({ requests, selectedRequest, setSelectedRequest }) => {
             {/* Venue */}
             <p className="dark:text-gray-300">
               <strong>Venue:</strong>{" "}
-              {selectedRequest.event_dates.length > 0 &&
-              selectedRequest.event_dates[0].venues.length > 0
+              {selectedRequest.event_dates && selectedRequest.event_dates.length > 0 &&
+              selectedRequest.event_dates[0].venues && selectedRequest.event_dates[0].venues.length > 0
                 ? selectedRequest.event_dates[0].venues.join(", ")
                 : "N/A"}
             </p>
@@ -281,19 +281,19 @@ const Request = ({ requests, selectedRequest, setSelectedRequest }) => {
             {/* Event Start Date */}
             <p className="dark:text-gray-300">
               <strong>Event Start Date:</strong>{" "}
-              {selectedRequest.event_dates[0]?.date || "N/A"}
+              {selectedRequest.event_dates && selectedRequest.event_dates[0]?.date || "N/A"}
             </p>
 
             {/* Event Start Time */}
             <p className="dark:text-gray-300">
               <strong>Event Start Time:</strong>{" "}
-              {selectedRequest.event_dates[0]?.start_time || "N/A"}
+              {selectedRequest.event_dates && selectedRequest.event_dates[0]?.start_time || "N/A"}
             </p>
 
             {/* Event End Time */}
             <p className="dark:text-gray-300">
               <strong>Event End Time:</strong>{" "}
-              {selectedRequest.event_dates[0]?.end_time || "N/A"}
+              {selectedRequest.event_dates && selectedRequest.event_dates[0]?.end_time || "N/A"}
             </p>
 
             {/* Resources Required */}
