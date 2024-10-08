@@ -91,7 +91,7 @@ const Footer = ({ userName }) => {
         <div className="w-full md:w-1/3 mb-6 text-left">
           <h4 className="text-sm sm:text-base font-semibold mb-2 heading">Contact Us</h4>
           <p className="text-xs sm:text-base">
-            Email: <a href="mailto:info@example.com" className="text-white hover:underline">info@example.com</a>
+            Email: <a href="mailto:emsmptp.shripur@nmims.edu" className="text-white hover:underline">emsmptp.shripur@nmims.edu</a>
           </p>
 
           <h4 className="text-sm sm:text-base font-semibold mb-2 mt-4 heading">Follow Us</h4>
