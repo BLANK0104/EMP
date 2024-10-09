@@ -27,43 +27,44 @@ const Footer = ({ userName }) => {
       <div className="flex flex-col md:flex-row justify-between px-4 sm:px-8 lg:px-16 space-y-8 md:space-y-0">
         {/* Logo and Event Management Portal Section */}
         <div className="w-full md:w-1/3 mb-6 md:mb-0 flex items-start space-x-4">
-        <img
-          src={nmims}
-          alt="SVKM's NMIMS Logo"
-          className="h-16 rounded-md" 
-        />
-        <div className="flex flex-col justify-start align-middle">
-          <h2 className="text-2xl font-semibold mb-1">
-            <span className="whitespace-nowrap">Event Management</span>
-            <br />
-            <span className="whitespace-nowrap">Portal</span>
-          </h2>
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-          >
-            <div className="text-lg font-semibold mb-4 heading">About Us</div>
-            <p className="text-xs leading-snug mb-4">
-              We are six NMIMS Shirpur students, guided by Director Sunita R. Patil and Prof. Piyush Kumar Soni. We created the Event Management Portal (EMP) to improve event planning, ensuring seamless documentation and enhancing event experiences for students and staff.
-            </p>
-          </motion.div>
+          <img src={nmims} alt="SVKM's NMIMS Logo" className="h-16 rounded-md z-0" />
+          <div className="flex flex-col justify-start align-middle z-0">
+            <h2 className="text-2xl font-semibold mb-1 z-0">
+              <span className="whitespace-nowrap">Event Management</span>
+              <br />
+              <span className="whitespace-nowrap">Portal</span>
+            </h2>
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+            >
+              <div className="text-lg font-semibold mb-4 heading z-0">About Us</div>
+              <p className="text-xs leading-snug mb-4">
+                  A dedicated team from NMIMS Shirpur, guided by Director Sunita R. Patil and Prof. Piyush Kumar Soni, developed the Event Management Portal (EMP) to streamline event planning and coordination for faculty, deans, directors, and administrative members.
+                </p>
+            </motion.div>
+          </div>
         </div>
-      </div>
 
         {/* Quick Links Section */}
         <div className="w-full md:w-1/3 mb-6 md:mb-0 text-center md:text-left ml-28">
-          <h4 className="text-sm sm:text-base font-semibold mb-2 heading">Quick Links</h4>
+          <h4 className="text-sm sm:text-base font-semibold mb-2 heading z-0">Quick Links</h4>
           <ul className="space-y-2">
-            {["Events", "Clubs", "Calendar", "History"].map((link, index) => (
+            {[
+              { name: "Events", url: "/events" },
+              { name: "Clubs", url: "/clubs" },
+              { name: "Calendar", url: "/calendar" },
+              { name: "History", url: "/history" },
+            ].map((link, index) => (
               <motion.li
                 key={index}
                 whileHover={{ color: "#FFD700", scale: 1.1 }}
                 transition={{ duration: 0.3 }}
               >
-                {/* <a href={/${link.toLowerCase()}} className="text-xs transition-colors">
-                  {link}
-                </a> */}
+                <a href={link.url} className="text-xs transition-colors">
+                  {link.name}
+                </a>
               </motion.li>
             ))}
           </ul>
@@ -71,8 +72,8 @@ const Footer = ({ userName }) => {
 
         {/* Guided By Section */}
         <div className="w-full md:w-1/3 mb-6 text-left">
-          <h4 className="text-sm sm:text-base font-semibold mb-2 heading">Guided By</h4>
-          <div className="text-xs sm:text-sm">
+          <h4 className="text-sm sm:text-base font-semibold mb-2 heading z-0">Guided By</h4>
+          <div className="text-xs sm:text-sm z-0">
             <p>Prof. Piyush Kumar Soni</p>
             <p>Professor at MPSTME, Shirpur</p>
           </div>
@@ -80,13 +81,13 @@ const Footer = ({ userName }) => {
 
         {/* Made By Section */}
         <div className="w-full md:w-1/3 mb-6 text-left">
-          <h4 className="text-sm sm:text-base font-semibold mb-2 heading">Made By</h4>
-          <div className="grid grid-rows-6 gap-2">
+          <h4 className="text-sm sm:text-base font-semibold mb-2 heading z-0">Made By</h4>
+          <div className="grid grid-rows-6 gap-2 z-0">
             {madeByNames.map((person, index) => (
               <motion.div
                 key={index}
                 whileHover={{ color: "#FFD700", scale: 1.05 }}
-                className="text-xs sm:text-sm transition-colors"
+                className="text-xs sm:text-sm transition-colors z-0"
               >
                 <a href={person.link} className="hover:underline">
                   {person.name}
@@ -98,38 +99,38 @@ const Footer = ({ userName }) => {
 
         {/* Contact Us and Follow Us Section */}
         <div className="w-full md:w-1/3 mb-6 text-left">
-          <h4 className="text-sm sm:text-base font-semibold mb-2 heading">Contact Us</h4>
-          <p className="text-xs sm:text-base">
+          <h4 className="text-sm sm:text-base font-semibold mb-2 heading z-0">Contact Us</h4>
+          <p className="text-xs sm:text-base z-0">
             Email: <a href="mailto:emsmptp.shripur@nmims.edu" className="text-white hover:underline">emsmptp.shripur@nmims.edu</a>
           </p>
 
-          <h4 className="text-sm sm:text-base font-semibold mb-2 mt-4 heading">Follow Us</h4>
-          <div className="flex justify-start space-x-3 sm:space-x-4">
+          <h4 className="text-sm sm:text-base font-semibold mb-2 mt-4 heading z-0">Follow Us</h4>
+          <div className="flex justify-start space-x-3 sm:space-x-4 z-0">
             <a
               href="https://www.facebook.com/SHIRPUR.NMIMS/"
               aria-label="Facebook"
-              className="text-white text-xl sm:text-2xl hover:text-[#3b5998] transition-transform transform hover:scale-110"
+              className="text-white text-xl sm:text-2xl hover:text-[#3b5998] transition-transform transform hover:scale-110 z-0"
             >
               <FontAwesomeIcon icon={faFacebookF} />
             </a>
             <a
               href="https://www.youtube.com/@nmimsedu/videos"
               aria-label="YouTube"
-              className="text-white text-xl sm:text-2xl hover:text-[#FF0000] transition-transform transform hover:scale-110"
+              className="text-white text-xl sm:text-2xl hover:text-[#FF0000] transition-transform transform hover:scale-110 z-0"
             >
               <FontAwesomeIcon icon={faYoutube} />
             </a>
             <a
               href="https://www.instagram.com/nmimsshirpurcampus/"
               aria-label="Instagram"
-              className="text-white text-xl sm:text-2xl hover:text-[#C13584] transition-transform transform hover:scale-110"
+              className="text-white text-xl sm:text-2xl hover:text-[#C13584] transition-transform transform hover:scale-110 z-0"
             >
               <FontAwesomeIcon icon={faInstagram} />
             </a>
             <a
               href="https://www.linkedin.com/school/nmims-engineering/posts/?feedView=all"
               aria-label="LinkedIn"
-              className="text-white text-xl sm:text-2xl hover:text-[#0077B5] transition-transform transform hover:scale-110"
+              className="text-white text-xl sm:text-2xl hover:text-[#0077B5] transition-transform transform hover:scale-110 z-0"
             >
               <FontAwesomeIcon icon={faLinkedinIn} />
             </a>
@@ -138,10 +139,10 @@ const Footer = ({ userName }) => {
       </div>
 
       {/* Line above copyright */}
-      <hr className="border-t border-gray-400 my-4 mx-auto w-full md:w-2/3" />
+      <hr className="border-t border-gray-400 my-4 mx-auto w-full md:w-2/3 z-0" />
 
       {/* Copyright Section */}
-      <div className="text-center text-gray-300 text-xs sm:text-sm mt-4">
+      <div className="text-center text-gray-300 text-xs sm:text-sm mt-4 z-0">
         &copy; 2024 Event Management Portal NMIMS MPTP Shirpur.
       </div>
 
@@ -162,7 +163,7 @@ const Footer = ({ userName }) => {
           transition: width 0.3s ease;
         }
 
-        /*Animation endpoint */
+        /* Animation endpoint */
         .heading:hover::after {
           width: 70px;
         }
