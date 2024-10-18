@@ -79,7 +79,7 @@ const Header = () => {
   return (
     <header
       id="empBar"
-      className="shadow-md shadow-slate-400 dark:shadow-slate-700 flex justify-between items-center bg-gradient-to-br from-red-800 to-brand-light dark:from-red-800 dark:to-brand-dark text-white p-3 md:p-4 z-20 mb-1"
+      className="fixed top-0 left-0 right-0 shadow-md shadow-slate-400 dark:shadow-slate-700 flex justify-between items-center bg-gradient-to-r from-gray-900/70 to-gray-300/30 backdrop-blur-lg text-white p-3 md:p-4 z-20 mb-1"
     >
       {/* Sidebar Toggle (Mobile Only) */}
       <button
