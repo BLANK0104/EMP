@@ -96,6 +96,11 @@ const Report = ({ selectedReport, setSelectedReport }) => {
     }
   };
 
+  const truncateText = (text, maxLength) => {
+    if (!text) return "";
+    return text.length > maxLength ? text.substring(0, maxLength) + "..." : text;
+  };
+
   return (
     <div className={`p-4 `}>
       <div className="max-w-full ">
@@ -148,16 +153,16 @@ const Report = ({ selectedReport, setSelectedReport }) => {
                   {index + 1}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-center">
-                  {report.title}
+                  {truncateText(report.title, 15)}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-center">
-                  {report.clubs}
+                  {truncateText(report.clubs, 15)}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-center">
-                  {report.facultyCoordinator}
+                  {truncateText(report.facultyCoordinator, 15)}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-center">
-                  {report.venue}
+                  {truncateText(report.venue, 15)}
                 </td>
               </tr>
             ))}
