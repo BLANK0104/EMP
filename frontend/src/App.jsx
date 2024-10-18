@@ -3,6 +3,7 @@ import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import Sidebar from "./components/Sidebar/Sidebar";
 import { useState, useEffect } from "react";
+import './App.css';
 
 function App() {
   const location = useLocation();
@@ -27,7 +28,7 @@ function App() {
       {!hide && <Header />}
       <div className={`flex min-h-screen ${collapsed && !isMobile ? "sidebar-open" : ""}`}>
         {!hide && !settings && !isMobile && <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />}
-        <div className={hide || settings ? "flex-grow" : "flex-grow px-4 pt-2"}>
+        <div className={`main-content ${hide || settings ? "flex-grow" : "flex-grow px-4 pt-2"}`}>
           <Outlet />
         </div>
       </div>
