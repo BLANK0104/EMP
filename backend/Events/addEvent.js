@@ -17,18 +17,8 @@ const addEvent = async ({
   registration,
   directorRequest,
 }) => {
-  console.log("created_by value:", created_by); // Debugging statement
-  console.log("title:", title);
-  console.log("description:", description);
-  console.log("currentApprover:", currentApprover);
-  console.log("eventDates:", eventDates);
-  console.log("school:", school);
-  console.log("audience:", audience);
-  console.log("clubs:", clubs);
-  console.log("resources:", resources);
-  console.log(eventType, objectives);
-
   const client = await db.getClient();
+
   try {
     await client.query("BEGIN");
 
@@ -42,8 +32,7 @@ const addEvent = async ({
     const result = await client.query(eventQuery, eventParams);
     const eventId = result.rows[0].id;
 
-    // Insert event approval details into EventApprovals table
-
+    // Insert event approval details for current approver (Dean)
     const eventApprovalQuery = `
       INSERT INTO eventapprovals (event_id, approver_id, status, created_at, updated_at)
       VALUES ($1, $2, 'Pending', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
@@ -51,13 +40,17 @@ const addEvent = async ({
     const eventApprovalParams = [eventId, currentApprover];
     await client.query(eventApprovalQuery, eventApprovalParams);
 
+    // Insert event approval details for Director, if applicable
+    if (directorRequest !== null) {
+      const directorApprovalParams = [eventId, directorRequest];
+      await client.query(eventApprovalQuery, directorApprovalParams);
+    }
+
     // Insert event details into event_details table
     const eventDetailsQuery = `
       INSERT INTO event_details (event_id, title, description, event_dates, school_audience, audience, clubs, resources, created_at, updated_at, eventtype, objectives, guests, registration)
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, $9, $10, $11, $12);
     `;
-
-    // Update the eventDetailsParams to use the corrected arrays
     const eventDetailsParams = [
       eventId,
       title,
@@ -65,104 +58,80 @@ const addEvent = async ({
       eventDates,
       school,
       audience,
-      clubs, // Use finalClubs here
+      clubs,
       resources,
-      eventType, // Use finalEventType here
+      eventType,
       objectives,
       guests,
       registration,
     ];
     await client.query(eventDetailsQuery, eventDetailsParams);
 
-    //director
-    if (directorRequest !== null) {
-      const eventApprovalQuery = `
-      INSERT INTO eventapprovals (event_id, approver_id, status, created_at, updated_at)
-      VALUES ($1, $2, 'Pending', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+    // Fetch emails of approvers and the user who created the event
+    const userQuery = `
+      SELECT id, email, username FROM users WHERE id = ANY($1::int[]);
     `;
-      const eventApprovalParams = [eventId, directorRequest];
-      await client.query(eventApprovalQuery, eventApprovalParams);
+    const approverIds = [currentApprover];
+    if (directorRequest) approverIds.push(directorRequest);
+    approverIds.push(created_by); // Include the event creator's ID
 
-      const notificationQuery = `
-      INSERT INTO Notification (user_id, event_id, notification_type, message, sent_at)
-      VALUES ($1, $2, 'Approval_Required', 'You have a new event titled "${title}" awaiting your approval.', CURRENT_TIMESTAMP);
-    `;
-      const notificationParams = [directorRequest, eventId];
-      await client.query(notificationQuery, notificationParams);
+    const userResult = await client.query(userQuery, [approverIds]);
+    const userEmails = userResult.rows.reduce((acc, row) => {
+      acc[row.id] = { email: row.email, username: row.username };
+      return acc;
+    }, {});
 
-      // Send notification email to the approver
-      const userQuery = `
-      SELECT email, username FROM Users WHERE id = $1;
-    `;
-      const userResult = await client.query(userQuery, [directorRequest]);
-      const approverEmail = userResult.rows[0].email;
-      const username = userResult.rows[0].username;
+    const createdUser = userEmails[created_by];
+    const deanApprover = userEmails[currentApprover];
+    const directorApprover = directorRequest
+      ? userEmails[directorRequest]
+      : null;
 
+    // Send notifications to Dean and Director (if applicable)
+    await sendNotification(
+      deanApprover.email,
+      "New Event Approval Required",
+      `You have a new event titled "${title}" awaiting your approval.`
+    );
+
+    if (directorApprover) {
       await sendNotification(
-        approverEmail,
+        directorApprover.email,
         "New Event Approval Required",
         `You have a new event titled "${title}" awaiting your approval.`
       );
-      const createdUserEmail = `select email from users where id = $1`;
-      const createdUserParams = [created_by];
-      const responseUser = await client.query(
-        createdUserEmail,
-        createdUserParams
-      );
-      const createdUser = responseUser.rows[0].email;
-
-      // Email sent to Faculty/central Authority
-      await sendNotification(
-        createdUser,
-        "New Event Created",
-        `Dear respected sir/ma'am,
-        Your event titled "${title}" has been Created and has been sent successfully to ${username}.`
-      );
     }
 
-    // Insert notification for the approver
+    // Notify the user who created the event
+    await sendNotification(
+      createdUser.email,
+      "New Event Created",
+      `Your event titled "${title}" has been created and sent to ${
+        deanApprover.username
+      }${
+        directorApprover ? ` and ${directorApprover.username}` : ""
+      } for approval.`
+    );
+
+    // Insert notifications into Notification table for both Dean and Director
     const notificationQuery = `
       INSERT INTO Notification (user_id, event_id, notification_type, message, sent_at)
-      VALUES ($1, $2, 'Approval_Required', 'You have a new event titled "${title}" awaiting your approval.', CURRENT_TIMESTAMP);
+      VALUES ($1, $2, 'Approval_Required', 'You have a new event titled "${title}" awaiting your approval.', CURRENT_TIMESTAMP)
     `;
-    const notificationParams = [currentApprover, eventId];
-    await client.query(notificationQuery, notificationParams);
+    const notifications = [
+      [currentApprover, eventId],
+      ...(directorRequest ? [[directorRequest, eventId]] : []),
+    ];
 
-    // Send notification email to the approver
-    const userQuery = `
-      SELECT email, username FROM Users WHERE id = $1;
-    `;
-    const userResult = await client.query(userQuery, [currentApprover]);
-    const approverEmail = userResult.rows[0].email;
-    const username = userResult.rows[0].username;
-
-    await sendNotification(
-      approverEmail,
-      "New Event Approval Required",
-      `Dear respected sir/ma'am,
-      You have a new event titled "${title}" awaiting your approval.`
-    );
-    const createdUserEmail = `select email from users where id = $1`;
-    const createdUserParams = [created_by];
-    const responseUser = await client.query(
-      createdUserEmail,
-      createdUserParams
-    );
-    const createdUser = responseUser.rows[0].email;
-
-    // Email sent to Faculty/central Authority
-    await sendNotification(
-      createdUser,
-      "New Event Created",
-      `Dear respected sir/ma'am,
-        Your event titled "${title}" has been Created and has been sent successfully to ${username}.`
-    );
+    for (const notification of notifications) {
+      await client.query(notificationQuery, notification);
+    }
 
     await client.query("COMMIT");
-    console.log("An event has been created and event details stored.");
+    console.log("Event created and notifications sent.");
   } catch (err) {
     await client.query("ROLLBACK");
-    console.error("An error occurred during adding new event: ", err);
+    console.error("Error during event creation: ", err);
     throw err;
   } finally {
     client.release();

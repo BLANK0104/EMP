@@ -147,7 +147,7 @@ app.post(
     const directorResult = await db.query(directorQuery, [currentApprover]);
     if (directorResult.rows[0].role !== "director") {
       const query = "select approver from request_assign where created_by = $1";
-      const result = await db.query(query, [id]);
+      const result = await db.query(query, [currentApprover]);
       directorRequest = result.rows[0].approver;
     }
 
@@ -159,7 +159,6 @@ app.post(
       audience,
       resources,
       clubs,
-      eventDates,
       school_audience,
       currentApprover,
       directorRequest,

@@ -22,29 +22,29 @@ const Available = async (date, startTime, endTime, venues, req, res) => {
   // SQL query to get events that overlap with the selected date and time for the specific venues
   const checkVenueQuery = `
     SELECT 
-      event_detail->>'venues' AS venue,
-      e.status,
-      COUNT(*) FILTER (WHERE e.status = 'Pending') AS pending_count
-      
-    FROM 
-      event_details ed
-    JOIN 
-      jsonb_array_elements(ed.event_dates) AS event_detail ON TRUE
-    JOIN 
-      events e ON ed.event_id = e.id
-    WHERE 
-      event_detail->>'date' = $1  
-      AND (
-          ($2 BETWEEN event_detail->>'start_time' AND event_detail->>'end_time')
-          OR ($3 BETWEEN event_detail->>'start_time' AND event_detail->>'end_time')
-          OR (event_detail->>'start_time' BETWEEN $2 AND $3)
-      )
-      AND EXISTS (
-          SELECT 1 FROM jsonb_array_elements_text(event_detail->'venues') AS v
-          WHERE v = ANY($4)
-      )
-    GROUP BY 
-      venue, e.status;
+    event_detail->>'venues' AS venue,
+    e.status,
+    COUNT(*) FILTER (WHERE e.status = 'Pending') AS pending_count
+FROM 
+    event_details ed
+JOIN 
+    jsonb_array_elements(ed.event_dates) AS event_detail ON TRUE
+JOIN 
+    events e ON ed.event_id = e.id
+WHERE 
+    event_detail->>'date' = $1  
+    AND (
+        ($2::time BETWEEN (event_detail->>'start_time')::time AND (event_detail->>'end_time')::time)
+        OR ($3::time BETWEEN (event_detail->>'start_time')::time AND (event_detail->>'end_time')::time)
+        OR ((event_detail->>'start_time')::time BETWEEN $2::time AND $3::time)
+    )
+    AND EXISTS (
+        SELECT 1 FROM jsonb_array_elements_text(event_detail->'venues') AS v
+        WHERE v = ANY($4::text[])
+    )
+GROUP BY 
+    venue, e.status;
+
   `;
 
   try {
