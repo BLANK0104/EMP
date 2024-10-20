@@ -42,6 +42,10 @@ const Login = () => {
     checkAuth();
   }, [navigate]);
 
+  useEffect(() => {
+    window.scrollTo(0, document.body.scrollHeight);
+  }, []);
+
   if (isAuthenticated === null) {
     return <div>Loading...</div>;
   }
@@ -76,7 +80,7 @@ const Login = () => {
   };
 
   return (
-    <div className="bg-nmims bg-cover bg-center min-h-screen flex items-center justify-center relative backdrop-blur-sm">
+    <div className="login-page bg-nmims bg-cover bg-center min-h-screen flex items-center justify-center relative backdrop-blur-sm">
       {/* Overlay */}
       <div className="absolute inset-0 bg-white opacity-20"></div>
       <div className="absolute top-2 right-3">
@@ -90,7 +94,7 @@ const Login = () => {
           </Link>
         </div>
       </div>
-
+  
       {/* Form Container */}
       <div className="relative z-10 bg-white rounded-lg shadow-gray-700 shadow-2xl p-10 flex flex-col items-center justify-center w-80 max-w-full font-serif">
         <img src="nmims.svg" alt="nmims-logo" className="mb-4" />

@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ClubSelector from './ClubSelector';
 import TableView from './TableView';
 import PopupView from './PopupView';
+import Header from '../../components/Header/Header';
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000/api";
 
@@ -11,7 +12,16 @@ const MainApp = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [isPopupOpen, setIsPopupOpen] = useState(false); // For popup visibility
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    document.body.className = isDarkMode ? 'dark-mode' : 'light-mode';
+  }, [isDarkMode]);
+
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+  };
 
   const tables = [
     { value: 'app_development_club', label: 'App Development Club' },
@@ -75,14 +85,15 @@ const MainApp = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+    <div className={`flex flex-col items-center justify-center min-h-screen p-4 ${isDarkMode ? 'text-white' : 'text-black'}`}>
+      <Header isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />
       <ClubSelector
         selectedTable={selectedTable}
         setSelectedTable={setSelectedTable}
         tables={tables}
       />
       <button
-        className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 mt-4"
+        className="w-1/8 bg-red-500 text-white py-1 px-2 rounded hover:bg-red-600 mt-4"
         onClick={fetchData}
         disabled={loading}
       >

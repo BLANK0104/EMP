@@ -116,6 +116,9 @@ const Request = ({ requests, selectedRequest, setSelectedRequest }) => {
               Club
             </th>
             <th className="px-2 py-1 border-b text-center bg-red-100 dark:bg-red-900 text-xs md:text-base">
+              Dean Status
+            </th>
+            <th className="px-2 py-1 border-b text-center bg-red-100 dark:bg-red-900 text-xs md:text-base">
               Faculty Coordinator
             </th>
             <th className="px-2 py-1 border-b text-center bg-red-100 dark:bg-red-900 text-xs md:text-base">
@@ -142,6 +145,9 @@ const Request = ({ requests, selectedRequest, setSelectedRequest }) => {
                 </td>
                 <td className="px-6 py-4 pl-4 whitespace-nowrap text-center">
                   {request.coordinator}
+                </td>
+                <td className="px-6 py-4 pl-4 whitespace-nowrap text-center">
+                  {request.dean_status}
                 </td>
                 <td className="px-6 py-4 pl-4 whitespace-nowrap text-wrap max-w-36  text-center">
                   {request.event_dates && request.event_dates.length > 0 &&
@@ -173,7 +179,7 @@ const Request = ({ requests, selectedRequest, setSelectedRequest }) => {
             ))
           ) : (
             <tr>
-              <td colSpan="5" className="px-6 py-4 text-center">
+              <td colSpan="6" className="px-6 py-4 text-center">
                 No requests available
               </td>
             </tr>
