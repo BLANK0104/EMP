@@ -142,6 +142,14 @@ app.post(
     if (currentApproverQuery.rows.length > 0) {
       currentApprover = currentApproverQuery.rows[0].approver;
     }
+    let directorRequest = null;
+    const directorQuery = `select role from users where id = $1`;
+    const directorResult = await db.query(directorQuery, [currentApprover]);
+    if (directorResult.rows[0].role !== "director") {
+      const query = "select approver from request_assign where created_by = $1";
+      const result = await db.query(query, [id]);
+      directorRequest = result.rows[0].approver;
+    }
 
     // console.log("CurrentApprover:", currentApprover);
     console.log(
@@ -154,6 +162,7 @@ app.post(
       eventDates,
       school_audience,
       currentApprover,
+      directorRequest,
       eventType,
       objectives,
       guests,
@@ -175,6 +184,7 @@ app.post(
         objectives: objectives,
         guests: guests,
         registration: registration,
+        directorRequest: directorRequest,
       });
       return res
         .status(201)

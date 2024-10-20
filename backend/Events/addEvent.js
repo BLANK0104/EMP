@@ -15,6 +15,7 @@ const addEvent = async ({
   objectives,
   guests,
   registration,
+  directorRequest,
 }) => {
   console.log("created_by value:", created_by); // Debugging statement
   console.log("title:", title);
@@ -42,6 +43,7 @@ const addEvent = async ({
     const eventId = result.rows[0].id;
 
     // Insert event approval details into EventApprovals table
+
     const eventApprovalQuery = `
       INSERT INTO eventapprovals (event_id, approver_id, status, created_at, updated_at)
       VALUES ($1, $2, 'Pending', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
@@ -71,6 +73,52 @@ const addEvent = async ({
       registration,
     ];
     await client.query(eventDetailsQuery, eventDetailsParams);
+
+    //director
+    if (directorRequest !== null) {
+      const eventApprovalQuery = `
+      INSERT INTO eventapprovals (event_id, approver_id, status, created_at, updated_at)
+      VALUES ($1, $2, 'Pending', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+    `;
+      const eventApprovalParams = [eventId, directorRequest];
+      await client.query(eventApprovalQuery, eventApprovalParams);
+
+      const notificationQuery = `
+      INSERT INTO Notification (user_id, event_id, notification_type, message, sent_at)
+      VALUES ($1, $2, 'Approval_Required', 'You have a new event titled "${title}" awaiting your approval.', CURRENT_TIMESTAMP);
+    `;
+      const notificationParams = [directorRequest, eventId];
+      await client.query(notificationQuery, notificationParams);
+
+      // Send notification email to the approver
+      const userQuery = `
+      SELECT email, username FROM Users WHERE id = $1;
+    `;
+      const userResult = await client.query(userQuery, [directorRequest]);
+      const approverEmail = userResult.rows[0].email;
+      const username = userResult.rows[0].username;
+
+      await sendNotification(
+        approverEmail,
+        "New Event Approval Required",
+        `You have a new event titled "${title}" awaiting your approval.`
+      );
+      const createdUserEmail = `select email from users where id = $1`;
+      const createdUserParams = [created_by];
+      const responseUser = await client.query(
+        createdUserEmail,
+        createdUserParams
+      );
+      const createdUser = responseUser.rows[0].email;
+
+      // Email sent to Faculty/central Authority
+      await sendNotification(
+        createdUser,
+        "New Event Created",
+        `Dear respected sir/ma'am,
+        Your event titled "${title}" has been Created and has been sent successfully to ${username}.`
+      );
+    }
 
     // Insert notification for the approver
     const notificationQuery = `
