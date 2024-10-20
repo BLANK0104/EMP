@@ -28,6 +28,9 @@ const FormComponent = ({ onSubmit }) => {
     classes: [],
     years: [],
     clubs: "",
+    externalInput: "",
+    cname: "" // Initialize cname as an empty string
+    
   });
 
   const [event_id, setEventId] = useState(null); // Initialize event_id separately
@@ -80,14 +83,17 @@ const FormComponent = ({ onSubmit }) => {
         branches: data.school_audience?.branch || [],
         classes: data.school_audience?.class || [],
         years: data.school_audience?.year || [],
+        externalInput: data.school_audience?.externalInput || "", // Corrected line
         event_id: event_id, // Set event_id after fetching
         fname: data.coordinator || "",
-        cname: data.username
+        cname: data.username,
+        facultyCoordinators: [{ name: data.coordinator || "" }] // Update facultyCoordinators
       }));
     }
   }, [data, event_id]); // Runs whenever data or event_id changes
 
   console.log("formData", formData);
+  //console.log("externalInput", data?.externalInput);
 
   const [isEditMode, setIsEditMode] = useState(false);
 
@@ -202,6 +208,9 @@ const FormComponent = ({ onSubmit }) => {
         const result = await response.json();
         console.log("Form data submitted successfully:", result);
         onSubmit(formData);
+        setTimeout(() => {
+          window.location.reload();
+        }, 4000); // Refresh the website 2 seconds after submitting the form
       } else {
         console.error("Failed to submit form data:", response.statusText);
       }
@@ -655,13 +664,13 @@ const FormComponent = ({ onSubmit }) => {
         <input
           type="checkbox"
           name="classes"
-          value="Agriculture"
-          checked={formData.classes.includes("Agriculture")}
+          value="AGRICULTURE"
+          checked={formData.classes.includes("AGRICULTURE")}
           onChange={(e) => handleCheckboxChange(e, "classes")}
           className="mr-2"
           disabled={!isEditMode}
         />
-        Agriculture
+        AGRICULTURE
       </label>
     </div>
   </div>
@@ -722,6 +731,20 @@ const FormComponent = ({ onSubmit }) => {
     </div>
   </div>
 )}
+
+
+<div className="mt-4">
+              <label className="block font-semibold mb-2 text-gray-700 dark:text-gray-300">
+                External Audience 
+              </label>
+              <input
+                type="text"
+                value={formData.externalInput}
+                className="w-full px-4 py-2 border rounded-lg bg-white border-gray-300 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
+                placeholder=" external audience"
+                disabled={!isEditMode}
+              />
+            </div>
         <label>Audience description:</label>
         <input
           type="text"
@@ -792,9 +815,10 @@ const FormComponent = ({ onSubmit }) => {
           <label>Faculty Coordinators:</label>
           {formData.facultyCoordinators.map((coordinator, index) => (
             <div key={index}>
+              {console.log("coordinator.name:", coordinator.name)}
               <input
                 type="text"
-                name={"formData.fname"}
+                name={`facultyCoordinators[${index}].name`}
                 value={coordinator.name}
                 onChange={(e) =>
                   handleCoordinatorChange("facultyCoordinators", index, e)

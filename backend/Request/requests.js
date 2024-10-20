@@ -9,6 +9,7 @@ const requests = async (id) => {
     ed.description,
     e.created_by, 
     e.created_at,
+    u.coordinator,
     u.username,
     ed.event_dates, 
     ed.school_audience, 

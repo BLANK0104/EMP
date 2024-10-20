@@ -38,6 +38,11 @@ VALUES
 ('FLAVIUM', 'FLAVIUM_MPSTME.shirpur@nmims.edu', '$2a$10$4qTzgZdVtr7NnecdCPBu9.zbm.wMCpJ5eSq5Z3OF4wABFygzYiMEa', 'faculty'),
 ('AMBIORA - Technical Event', 'AMBIORA_MPSTME.shirpur@nmims.edu', '$2a$10$4qTzgZdVtr7NnecdCPBu9.zbm.wMCpJ5eSq5Z3OF4wABFygzYiMEa', 'faculty'),
 ('PROTSAHAN', 'PROTSAHAN_MPSTME.shirpur@nmims.edu', '$2a$10$4qTzgZdVtr7NnecdCPBu9.zbm.wMCpJ5eSq5Z3OF4wABFygzYiMEa', 'faculty');
+('Sunita Patil', 'sunita.patil@nmims.edu', '$2a$10$4qTzgZdVtr7NnecdCPBu9.zbm.wMCpJ5eSq5Z3OF4wABFygzYiMEa', 'director')
+('Venkatadri Marriboyina', 'venkatadri.marriboyina@nmims.edu', '$2a$10$4qTzgZdVtr7NnecdCPBu9.zbm.wMCpJ5eSq5Z3OF4wABFygzYiMEa', 'dean')
+('Shyam Pancholi', 'shyam.pancholi@nmims.edu', '$2a$10$4qTzgZdVtr7NnecdCPBu9.zbm.wMCpJ5eSq5Z3OF4wABFygzYiMEa', 'director')
+--('Sunita Patil', 'sunita.patil@nmims.edu', '$2a$10$4qTzgZdVtr7NnecdCPBu9.zbm.wMCpJ5eSq5Z3OF4wABFygzYiMEa', 'director')
+
 
 
 -- Alter the table to change the size of username to varchar(100)

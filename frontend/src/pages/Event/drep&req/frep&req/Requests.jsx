@@ -144,8 +144,8 @@ const Request = ({ requests, selectedRequest, setSelectedRequest }) => {
                   {request.coordinator}
                 </td>
                 <td className="px-6 py-4 pl-4 whitespace-nowrap text-wrap max-w-36  text-center">
-                  {request.event_dates.length > 0 &&
-                  request.event_dates[0].venues.length > 0 ? (
+                  {request.event_dates && request.event_dates.length > 0 &&
+                  request.event_dates[0].venues && request.event_dates[0].venues.length > 0 ? (
                     <>
                       {request.event_dates[0].venues
                         .slice(0, 3)
@@ -217,63 +217,107 @@ const Request = ({ requests, selectedRequest, setSelectedRequest }) => {
             <p className="dark:text-gray-300">
               <strong>Target Audience:</strong> {selectedRequest.TAudience}
             </p>
-            <p className="dark:text-gray-300 ml-24">
-              <strong>Branch:</strong> {selectedRequest.school_audience.branch}
-            </p>
-            <p className="dark:text-gray-300 ml-24">
-              <strong>Classes:</strong> {selectedRequest.school_audience.class}
-            </p>
-            <p className="dark:text-gray-300 ml-24">
-              <strong>Year:</strong> {selectedRequest.school_audience.year}
-            </p>
+            {/* Branch */}
+            {selectedRequest.school_audience.branch &&
+              selectedRequest.school_audience.branch.length > 0 && (
+                <p className="dark:text-gray-300 ml-24">
+                  <strong>Branch:</strong>{" "}
+                  {selectedRequest.school_audience.branch.join(", ")}
+                </p>
+              )}
+
+            {/* Classes */}
+            {selectedRequest.school_audience.class &&
+              selectedRequest.school_audience.class.length > 0 && (
+                <p className="dark:text-gray-300 ml-24">
+                  <strong>Classes:</strong>{" "}
+                  {selectedRequest.school_audience.class.join(", ")}
+                </p>
+              )}
+
+            {/* Year */}
+            {selectedRequest.school_audience.year &&
+              selectedRequest.school_audience.year.length > 0 && (
+                <p className="dark:text-gray-300 ml-24">
+                  <strong>Year:</strong>{" "}
+                  {selectedRequest.school_audience.year.join(", ")}
+                </p>
+              )}
+
+            {/* External Audience */}
+            {selectedRequest.school_audience.externalInput &&
+              selectedRequest.school_audience.externalInput.length > 0 && (
+                <p className="dark:text-gray-300 ml-24">
+                  <strong>External Audience:</strong>{" "}
+                  {selectedRequest.school_audience.externalInput}
+                </p>
+              )}
+
+            {/* Max Audience */}
             <p className="dark:text-gray-300">
-              <strong>Max Audience:</strong> {selectedRequest.audience}
+              <strong>Max Audience:</strong> {selectedRequest.audience || "N/A"}
             </p>
+
+            {/* Club */}
             <p className="dark:text-gray-300">
-              <strong>Club:</strong> {selectedRequest.username}
+              <strong>Club:</strong> {selectedRequest.username || "N/A"}
             </p>
+
+            {/* Faculty Coordinator */}
             <p className="dark:text-gray-300">
               <strong>Faculty Coordinator:</strong>{" "}
-              {selectedRequest.coordinator}
+              {selectedRequest.coordinator || "N/A"}
             </p>
+
+            {/* Venue */}
             <p className="dark:text-gray-300">
               <strong>Venue:</strong>{" "}
-              {selectedRequest.event_dates.length > 0 &&
-              selectedRequest.event_dates[0].venues.length > 0
-                ? selectedRequest.event_dates[0].venues.map((venue, index) => (
-                    <span key={index}>
-                      {venue}
-                      {index < selectedRequest.event_dates[0].venues.length - 1
-                        ? ", "
-                        : ""}
+              {selectedRequest.event_dates && selectedRequest.event_dates.length > 0 &&
+              selectedRequest.event_dates[0].venues && selectedRequest.event_dates[0].venues.length > 0
+                ? selectedRequest.event_dates[0].venues.join(", ")
+                : "N/A"}
+            </p>
+
+            {/* Event Start Date */}
+            <p className="dark:text-gray-300">
+              <strong>Event Start Date:</strong>{" "}
+              {selectedRequest.event_dates && selectedRequest.event_dates[0]?.date || "N/A"}
+            </p>
+
+            {/* Event Start Time */}
+            <p className="dark:text-gray-300">
+              <strong>Event Start Time:</strong>{" "}
+              {selectedRequest.event_dates && selectedRequest.event_dates[0]?.start_time || "N/A"}
+            </p>
+
+            {/* Event End Time */}
+            <p className="dark:text-gray-300">
+              <strong>Event End Time:</strong>{" "}
+              {selectedRequest.event_dates && selectedRequest.event_dates[0]?.end_time || "N/A"}
+            </p>
+
+            {/* Resources Required */}
+            <p className="dark:text-gray-300">
+              <strong>Resources Required:</strong>{" "}
+              {Array.isArray(selectedRequest.resources) &&
+              selectedRequest.resources.length > 0
+                ? selectedRequest.resources.join(", ")
+                : "N/A"}
+            </p>
+
+            {/* Collaborators */}
+            <p className="dark:text-gray-300">
+              <strong>Clubs Collaborators:</strong>{" "}
+              {selectedRequest.clubs && selectedRequest.clubs.length > 0
+                ? selectedRequest.clubs.map((club, idx) => (
+                    <span key={idx}>
+                      {idx + 1}. {club}
+                      <br />
                     </span>
                   ))
                 : "N/A"}
             </p>
-            <p className="dark:text-gray-300">
-              <strong>Event Start Date:</strong>{" "}
-              {selectedRequest.event_dates[0]?.date}
-            </p>
-            <p className="dark:text-gray-300">
-              <strong>Event Start Time:</strong>{" "}
-              {selectedRequest.event_dates[0]?.start_time}
-            </p>
-            <p className="dark:text-gray-300">
-              <strong>Event End Time:</strong>{" "}
-              {selectedRequest.event_dates[0]?.end_time}
-            </p>
-            <p className="dark:text-gray-300">
-              <strong>Resources Required:</strong> {selectedRequest.resources}
-            </p>
-            <p className="dark:text-gray-300">
-              <strong>Collaborators:</strong>{" "}
-              {selectedRequest.clubs.map((club, idx) => (
-                <span key={idx}>
-                  {idx + 1}. {club}
-                  <br />
-                </span>
-              ))}
-            </p>
+
             <div className="mt-4">
               <button
                 className="bg-green-500 text-white px-4 py-2 rounded mr-2"

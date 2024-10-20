@@ -1,10 +1,36 @@
 import jsPDF from "jspdf";
 import { PdfHeader } from "./PdfHeader";
 
+const getClubLogoPath = (clubName) => {
+  const logoPath = `/public/Club_logo/${clubName}.jpg`;
+  return logoPath;
+};
+
+const readFileAsDataURL = (file) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+};
+
 export const generatePdf = async ({ formData }) => {
   const doc = new jsPDF();
 
   await PdfHeader(doc);
+
+  const clubLogoPath = getClubLogoPath(formData.cname);
+  try {
+    const response = await fetch(clubLogoPath);
+    if (response.ok) {
+      const imgData = await response.blob();
+      const logoDataUrl = await readFileAsDataURL(imgData);
+      doc.addImage(logoDataUrl, "JPEG", 160, 10, 30, 30);
+    }
+  } catch (error) {
+    console.error("Error fetching club logo:", error);
+  }
 
   // Centralize the title and make its font bigger
   doc.setFontSize(20);
@@ -12,9 +38,11 @@ export const generatePdf = async ({ formData }) => {
   doc.text(formData.title, doc.internal.pageSize.getWidth() / 2, 40, {
     align: "center",
   });
-  //Event type
+
+  // Event type
   doc.setFontSize(16);
   doc.text(`Event Type: ${formData.type}`, 10, 50);
+
   // Add the guest speakers/judges/mentors section
   doc.setFontSize(12);
   let yOffset = 60;
@@ -76,14 +104,14 @@ export const generatePdf = async ({ formData }) => {
   }
 
   // Add the school, branch, and year fields
-  doc.text(`School: ${formData.school}`, 10, yOffset);
+  doc.text(`School: ${formData.schools}`, 10, yOffset);
   yOffset += 10;
   if (yOffset > 280) {
     // Check if we need to add a new page
     doc.addPage();
     yOffset = 10;
   }
-  doc.text(`Branch: ${formData.branch}`, 10, yOffset);
+  doc.text(`Branch: ${formData.branches}`, 10, yOffset);
   yOffset += 10;
   if (yOffset > 280) {
     // Check if we need to add a new page
@@ -91,6 +119,30 @@ export const generatePdf = async ({ formData }) => {
     yOffset = 10;
   }
   doc.text(`Year: ${formData.years}`, 10, yOffset);
+  yOffset += 10;
+  if (yOffset > 280) {
+    // Check if we need to add a new page
+    doc.addPage();
+    yOffset = 10;
+  }
+
+  doc.text(`External Audience: ${formData.externalInput}`, 10, yOffset);
+  yOffset += 10;
+  if (yOffset > 280) {
+    // Check if we need to add a new page
+    doc.addPage();
+    yOffset = 10;
+  }
+  // Add the cname field
+  doc.text(`Club Name: ${formData.cname}`, 10, yOffset);
+  yOffset += 10;
+  if (yOffset > 280) {
+    // Check if we need to add a new page
+    doc.addPage();
+    yOffset = 10;
+  }
+
+  doc.text(`Additional Clubs: ${formData.clubs}`, 10, yOffset);
   yOffset += 10;
   if (yOffset > 280) {
     // Check if we need to add a new page
@@ -169,16 +221,6 @@ export const generatePdf = async ({ formData }) => {
   doc.text("Here are a few glimpses from the event:", 10, yOffset);
   yOffset += 18; // Add some space before listing the photos
 
-  // Add photos to the PDF
-  const readFileAsDataURL = (file) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
-    });
-  };
-
   let photoCount = 0;
   for (const photo of formData.photos) {
     try {
@@ -220,5 +262,4 @@ export const generatePdf = async ({ formData }) => {
   }
   const fileName = formData.title ? `${formData.title}.pdf` : "form.pdf";
   doc.save(fileName);
-  
 };

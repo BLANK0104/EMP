@@ -139,7 +139,8 @@ const addEvent = async ({
     await sendNotification(
       approverEmail,
       "New Event Approval Required",
-      `You have a new event titled "${title}" awaiting your approval.`
+      `Dear respected sir/ma'am,
+      You have a new event titled "${title}" awaiting your approval.`
     );
     const createdUserEmail = `select email from users where id = $1`;
     const createdUserParams = [created_by];
