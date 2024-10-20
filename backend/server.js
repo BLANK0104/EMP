@@ -29,6 +29,30 @@ const clubs = require("./Clubs/clubs");
 const app = express();
 const PORT = 5000;
 
+
+// Set up multer to save files in the 'public/reports' directory
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, path.join(__dirname, 'public', 'reports'));
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, file.originalname);
+//   }
+// });
+
+// const upload = multer({ storage });
+
+// app.post('/api/upload', upload.single('file'), (req, res) => {
+//   if (!req.file) {
+//     return res.status(400).send('No file uploaded.');
+//   }
+//   res.send('File uploaded successfully.');
+// });
+
+// app.listen(3000, () => {
+//   console.log('Server is running on port 3000');
+// });
+
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", req.headers.origin);
   res.header("Access-Control-Allow-Credentials", "true");
@@ -228,15 +252,15 @@ app.get(
   authenticateToken,
   authorizedRole(["dean", "director"]),
   async (req, res) => {
-    console.log("Request received at /api/reporttab");
+   // console.log("Request received at /api/reporttab");
     const { id } = req.user;
-    console.log(`User ID: ${id}`);
+   // console.log(`User ID: ${id}`);
     try {
       const response = await reporttab(id);
-      console.log("Report generated successfully");
+    //  console.log("Report generated successfully");
       res.json(response);
     } catch (error) {
-      console.error("Error generating report:", error);
+     // console.error("Error generating report:", error);
       res.status(500).json({ error: "Internal Server Error" });
     }
   }

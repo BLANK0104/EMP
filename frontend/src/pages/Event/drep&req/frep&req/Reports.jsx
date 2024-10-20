@@ -54,6 +54,7 @@ const Report = ({ selectedReport, setSelectedReport }) => {
   const handleReportClick = (report) => {
     setSelectedReport(report);
     setShowPopup(true);
+    console.log(`Report clicked:`, report);
   };
 
   const handleAcceptReport = () => {
@@ -136,37 +137,42 @@ const Report = ({ selectedReport, setSelectedReport }) => {
             </tr>
           </thead>
           <tbody
-            className={`bg-white dark:bg-gray-900 divide-y text-center divide-gray-200 dark:divide-gray-700 dark:text-white text-black`}
-          >
-            {reports.map((report, index) => (
-              <tr
-                key={report.id}
-                onClick={() => {
-                  handleReportClick(report);
-                  console.log(
-                    `Title: ${report.title}, Club: ${report.clubs}, Venue: ${report.venue}`
-                  );
-                }}
-                className={`hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer text-center dark:text-white  text-black`}
-              >
-                <td className="px-6 py-4 whitespace-nowrap text-center">
-                  {index + 1}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-center">
-                  {truncateText(report.title, 15)}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-center">
-                  {truncateText(report.clubs, 15)}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-center">
-                  {truncateText(report.facultyCoordinator, 15)}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-center">
-                  {truncateText(report.venue, 15)}
-                </td>
-              </tr>
-            ))}
-          </tbody>
+  className={`bg-white dark:bg-gray-900 divide-y text-center divide-gray-200 dark:divide-gray-700 dark:text-white text-black`}
+>
+  {reports.map((report, index) => (
+    <tr
+      key={report.id}
+      onClick={() => {
+        handleReportClick(report);
+        console.log(
+          `Title: ${report.title}, Club: ${report.clubs}, Venue: ${report.venue}, coordinator: ${report.faculty_coordinators}, username" ${report.username} `
+        );
+      }}
+      className={`hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer text-center dark:text-white  text-black`}
+    >
+      <td className="px-6 py-4 whitespace-nowrap text-center">
+        {index + 1}
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap text-center">
+        {truncateText(typeof report.title === 'object' ? report.title.name : report.title, 15)}
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap text-center">
+        {truncateText(typeof report.clubs === 'object' ? report.clubs.name : report.clubs, 15)}
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap text-center">
+        {truncateText(
+          Array.isArray(report.faculty_coordinators)
+            ? report.faculty_coordinators.map(fc => fc.name).join(', ')
+            : report.faculty_coordinators,
+          15
+        )}
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap text-center">
+        {truncateText(typeof report.venue === 'object' ? report.venue.name : report.venue, 15)}
+      </td>
+    </tr>
+  ))}
+</tbody>
         </table>
       </div>
       {showPopup && (
