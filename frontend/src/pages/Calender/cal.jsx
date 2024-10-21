@@ -7,7 +7,8 @@ import interactionPlugin from "@fullcalendar/interaction";
 import "tailwindcss/tailwind.css"; // Ensure Tailwind CSS is imported
 import Popup from "./Popup"; // Import the Popup component
 
-const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000/api";
+const backendUrl =
+  import.meta.env.VITE_BACKEND_URL || "http://localhost:5000/api";
 
 export default function DemoApp() {
   const [weekendsVisible, setWeekendsVisible] = useState(true);
@@ -71,8 +72,8 @@ export default function DemoApp() {
     const event = clickInfo.event;
     const eventDetails = {
       title: event.title,
-      clubName: event.extendedProps.clubName,
-      facultyCoordinator: event.extendedProps.facultyCoordinator,
+      username: event.extendedProps.username,
+      coordinator: event.extendedProps.coordinator,
       venue: event.extendedProps.venue,
       date: formatDate(event.start, {
         year: "numeric",
@@ -183,15 +184,8 @@ export default function DemoApp() {
 
 function renderEventContent(eventInfo) {
   return (
-    <>
-      <b className="text-xs lg:text-sm text-black dark:text-white">
-        {eventInfo.timeText}
-      </b>{" "}
-      {/* Smaller font size for mobile, larger for PC */}
-      <i className="text-xs lg:text-sm text-black dark:text-white">
-        {eventInfo.event.title}
-      </i>{" "}
-      {/* Same here */}
-    </>
+    <div className="text-xs lg:text-sm text-black dark:text-white">
+      <i>{eventInfo.event.title}</i> {/* Event title in italic */}
+    </div>
   );
 }
