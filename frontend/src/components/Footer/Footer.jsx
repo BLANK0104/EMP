@@ -66,17 +66,17 @@ const Footer = ({ userName }) => {
 
       <footer
         id="foot"
-        className="hidden md:block bg-gradient-to-br from-red-800 to-brand-light dark:from-red-800 dark:to-brand-dark text-white p-4 z-10 mt-1"
+        className="hidden md:block bg-gradient-to-br from-red-800 to-brand-light dark:from-red-800 dark:to-brand-dark text-white p-4 z-0 mt-1"
       >
-        <div className="flex flex-col md:flex-row justify-between px-4 sm:px-8 lg:px-16 space-y-8 md:space-y-0 footer-content">
-          <div className="w-full md:w-1/3 mb-6 md:mb-0 flex flex-col items-start">
-            <div className="flex items-start space-x-4 mb-4">
+        <div className="flex flex-col md:flex-row justify-between px-4 sm:px-8 lg:px-16 space-y-8 md:space-y-0 footer-content z-0">
+          <div className="w-full md:w-1/3 mb-6 md:mb-0 flex flex-col items-start z-0">
+            <div className="flex items-start space-x-4 mb-4 z-0">
               <img
                 src={nmims}
                 alt="SVKM's NMIMS Logo"
                 className="h-16 rounded-md z-0"
               />
-              <div className="flex flex-col justify-start">
+              <div className="flex flex-col justify-start z-0">
                 <h2 className="text-2xl font-semibold mb-1 z-0">
                   <span className="whitespace-nowrap">Event Management</span>
                   <br />
@@ -89,12 +89,12 @@ const Footer = ({ userName }) => {
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="pl-0 w-full"
+              className="pl-0 w-full z-0"
             >
               <div className="text-lg font-semibold mb-3 heading z-0">
                 About Us
               </div>
-              <p className="text-xs leading-relaxed mb-4 text-gray-100 max-w-2xl text-justify">
+              <p className="text-xs leading-relaxed mb-4 text-gray-100 max-w-2xl text-justify z-0">
                 NMIMS Shirpur's Event Management Portal, guided by Director Dr.
                 R. Sunita Patil and Prof. Piyush Kumar Soni, revolutionizes
                 event coordination, empowering the academic community to
@@ -105,18 +105,19 @@ const Footer = ({ userName }) => {
           </div>
 
           {/* Quick Links Section */}
-          <div className="w-full md:w-1/5 mb-6 md:mb-0 text-center md:text-left ml-28">
+          <div className="w-full md:w-1/5 mb-6 md:mb-0 text-center md:text-left ml-28 z-0">
             <h4 className="text-sm sm:text-base font-semibold mb-2 heading z-0">
               Quick Links
             </h4>
-            <ul className="space-y-2">
+            <ul className="space-y-2 z-0">
               {quickLinks.map((link, index) => (
                 <motion.li
                   key={index}
                   whileHover={{ color: "#FFD700", scale: 1.1 }}
                   transition={{ duration: 0.3 }}
+                  className="z-0"
                 >
-                  <Link to={link.url} className="text-xs transition-colors">
+                  <Link to={link.url} className="text-xs transition-colors z-0">
                     {link.name}
                   </Link>
                 </motion.li>
@@ -125,7 +126,7 @@ const Footer = ({ userName }) => {
           </div>
 
           {/* Guided By Section */}
-          <div className="w-full md:w-1/3 mb-6 text-left">
+          <div className="w-full md:w-1/3 mb-6 text-left z-0">
             <h4 className="text-sm sm:text-base font-semibold mb-2 heading z-0">
               Guided By
             </h4>
@@ -136,7 +137,7 @@ const Footer = ({ userName }) => {
           </div>
 
           {/* Made By Section */}
-          <div className="w-full md:w-1/3 mb-6 text-left">
+          <div className="w-full md:w-1/3 mb-6 text-left z-0">
             <h4 className="text-sm sm:text-base font-semibold mb-2 heading z-0">
               Made By
             </h4>
@@ -161,7 +162,7 @@ const Footer = ({ userName }) => {
           </div>
 
           {/* Contact Us and Follow Us Section */}
-          <div className="w-full md:w-1/3 mb-6 text-left">
+          <div className="w-full md:w-1/3 mb-6 text-left z-0">
             <h4 className="text-sm sm:text-base font-semibold mb-2 heading z-0">
               Contact Us
             </h4>
@@ -169,11 +170,11 @@ const Footer = ({ userName }) => {
               <span className="flex items-center space-x-2" onClick={openEmail}>
                 <FontAwesomeIcon
                   icon={faEnvelope}
-                  className="text-white text-xs"
+                  className="text-white text-xs z-0"
                 />
                 <a
                   href="mailto:emsmptp.shripur@nmims.edu"
-                  className="text-white hover:underline text-sm"
+                  className="text-white hover:underline text-sm z-0"
                 >
                   emsmptp.shripur@nmims.edu
                 </a>
@@ -186,9 +187,9 @@ const Footer = ({ userName }) => {
               >
                 <FontAwesomeIcon
                   icon={faMapMarkerAlt}
-                  className="text-white text-xs"
+                  className="text-white text-xs z-0"
                 />
-                <span className="text-xs">
+                <span className="text-xs z-0">
                   Mukesh Patel Technology Park, Babulde, Bank of Tapi River,
                   National Highway No: 3, Shirpur, Pin Code: 425405, Dist.
                   Dhule, Maharashtra, India
@@ -219,67 +220,39 @@ const Footer = ({ userName }) => {
                 <FontAwesomeIcon icon={faYoutube} />
               </a>
               <a
-                href="https://www.instagram.com/nmimsshirpurcampus/"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Instagram"
-                className="text-white text-xl sm:text-2xl hover:text-[#C13584] transition-transform transform hover:scale-110 z-0"
-              >
-                <FontAwesomeIcon icon={faInstagram} />
-              </a>
-              <a
-                href="https://www.linkedin.com/school/nmims-engineering/posts/?feedView=all"
+                href="https://www.linkedin.com/school/narsee-monjee-institute-of-management-studies/mycompany/"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="LinkedIn"
-                className="text-white text-xl sm:text-2xl hover:text-[#0077B5] transition-transform transform hover:scale-110 z-0"
+                className="text-white text-xl sm:text-2xl hover:text-[#0077b5] transition-transform transform hover:scale-110 z-0"
               >
                 <FontAwesomeIcon icon={faLinkedinIn} />
+              </a>
+              <a
+                href="https://www.instagram.com/nmimsshirpur_campus/?hl=en"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+                className="text-white text-xl sm:text-2xl hover:text-[#E1306C] transition-transform transform hover:scale-110 z-0"
+              >
+                <FontAwesomeIcon icon={faInstagram} />
               </a>
             </div>
           </div>
         </div>
 
-        {/* Line above copyright */}
-        <hr className="border-t border-gray-400 my-4 mx-auto w-full md:w-2/3 z-0" />
-
-        {/* Copyright Section */}
-        <div className="text-center text-gray-300 text-xs sm:text-sm mt-4 z-0">
-          &copy; 2024 Event Management Portal NMIMS MPTP Shirpur.
-        </div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="text-center z-0"
+        >
+          <hr className="border-t border-gray-500 z-0" />
+          <p className="text-xs text-gray-100 mt-3 copyright-text z-0">
+            &copy; 2023 SVKM's NMIMS MPSTME Shirpur Campus. All rights reserved.
+          </p>
+        </motion.div>
       </footer>
-
-      <style jsx>{`
-        .heading {
-          position: relative;
-        }
-
-        .heading::after {
-          content: "";
-          position: absolute;
-          bottom: -6px;
-          left: 0;
-          width: 25px;
-          height: 2px;
-          background-color: white;
-          transition: width 0.3s ease;
-        }
-
-        .heading:hover::after {
-          width: 70px;
-        }
-
-        hr {
-          border: 0;
-          height: 1px;
-          background: linear-gradient(
-            to right,
-            rgba(255, 255, 255, 0),
-            rgba(255, 255, 255, 0.8),
-            rgba(255, 255, 255, 0)
-          );
-        }
-      `}</style>
     </>
   );
 };

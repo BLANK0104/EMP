@@ -3,13 +3,15 @@ import React from "react";
 const RightUpcomingEvents = ({ events }) => {
   console.log(events);
   const sanitizeString = (str) => {
-    return str.replace(/[^\w\s]/gi, '');
+    return str.replace(/[^\w\s]/gi, "");
   };
 
   const formatString = (str) => {
-    return str.split(',').map((item, index) => (
-      <div key={index}>{sanitizeString(item.trim())}</div>
-    ));
+    return str
+      .split(",")
+      .map((item, index) => (
+        <div key={index}>{sanitizeString(item.trim())}</div>
+      ));
   };
 
   return (
@@ -61,7 +63,9 @@ const RightUpcomingEvents = ({ events }) => {
                   {event.event_date_range}
                 </td>
                 <td className="p-2 text-wrap text-center text-gray-900 dark:text-gray-100">
-                  {formatString(event.venue)}
+                  <div className="max-h-20 overflow-y-auto">
+                    {formatString(event.venue)}
+                  </div>
                 </td>
               </tr>
             ))}
