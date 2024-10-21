@@ -3,7 +3,7 @@ const db = require("../db");
 const requests = async (id) => {
   console.log("Entered Requests");
   const query = `
-  SELECT 
+ SELECT  
     e.id, 
     ed.title, 
     ed.description,
@@ -18,16 +18,21 @@ const requests = async (id) => {
     ed.resources,
     ed.eventtype,
     ed.objectives
-  FROM 
+FROM 
     events e
-  LEFT JOIN 
+LEFT JOIN 
     event_details ed ON e.id = ed.event_id
-  LEFT JOIN
+LEFT JOIN
     users u ON e.created_by = u.id
-  WHERE 
-    e.current_approver = $1
-  ORDER BY 
+JOIN
+    eventapprovals ea ON e.id = ea.event_id -- Ensure it's linked to the event approvals
+WHERE 
+    ea.approver_id = $1   -- Filter by the approver (Dean or Director)
+    AND ea.status = 'Pending'  -- Show only pending approvals
+    AND e.status = 'Pending'
+ORDER BY 
     e.created_at ASC;
+
 `;
 
   const result = await db.query(query, [id]);
