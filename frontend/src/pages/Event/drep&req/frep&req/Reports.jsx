@@ -5,6 +5,7 @@ const backendUrl =
 
 const Report = ({ selectedReport, setSelectedReport }) => {
   const [reports, setReports] = useState([]);
+  const [clubName, setClubName] = useState("");
   const [showPopup, setShowPopup] = useState(false);
   const popupRef = useRef(null);
 
@@ -30,7 +31,29 @@ const Report = ({ selectedReport, setSelectedReport }) => {
       }
     };
 
+    const fetchClubName = async () => {
+      try {
+        const response = await fetch(`${backendUrl}/fetchClub`, {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch club name");
+        }
+
+        const data = await response.json();
+        setClubName(data.name); // Assuming the response contains a 'name' field
+      } catch (error) {
+        console.error("Error fetching club name:", error);
+      }
+    };
+
     fetchReports();
+    fetchClubName();
   }, []);
 
   useEffect(() => {
@@ -137,42 +160,59 @@ const Report = ({ selectedReport, setSelectedReport }) => {
             </tr>
           </thead>
           <tbody
-  className={`bg-white dark:bg-gray-900 divide-y text-center divide-gray-200 dark:divide-gray-700 dark:text-white text-black`}
->
-  {reports.map((report, index) => (
-    <tr
-      key={report.id}
-      onClick={() => {
-        handleReportClick(report);
-        console.log(
-          `Title: ${report.title}, Club: ${report.clubs}, Venue: ${report.venue}, coordinator: ${report.faculty_coordinators}, username" ${report.username} `
-        );
-      }}
-      className={`hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer text-center dark:text-white  text-black`}
-    >
-      <td className="px-6 py-4 whitespace-nowrap text-center">
-        {index + 1}
-      </td>
-      <td className="px-6 py-4 whitespace-nowrap text-center">
-        {truncateText(typeof report.title === 'object' ? report.title.name : report.title, 15)}
-      </td>
-      <td className="px-6 py-4 whitespace-nowrap text-center">
-        {truncateText(typeof report.clubs === 'object' ? report.clubs.name : report.clubs, 15)}
-      </td>
-      <td className="px-6 py-4 whitespace-nowrap text-center">
-        {truncateText(
-          Array.isArray(report.faculty_coordinators)
-            ? report.faculty_coordinators.map(fc => fc.name).join(', ')
-            : report.faculty_coordinators,
-          15
-        )}
-      </td>
-      <td className="px-6 py-4 whitespace-nowrap text-center">
-        {truncateText(typeof report.venue === 'object' ? report.venue.name : report.venue, 15)}
-      </td>
-    </tr>
-  ))}
-</tbody>
+            className={`bg-white dark:bg-gray-900 divide-y text-center divide-gray-200 dark:divide-gray-700 dark:text-white text-black`}
+          >
+            {reports.map((report, index) => (
+              <tr
+                key={report.id}
+                onClick={() => {
+                  handleReportClick(report);
+                  console.log(
+                    `Title: ${report.title}, Club: ${report.clubs}, Venue: ${report.venue}, coordinator: ${report.faculty_coordinators}, username" ${report.username} `
+                  );
+                }}
+                className={`hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer text-center dark:text-white  text-black`}
+              >
+                <td className="px-6 py-4 whitespace-nowrap text-center">
+                  {index + 1}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-center">
+                  {truncateText(
+                    typeof report.title === "object"
+                      ? report.title.name
+                      : report.title,
+                    15
+                  )}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-center">
+                  {truncateText(
+                    typeof report.username === "object"
+                      ? report.clubs.username
+                      : report.username,
+                    15
+                  )}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-center">
+                  {truncateText(
+                    Array.isArray(report.faculty_coordinators)
+                      ? report.faculty_coordinators
+                          .map((fc) => fc.name)
+                          .join(", ")
+                      : report.faculty_coordinators,
+                    15
+                  )}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-center">
+                  {truncateText(
+                    typeof report.venue === "object"
+                      ? report.venue.name
+                      : report.venue,
+                    15
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
         </table>
       </div>
       {showPopup && (
