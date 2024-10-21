@@ -922,7 +922,7 @@ const RequestForm = () => {
         ""
       )}
       <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">
-        Event Request Form 
+        Event Request Form
       </h2>
       <form onSubmit={handleFormSubmit}>
         <motion.form
@@ -1039,13 +1039,24 @@ const RequestForm = () => {
                     <DatePicker
                       selected={event.date}
                       onChange={(date) => {
-                        handleEventDateChange(index, "date", date);
+                        // Set time to 00:00:00 in UTC to avoid time zone issues
+                        const utcDate = new Date(
+                          Date.UTC(
+                            date.getFullYear(),
+                            date.getMonth(),
+                            date.getDate()
+                          )
+                        );
+
+                        // Use the UTC-adjusted date when setting the event date
+                        handleEventDateChange(index, "date", utcDate);
                       }}
                       minDate={new Date()}
                       dateFormat="yyyy-MM-dd"
-                      className="w-40 px-8 py-2 border rounded-lg bg-white dark:bg-gray-600 "
+                      className="w-40 px-8 py-2 border rounded-lg bg-white dark:bg-gray-600"
                       required
                     />
+
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                       <FontAwesomeIcon
                         icon={faCalendarAlt}
@@ -1872,8 +1883,6 @@ const RequestForm = () => {
 
         {/* Buttons Container */}
         <div className="flex justify-between mt-4">
-          
-
           {/* Submit Button */}
           <motion.button
             type="submit"
