@@ -19,26 +19,26 @@ const Footer = ({ userName }) => {
       link: "https://www.linkedin.com/in/achyut-vyas-874184258/",
     },
     {
-      name: "Dev Saraf",
-      link: "https://www.linkedin.com/in/dev-saraf-0248a4252/",
-    },
-    {
-      name: "Divyanshu Patil",
-      link: "https://www.linkedin.com/in/divyanshu-patil-271430257/",
+      name: "Utsav Chandra",
+      link: "https://www.linkedin.com/in/utsav-chandra/",
     },
     {
       name: "Harsh Jain",
       link: "https://www.linkedin.com/in/harsh-jain-b071b424a/",
     },
     {
+      name: "Divyanshu Patil",
+      link: "https://www.linkedin.com/in/divyanshu-patil-271430257/",
+    },
+    {
+      name: "Dev Saraf",
+      link: "https://www.linkedin.com/in/dev-saraf-0248a4252/",
+    },
+    {
       name: "Hitesh Patil",
       link: "https://www.linkedin.com/in/hitesh-patil-49aa13265/",
     },
-    {
-      name: "Utsav Chandra",
-      link: "https://www.linkedin.com/in/utsav-chandra/",
-    },
-  ].sort((a, b) => a.name.localeCompare(b.name));
+  ];
 
   const quickLinks = [
     { name: "Events", url: "/events" },
