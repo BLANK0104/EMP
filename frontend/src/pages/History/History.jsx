@@ -99,20 +99,35 @@ const History = ({ data }) => {
     doc.save("history.pdf");
   };
 
-  const handleDownload = (item) => {
-    // Replace with actual backend call
-    fetch(`/api/download/${item.id}`)
-      .then((response) => response.blob())
-      .then((blob) => {
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = `${item.club}-${item.event}.pdf`;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-      });
-  };
+// ...existing code...
+
+const handleDownload = async (fileName) => {
+  try {
+    const response = await fetch(`${backendUrl}/download-pdf/${fileName}`, {
+      method: 'GET',
+      credentials: 'include',
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to download PDF');
+    }
+
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+
+  } catch (error) {
+    console.error('Error downloading PDF:', error);
+  }
+};
+
+// ...existing code...
 
   return (
     <div className="container mx-auto p-4 text-lg dark:text-gray-200 max-w-full">

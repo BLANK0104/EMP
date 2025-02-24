@@ -25,9 +25,14 @@ const addDraft = require("./Events/addDraft");
 const { getDraft } = require("./Events/getDraft");
 const DeanDirectorDashboard = require("./Dashboard/DeanDirectorDashboard");
 const clubs = require("./Clubs/clubs");
+const { generatePdf, downloadPdf } = require('./controllers/pdfController');
 
 const app = express();
 const PORT = 5000;
+
+app.use(bodyParser.json());  // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true }));  // for parsing application/x-www-form-urlencoded
+app.use(cookieParser());
 
 
 // Set up multer to save files in the 'public/reports' directory
@@ -54,7 +59,7 @@ const PORT = 5000;
 // });
 
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", req.headers.origin);
+  res.header("Access-Control-Allow-Origin", "http://localhost:5173"); // Your frontend URL
   res.header("Access-Control-Allow-Credentials", "true");
   res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
   res.header(
@@ -63,8 +68,6 @@ app.use((req, res, next) => {
   );
   next();
 });
-app.use(bodyParser.json());
-app.use(cookieParser());
 
 // Test the database connection by querying the database
 (async () => {
@@ -221,6 +224,17 @@ app.post(
       });
     }
   }
+);
+
+app.post('/api/generate-pdf', 
+  authenticateToken, 
+  authorizedRole(['faculty', 'centralAuthority']), 
+  generatePdf
+);
+
+app.get('/api/download-pdf/:fileName',
+  authenticateToken,
+  downloadPdf
 );
 
 // Verifying user with JWT token
