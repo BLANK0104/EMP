@@ -6,3 +6,5 @@ frontend/package.json
 frontend/public/Reports
 backend/.env
 package-lock.json
+backend/uploads
+backend/public

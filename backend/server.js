@@ -30,8 +30,8 @@ const { generatePdf, downloadPdf } = require('./controllers/pdfController');
 const app = express();
 const PORT = 5000;
 
-app.use(bodyParser.json());  // for parsing application/json
-app.use(bodyParser.urlencoded({ extended: true }));  // for parsing application/x-www-form-urlencoded
+app.use(bodyParser.json({ limit: '50mb' }));  // Increased limit for large payloads
+app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));  // Increased limit for large payloads
 app.use(cookieParser());
 
 
@@ -422,9 +422,12 @@ app.post("/api/report-data", async (req, res) => {
     classes,
     years,
     clubs,
+    externalInput,
+    cname,
   } = req.body;
 
   try {
+    // First save the report data
     const result = await db.query(
       `INSERT INTO report (
     event_id,
@@ -457,36 +460,42 @@ app.post("/api/report-data", async (req, res) => {
         event_id,
         title,
         event_type,
-        JSON.stringify(guestSpeakers), // Stored as JSON
+        JSON.stringify(guestSpeakers),
         startDate,
         startTime,
         endDate,
         endTime,
-        objectives, // Pass directly as array
+        objectives,
         venue,
         resources,
         audience,
         description,
-        photos.length > 0 ? JSON.stringify(photos) : "{}", // Ensure empty array or valid array literal
+        photos.length > 0 ? JSON.stringify(photos) : "{}",
         facultyCoordinators.length > 0
           ? JSON.stringify(facultyCoordinators)
-          : "{}", // Same here
+          : "{}",
         studentCoordinators.length > 0
           ? JSON.stringify(studentCoordinators)
-          : "{}", // Same here
-        schools.length > 0 ? schools : "{}", // Ensure it's an array literal if empty
-        branches.length > 0 ? branches : "{}", // Same for branches
-        classes.length > 0 ? classes : "{}", // Same for classes
-        years.length > 0 ? years : "{}", // Same for years
+          : "{}",
+        schools.length > 0 ? schools : "{}",
+        branches.length > 0 ? branches : "{}",
+        classes.length > 0 ? classes : "{}",
+        years.length > 0 ? years : "{}",
         clubs,
       ]
     );
 
-    // Respond with success and the created report ID
+    console.log('Report saved successfully, now generating PDF...');
+
+    // Now generate the PDF - call the endpoint directly rather than using the function
+    // This ensures proper request/response handling
     res.status(201).json({
-      message: "Report data successfully saved",
+      message: "Report data successfully saved. PDF generation initiated.",
       reportId: result.rows[0].id,
+      event_id: event_id,
+      shouldGeneratePdf: true
     });
+
   } catch (error) {
     console.error("Error saving report data:", error);
     res.status(500).json({ error: "Internal server error" });

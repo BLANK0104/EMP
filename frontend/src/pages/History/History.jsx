@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { jsPDF } from "jspdf";
-import { FaDownload } from "react-icons/fa"; // Import FontAwesome download icon
+import { FaDownload } from "react-icons/fa";
+
+const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000/api";
 
 const History = ({ data }) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -99,35 +101,37 @@ const History = ({ data }) => {
     doc.save("history.pdf");
   };
 
-// ...existing code...
-
-const handleDownload = async (fileName) => {
-  try {
-    const response = await fetch(`${backendUrl}/download-pdf/${fileName}`, {
-      method: 'GET',
-      credentials: 'include',
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to download PDF');
+  const handleDownload = async (fileName) => {
+    if (!fileName) {
+      alert("Report has yet to be generated");
+      return;
     }
 
-    const blob = await response.blob();
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = fileName;
-    document.body.appendChild(a);
-    a.click();
-    window.URL.revokeObjectURL(url);
-    document.body.removeChild(a);
+    try {
+      const response = await fetch(`${backendUrl}/download-pdf/${fileName}`, {
+        method: 'GET',
+        credentials: 'include',
+      });
 
-  } catch (error) {
-    console.error('Error downloading PDF:', error);
-  }
-};
+      if (!response.ok) {
+        throw new Error('Failed to download PDF');
+      }
 
-// ...existing code...
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+
+    } catch (error) {
+      console.error('Error downloading PDF:', error);
+      alert("Error downloading report");
+    }
+  };
 
   return (
     <div className="container mx-auto p-4 text-lg dark:text-gray-200 max-w-full">
@@ -277,27 +281,12 @@ const handleDownload = async (fileName) => {
                   <td className="px-2 py-1 border-b text-center align-middle dark:border-gray-600">
                     {item.status === "Approved" &&
                       currentDate > new Date(Array.isArray(item.date) ? item.date[0] : item.date) && (
-                        <a
-                          href={`/Reports/${item.event}.pdf`}
-                          download
-                          className="text-blue-500 hover:underline"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            fetch(`/Reports/${item.event}.pdf`, { method: 'HEAD' })
-                              .then((response) => {
-                                if (response.ok) {
-                                  window.location.href = `/Reports/${item.event}.pdf`;
-                                } else {
-                                  alert("Report has yet to be generated");
-                                }
-                              })
-                              .catch(() => {
-                                alert("Report has yet to be generated");
-                              });
-                          }}
+                        <button
+                          onClick={() => handleDownload(item.pdf_file_path)}
+                          className="text-blue-500 hover:underline cursor-pointer"
                         >
                           Download
-                        </a>
+                        </button>
                       )}
                   </td>
                 </tr>

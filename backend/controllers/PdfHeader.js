@@ -5,7 +5,7 @@ const db = require('../db');
 const generatePdfHeader = async (doc, formData) => {
   try {
     // Read logo from assets directory
-    const logoPath = path.join(__dirname, '../assets/logo.jpg');
+    const logoPath = 'E:\\Projects\\EMP\\backend\\controllers\\logo.jpg';
     const logoBuffer = await fs.readFile(logoPath);
     const logoBase64 = logoBuffer.toString('base64');
 
